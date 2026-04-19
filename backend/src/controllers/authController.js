@@ -1,5 +1,12 @@
 import AuthService from "../services/authServices.js";
 
+function handleError(res, error) {
+  return res.status(error.statusCode || 500).json({
+    erro: error.message || "Erro interno do servidor.",
+    codigo: error.code || "UNEXPECTED_ERROR",
+  });
+}
+
 class AuthController {
   static async cadastrar(req, res) {
     try {
@@ -12,9 +19,7 @@ class AuthController {
         usuario,
       });
     } catch (error) {
-      return res.status(400).json({
-        erro: error.message,
-      });
+      return handleError(res, error);
     }
   }
 
@@ -29,9 +34,7 @@ class AuthController {
         ...resultado,
       });
     } catch (error) {
-      return res.status(401).json({
-        erro: error.message,
-      });
+      return handleError(res, error);
     }
   }
 }
