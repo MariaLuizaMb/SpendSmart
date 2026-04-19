@@ -2,28 +2,44 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import prisma from "../database/prisma.js";
 
+import {
+  ValidationError,
+  ConflictError,
+  AuthenticationError,
+} from "../errors/AppError.js";
+
+import {
+  validarEmail,
+  validarSenha,
+  validarJwtSecret,
+} from "../utils/authValidators.js";
+
 const SALT_ROUNDS = 10;
 
 class AuthService {
   static async cadastrar({ nome, email, senha }) {
     if (!nome || !email || !senha) {
-      throw new Error("Nome, email e senha são obrigatórios.");
+      throw new ValidationError("Nome, email e senha são obrigatórios.");
     }
 
+    const nomeLimpo = nome.trim();
+    const emailValido = validarEmail(email);
+    const senhaValida = validarSenha(senha);
+
     const usuarioExistente = await prisma.usuario.findUnique({
-      where: { email },
+      where: { email: emailValido },
     });
 
     if (usuarioExistente) {
-      throw new Error("Já existe um usuário com esse email.");
+      throw new ConflictError("Já existe um usuário com esse email.");
     }
 
-    const senhaHash = await bcrypt.hash(senha, SALT_ROUNDS);
+    const senhaHash = await bcrypt.hash(senhaValida, SALT_ROUNDS);
 
     const usuario = await prisma.usuario.create({
       data: {
-        nome,
-        email,
+        nome: nomeLimpo,
+        email: emailValido,
         senhaHash,
       },
       select: {
@@ -39,29 +55,33 @@ class AuthService {
 
   static async login({ email, senha }) {
     if (!email || !senha) {
-      throw new Error("Email e senha são obrigatórios.");
+      throw new ValidationError("Email e senha são obrigatórios.");
     }
 
+    const emailValido = validarEmail(email);
+
     const usuario = await prisma.usuario.findUnique({
-      where: { email },
+      where: { email: emailValido },
     });
 
     if (!usuario) {
-      throw new Error("Email ou senha inválidos.");
+      throw new AuthenticationError("Email inválido.");
     }
 
     const senhaCorreta = await bcrypt.compare(senha, usuario.senhaHash);
 
     if (!senhaCorreta) {
-      throw new Error("Email ou senha inválidos.");
+      throw new AuthenticationError("Senha inválida.");
     }
+
+    const jwtSecret = validarJwtSecret();
 
     const token = jwt.sign(
       {
         sub: usuario.id,
         email: usuario.email,
       },
-      process.env.JWT_SECRET,
+      jwtSecret,
       {
         expiresIn: "1d",
       },
