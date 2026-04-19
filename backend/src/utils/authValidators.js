@@ -1,4 +1,5 @@
 import { ValidationError } from "../errors/AppError.js";
+import { InternalServerError } from "../errors/AppError.js";
 
 export function validarJwtSecret() {
   if (!process.env.JWT_SECRET || process.env.JWT_SECRET.trim() === "") {
@@ -37,12 +38,6 @@ export function validarSenha(senha) {
 
   if (senhaLimpa.length < 8) {
     throw new ValidationError("A senha deve ter no mínimo 8 caracteres.");
-  }
-
-  if (!/[a-z]/.test(senhaLimpa)) {
-    throw new ValidationError(
-      "A senha deve conter pelo menos uma letra minúscula.",
-    );
   }
 
   if (!/[A-Z]/.test(senhaLimpa)) {
