@@ -102,109 +102,154 @@ describe("AuthService", () => {
       ).rejects.toThrow("Informe um email válido, como nome@dominio.com.");
     });
 
-    it("deve falhar quando a senha for fraca", async () => {
-      await expect(
-        AuthService.cadastrar({
-          nome: "Maria",
-          email: "maria@email.com",
-          senha: "12345678",
-        }),
-      ).rejects.toThrow("A senha deve conter pelo menos uma letra maiúscula.");
-    });
-  });
+    it("não deve retornar senha nem senhaHash no resultado do cadastro", async () => {
+      vi.spyOn(bcrypt, "hash").mockResolvedValue("hash-fake");
 
-  describe("login", () => {
-    it("deve fazer login com credenciais válidas", async () => {
-      prisma.usuario.findUnique.mockResolvedValue({
+      prisma.usuario.findUnique.mockResolvedValue(null);
+      prisma.usuario.create.mockResolvedValue({
         id: "1",
         nome: "Maria",
         email: "maria@email.com",
-        senhaHash: "hash-fake",
+        criadoEm: new Date("2026-04-19T10:00:00.000Z"),
       });
 
-      vi.spyOn(bcrypt, "compare").mockResolvedValue(true);
-
-      const resultado = await AuthService.login({
+      const resultado = await AuthService.cadastrar({
+        nome: "Maria",
         email: "maria@email.com",
         senha: "Senha123",
       });
 
-      expect(prisma.usuario.findUnique).toHaveBeenCalledWith({
-        where: { email: "maria@email.com" },
-      });
+      expect(resultado).not.toHaveProperty("senha");
+      expect(resultado).not.toHaveProperty("senhaHash");
+    });
+  });
 
-      expect(bcrypt.compare).toHaveBeenCalledWith("Senha123", "hash-fake");
+  it("deve falhar quando a senha for fraca", async () => {
+    await expect(
+      AuthService.cadastrar({
+        nome: "Maria",
+        email: "maria@email.com",
+        senha: "12345678",
+      }),
+    ).rejects.toThrow("A senha deve conter pelo menos uma letra maiúscula.");
+  });
+});
 
-      expect(jwt.sign).toHaveBeenCalledWith(
-        {
-          sub: "1",
-          email: "maria@email.com",
-        },
-        "teste-secret",
-        {
-          expiresIn: "1d",
-        },
-      );
-
-      expect(resultado).toEqual({
-        token: "token-fake",
-        usuario: {
-          id: "1",
-          nome: "Maria",
-          email: "maria@email.com",
-        },
-      });
+describe("login", () => {
+  it("deve fazer login com credenciais válidas", async () => {
+    prisma.usuario.findUnique.mockResolvedValue({
+      id: "1",
+      nome: "Maria",
+      email: "maria@email.com",
+      senhaHash: "hash-fake",
     });
 
-    it("deve falhar no login quando o email não existe", async () => {
-      prisma.usuario.findUnique.mockResolvedValue(null);
+    vi.spyOn(bcrypt, "compare").mockResolvedValue(true);
 
-      await expect(
-        AuthService.login({
-          email: "naoexiste@email.com",
-          senha: "Senha123",
-        }),
-      ).rejects.toThrow("Email ou senha inválidos.");
+    const resultado = await AuthService.login({
+      email: "maria@email.com",
+      senha: "Senha123",
     });
 
-    it("deve falhar no login quando a senha está incorreta", async () => {
-      prisma.usuario.findUnique.mockResolvedValue({
+    expect(prisma.usuario.findUnique).toHaveBeenCalledWith({
+      where: { email: "maria@email.com" },
+    });
+
+    expect(bcrypt.compare).toHaveBeenCalledWith("Senha123", "hash-fake");
+
+    expect(jwt.sign).toHaveBeenCalledWith(
+      {
+        sub: "1",
+        email: "maria@email.com",
+      },
+      "teste-secret",
+      {
+        expiresIn: "1d",
+      },
+    );
+
+    expect(resultado).toEqual({
+      token: "token-fake",
+      usuario: {
         id: "1",
         nome: "Maria",
         email: "maria@email.com",
-        senhaHash: "hash-fake",
-      });
+      },
+    });
+  });
 
-      vi.spyOn(bcrypt, "compare").mockResolvedValue(false);
+  it("deve falhar no login quando o email não existe", async () => {
+    prisma.usuario.findUnique.mockResolvedValue(null);
 
-      await expect(
-        AuthService.login({
-          email: "maria@email.com",
-          senha: "SenhaErrada123",
-        }),
-      ).rejects.toThrow("Email ou senha inválidos.");
+    await expect(
+      AuthService.login({
+        email: "naoexiste@email.com",
+        senha: "Senha123",
+      }),
+    ).rejects.toThrow("Email inválido.");
+  });
+
+  it("deve falhar no login quando a senha está incorreta", async () => {
+    prisma.usuario.findUnique.mockResolvedValue({
+      id: "1",
+      nome: "Maria",
+      email: "maria@email.com",
+      senhaHash: "hash-fake",
     });
 
-    it("deve falhar quando JWT_SECRET não estiver configurado", async () => {
-      delete process.env.JWT_SECRET;
+    vi.spyOn(bcrypt, "compare").mockResolvedValue(false);
 
-      prisma.usuario.findUnique.mockResolvedValue({
-        id: "1",
-        nome: "Maria",
+    await expect(
+      AuthService.login({
         email: "maria@email.com",
-        senhaHash: "hash-fake",
-      });
+        senha: "SenhaErrada123",
+      }),
+    ).rejects.toThrow("Senha inválida.");
+  });
 
-      vi.spyOn(bcrypt, "compare").mockResolvedValue(true);
+  it("não deve retornar senha nem senhaHash no payload do login", async () => {
+    prisma.usuario.findUnique.mockResolvedValue({
+      id: "1",
+      nome: "Maria",
+      email: "maria@email.com",
+      senhaHash: "hash-fake",
+    });
 
-      await expect(
-        AuthService.login({
-          email: "maria@email.com",
-          senha: "Senha123",
-        }),
-      ).rejects.toThrow(
-        "A configuração de autenticação do servidor está ausente.",
-      );
+    vi.spyOn(bcrypt, "compare").mockResolvedValue(true);
+
+    const resultado = await AuthService.login({
+      email: "maria@email.com",
+      senha: "Senha123",
+    });
+
+    expect(resultado).not.toHaveProperty("senha");
+    expect(resultado).not.toHaveProperty("senhaHash");
+
+    expect(resultado.usuario).not.toHaveProperty("senha");
+    expect(resultado.usuario).not.toHaveProperty("senhaHash");
+  });
+
+  it("deve falhar quando JWT_SECRET não estiver configurado", async () => {
+    delete process.env.JWT_SECRET;
+
+    prisma.usuario.findUnique.mockResolvedValue({
+      id: "1",
+      nome: "Maria",
+      email: "maria@email.com",
+      senhaHash: "hash-fake",
+    });
+
+    vi.spyOn(bcrypt, "compare").mockResolvedValue(true);
+
+    await expect(
+      AuthService.login({
+        email: "maria@email.com",
+        senha: "Senha123",
+      }),
+    ).rejects.toMatchObject({
+      message: "A configuração de autenticação do servidor está ausente.",
+      statusCode: 500,
+      code: "INTERNAL_SERVER_ERROR",
     });
   });
 });
