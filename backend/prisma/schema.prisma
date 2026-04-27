@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TipoCategoria {
+  DESPESA // categoria usada para gastos
+  RECEITA // categoria usada para entradas de dinheiro
+}
+
+enum TipoLancamento {
+  DESPESA // lançamento que representa saída de dinheiro
+  RECEITA // lançamento que representa entrada de dinheiro
+}
+
+enum TipoRecorrencia {
+  NENHUMA // lançamento sem repetição
+  DIARIA  // lançamento recorrente diário
+  SEMANAL // lançamento recorrente semanal
+  MENSAL  // lançamento recorrente mensal
+  ANUAL   // lançamento recorrente anual
+}
+
+model Usuario {
+  id          String       @id @default(cuid()) // chave primária; Prisma gera um id string único automaticamente
+  nome        String // nome do usuário
+  email       String       @unique // email do usuário; não pode repetir
+  senhaHash   String // armazena a senha criptografada em hash
+  categorias  Categoria[] // relação de um usuário para várias categorias
+  lancamentos Lancamento[] // relação de um usuário para vários lançamentos
+  orcamentos  Orcamento[] // relação de um usuário para vários orçamentos
+  criadoEm    DateTime     @default(now()) // data/hora de criação do registro
+  atualizadoEm DateTime    @updatedAt // atualiza automaticamente sempre que o registro for alterado
+}
+
+model Categoria {
+  id           String         @id @default(cuid()) // chave primária da categoria
+  idUsuario    String? // usuário dono da categoria; pode ser nulo se a categoria for padrão do sistema
+  nome         String // nome da categoria, como Mercado, Luz ou Salário
+  tipo         TipoCategoria // define se a categoria pertence a DESPESA ou RECEITA
+  ehPadrao     Boolean        @default(false) // indica se a categoria é padrão do sistema
+  usuario      Usuario?       @relation(fields: [idUsuario], references: [id], onDelete: Cascade) // relação opcional com usuário
+  lancamentos  Lancamento[] // uma categoria pode estar em vários lançamentos
+  orcamentos   Orcamento[] // uma categoria pode estar em vários orçamentos
+  criadoEm     DateTime       @default(now()) // data/hora de criação
+  atualizadoEm DateTime       @updatedAt // data/hora de última atualização automática
+
+  @@index([idUsuario]) // cria índice para buscas por usuário
+  @@index([tipo]) // cria índice para buscas por tipo de categoria
+}
+ 
+model Lancamento {
+  id            String           @id @default(cuid()) // chave primária do lançamento
+  idUsuario     String // id do usuário que criou o lançamento
+  idCategoria   String // id da categoria escolhida para o lançamento
+  valor         Decimal          @db.Decimal(12, 2) // valor monetário com precisão de 12 dígitos e 2 casas decimais
+  dataTransacao DateTime // data em que a transação ocorreu
+  recorrencia   TipoRecorrencia  @default(NENHUMA) // tipo de recorrência do lançamento
+  tipo          TipoLancamento // define se é DESPESA ou RECEITA
+  descricao     String? // descrição opcional do lançamento
+  usuario       Usuario          @relation(fields: [idUsuario], references: [id], onDelete: Cascade) // relação obrigatória com usuário
+  categoria     Categoria        @relation(fields: [idCategoria], references: [id]) // relação obrigatória com categoria
+  criadoEm      DateTime         @default(now()) // data/hora de criação
+  atualizadoEm  DateTime         @updatedAt // data/hora de última atualização automática
+
+  @@index([idUsuario]) // índice para buscar lançamentos por usuário
+  @@index([idCategoria]) // índice para buscar lançamentos por categoria
+  @@index([dataTransacao]) // índice para filtros por data
+  @@index([tipo]) // índice para filtros por tipo
+}
+
+model Orcamento {
+  id           String      @id @default(cuid()) // chave primária do orçamento
+  idUsuario    String // id do usuário que criou o orçamento
+  idCategoria  String? // categoria do orçamento; nulo quando o orçamento for geral
+  valor        Decimal     @db.Decimal(12, 2) // valor máximo definido para o orçamento
+  mes          Int // mês de referência do orçamento
+  ano          Int // ano de referência do orçamento
+  descricao    String? // descrição opcional do orçamento
+  usuario      Usuario     @relation(fields: [idUsuario], references: [id], onDelete: Cascade) // relação obrigatória com usuário
+  categoria    Categoria?  @relation(fields: [idCategoria], references: [id]) // relação opcional com categoria
+  criadoEm     DateTime    @default(now()) // data/hora de criação
+  atualizadoEm DateTime    @updatedAt // data/hora de última atualização automática
+
+  @@index([idUsuario]) // índice para buscar orçamentos por usuário
+  @@index([idCategoria]) // índice para buscar orçamentos por categoria
+  @@index([mes, ano]) // índice útil para consultas por período
+}
+
