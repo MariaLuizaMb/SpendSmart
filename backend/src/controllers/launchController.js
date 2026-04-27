@@ -3,12 +3,21 @@ import LaunchService from "../services/launchService.js";
 class LaunchController {
   static async cadastrar(req, res, next) {
     try {
-      const { idCategoria, valor, dataTransacao, tipo, descricao, recorrencia } = req.body;
+      const {
+        idCategoria,
+        idConta,
+        valor,
+        dataTransacao,
+        tipo,
+        descricao,
+        recorrencia,
+      } = req.body;
 
       // Pegando o id do usuário do middleware de autenticação
       const dadosLancamento = {
         idUsuario: req.usuario.id,
         idCategoria,
+        idConta,
         valor,
         dataTransacao,
         tipo,

@@ -4,6 +4,7 @@ import authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
-router.post("/contas", authMiddleware, BankAccountController.cadastrar);
+router.get("/", authMiddleware, BankAccountController.listar);
+router.post("/", authMiddleware, BankAccountController.cadastrar);
 
 export default router;

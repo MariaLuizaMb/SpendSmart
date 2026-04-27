@@ -3,6 +3,22 @@ import prisma from "../database/prisma.js";
 import { ValidationError, ConflictError } from "../errors/AppError.js";
 
 class BankAccountService {
+  static async listarPorUsuario(idUsuario) {
+    if (!idUsuario) {
+      throw new ValidationError("Usuário é obrigatório.");
+    }
+
+    return prisma.conta.findMany({
+      where: {
+        idUsuario,
+        ativa: true,
+      },
+      orderBy: {
+        nome: "asc",
+      },
+    });
+  }
+
   static async cadastrar({ idUsuario, nome, tipo, saldoInicial, descricao }) {
     if (
       !idUsuario ||

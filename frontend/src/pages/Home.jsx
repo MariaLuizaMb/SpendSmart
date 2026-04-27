@@ -18,6 +18,7 @@ import {
   cadastrarCategoria,
   cadastrarLancamento,
   listarCategorias,
+  listarContas,
 } from "@/services/api";
 
 const OPCAO_CATEGORIA_PERSONALIZADA = "__personalizada__";
@@ -27,7 +28,9 @@ export default function Dashboard() {
   const usuario = obterUsuario();
   const [modalLancamentoAberto, setModalLancamentoAberto] = useState(false);
   const [categorias, setCategorias] = useState([]);
+  const [contas, setContas] = useState([]);
   const [carregandoCategorias, setCarregandoCategorias] = useState(false);
+  const [carregandoContas, setCarregandoContas] = useState(false);
   const [erroLancamento, setErroLancamento] = useState("");
   const [carregandoLancamento, setCarregandoLancamento] = useState(false);
   const [nomeCategoriaPersonalizada, setNomeCategoriaPersonalizada] =
@@ -41,6 +44,7 @@ export default function Dashboard() {
   const [formLancamento, setFormLancamento] = useState({
     tipo: "RECEITA",
     idCategoria: "",
+    idConta: "",
     valor: "",
     dataTransacao: "",
     descricao: "",
@@ -83,12 +87,27 @@ export default function Dashboard() {
     }
   }
 
+  async function carregarContas() {
+    setCarregandoContas(true);
+
+    try {
+      const resultado = await listarContas();
+      setContas(resultado);
+    } catch (error) {
+      console.error("Erro ao carregar contas:", error.message);
+      setErroLancamento("Erro ao carregar contas.");
+    } finally {
+      setCarregandoContas(false);
+    }
+  }
+
   function handleOpenChangeLancamento(aberto) {
     setModalLancamentoAberto(aberto);
 
     if (aberto) {
       setErroLancamento("");
       carregarCategorias();
+      carregarContas();
     }
   }
 
@@ -99,6 +118,7 @@ export default function Dashboard() {
 
     try {
       let idCategoria = formLancamento.idCategoria;
+      let idConta = formLancamento.idConta;
 
       if (idCategoria === OPCAO_CATEGORIA_PERSONALIZADA) {
         const categoria = await cadastrarCategoria({
@@ -112,11 +132,13 @@ export default function Dashboard() {
       await cadastrarLancamento({
         ...formLancamento,
         idCategoria,
+        idConta: idConta || null,
       });
 
       setFormLancamento({
         tipo: "RECEITA",
         idCategoria: "",
+        idConta: "",
         valor: "",
         dataTransacao: "",
         descricao: "",
@@ -124,6 +146,7 @@ export default function Dashboard() {
       });
       setNomeCategoriaPersonalizada("");
       carregarCategorias();
+      carregarContas();
 
       setModalLancamentoAberto(false);
     } catch (error) {
@@ -250,6 +273,44 @@ export default function Dashboard() {
                           {formLancamento.tipo.toLowerCase()}.
                         </p>
                       )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="idConta">Conta</Label>
+                    <select
+                      id="idConta"
+                      name="idConta"
+                      value={formLancamento.idConta}
+                      onChange={handleChangeLancamento}
+                      className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"
+                      disabled={carregandoContas || contas.length === 0}
+                      required={contas.length > 0}
+                    >
+                      <option value="">
+                        {contas.length === 0
+                          ? "Nenhuma conta cadastrada"
+                          : "Selecione uma conta"}
+                      </option>
+
+                      {!carregandoContas &&
+                        contas.map((conta) => (
+                          <option key={conta.id} value={conta.id}>
+                            {conta.nome}
+                          </option>
+                        ))}
+                    </select>
+
+                    {carregandoContas && (
+                      <p className="text-sm text-slate-500">
+                        Carregando contas...
+                      </p>
+                    )}
+
+                    {!carregandoContas && contas.length === 0 && (
+                      <p className="text-sm text-slate-500">
+                        Você ainda não tem nenhuma conta bancária cadastrada.
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-2">

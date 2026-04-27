@@ -1,6 +1,19 @@
 import BankAccountService from "../services/bankAccountService.js";
 
 class BankAccountController {
+  static async listar(req, res, next) {
+    try {
+      const contas = await BankAccountService.listarPorUsuario(req.usuario.id);
+
+      return res.status(200).json({
+        success: true,
+        data: contas,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async cadastrar(req, res, next) {
     try {
       const { nome, tipo, saldoInicial, descricao } = req.body;

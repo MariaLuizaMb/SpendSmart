@@ -143,11 +143,24 @@ exports.Prisma.LancamentoScalarFieldEnum = {
   id: 'id',
   idUsuario: 'idUsuario',
   idCategoria: 'idCategoria',
+  idConta: 'idConta',
   valor: 'valor',
   dataTransacao: 'dataTransacao',
   recorrencia: 'recorrencia',
   tipo: 'tipo',
   descricao: 'descricao',
+  criadoEm: 'criadoEm',
+  atualizadoEm: 'atualizadoEm'
+};
+
+exports.Prisma.ContaScalarFieldEnum = {
+  id: 'id',
+  idUsuario: 'idUsuario',
+  nome: 'nome',
+  tipo: 'tipo',
+  saldoInicial: 'saldoInicial',
+  descricao: 'descricao',
+  ativa: 'ativa',
   criadoEm: 'criadoEm',
   atualizadoEm: 'atualizadoEm'
 };
@@ -196,10 +209,19 @@ exports.TipoLancamento = exports.$Enums.TipoLancamento = {
   RECEITA: 'RECEITA'
 };
 
+exports.TipoContaBancaria = exports.$Enums.TipoContaBancaria = {
+  CONTA_CORRENTE: 'CONTA_CORRENTE',
+  POUPANCA: 'POUPANCA',
+  CARTEIRA_DINHEIRO: 'CARTEIRA_DINHEIRO',
+  CARTEIRA_DIGITAL: 'CARTEIRA_DIGITAL',
+  OUTRA: 'OUTRA'
+};
+
 exports.Prisma.ModelName = {
   Usuario: 'Usuario',
   Categoria: 'Categoria',
   Lancamento: 'Lancamento',
+  Conta: 'Conta',
   Orcamento: 'Orcamento'
 };
 

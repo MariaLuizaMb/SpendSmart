@@ -1,12 +1,18 @@
 import prisma from "../database/prisma.js";
 
-import {
-  ValidationError,
-  ConflictError,
-} from "../errors/AppError.js";
+import { ValidationError } from "../errors/AppError.js";
 
 class LaunchService {
-  static async cadastrar({ idUsuario, idCategoria, valor, dataTransacao, tipo, descricao, recorrencia = "NENHUMA" }) {
+  static async cadastrar({
+    idUsuario,
+    idCategoria,
+    idConta,
+    valor,
+    dataTransacao,
+    tipo,
+    descricao,
+    recorrencia = "NENHUMA",
+  }) {
     // Validações básicas
     if (!idUsuario || !idCategoria || !valor || !dataTransacao || !tipo) {
       throw new ValidationError("Todos os campos obrigatórios devem ser fornecidos: idUsuario, idCategoria, valor, dataTransacao, tipo.");
@@ -62,10 +68,25 @@ class LaunchService {
       throw new ValidationError(`A categoria selecionada é do tipo ${categoria.tipo}, mas o lançamento é do tipo ${tipo}.`);
     }
 
+    if (idConta) {
+      const conta = await prisma.conta.findFirst({
+        where: {
+          id: idConta,
+          idUsuario,
+          ativa: true,
+        },
+      });
+
+      if (!conta) {
+        throw new ValidationError("Conta não encontrada ou não pertence ao usuário.");
+      }
+    }
+
     const lancamento = await prisma.lancamento.create({
       data: {
         idUsuario,
         idCategoria,
+        idConta: idConta || null,
         valor: valorNumerico,
         dataTransacao: data,
         tipo,
@@ -74,6 +95,7 @@ class LaunchService {
       },
       include: {
         categoria: true,
+        conta: true,
         usuario: {
           select: {
             id: true,

@@ -30,6 +30,14 @@ enum TipoRecorrencia {
   ANUAL   // lançamento recorrente anual
 }
 
+enum TipoContaBancaria {
+  CONTA_CORRENTE
+  POUPANCA
+  CARTEIRA_DINHEIRO
+  CARTEIRA_DIGITAL
+  OUTRA
+}
+
 model Usuario {
   id          String       @id @default(cuid()) // chave primária; Prisma gera um id string único automaticamente
   nome        String // nome do usuário
@@ -38,6 +46,7 @@ model Usuario {
   categorias  Categoria[] // relação de um usuário para várias categorias
   lancamentos Lancamento[] // relação de um usuário para vários lançamentos
   orcamentos  Orcamento[] // relação de um usuário para vários orçamentos
+  contas      Conta[] // relação de um usuário para várias contas bancárias
   criadoEm    DateTime     @default(now()) // data/hora de criação do registro
   atualizadoEm DateTime    @updatedAt // atualiza automaticamente sempre que o registro for alterado
 }
@@ -62,6 +71,7 @@ model Lancamento {
   id            String           @id @default(cuid()) // chave primária do lançamento
   idUsuario     String // id do usuário que criou o lançamento
   idCategoria   String // id da categoria escolhida para o lançamento
+  idConta       String? // id da conta associada ao lançamento
   valor         Decimal          @db.Decimal(12, 2) // valor monetário com precisão de 12 dígitos e 2 casas decimais
   dataTransacao DateTime // data em que a transação ocorreu
   recorrencia   TipoRecorrencia  @default(NENHUMA) // tipo de recorrência do lançamento
@@ -69,13 +79,33 @@ model Lancamento {
   descricao     String? // descrição opcional do lançamento
   usuario       Usuario          @relation(fields: [idUsuario], references: [id], onDelete: Cascade) // relação obrigatória com usuário
   categoria     Categoria        @relation(fields: [idCategoria], references: [id]) // relação obrigatória com categoria
+  conta         Conta?           @relation(fields: [idConta], references: [id], onDelete: SetNull) // conta associada opcionalmente ao lançamento
   criadoEm      DateTime         @default(now()) // data/hora de criação
   atualizadoEm  DateTime         @updatedAt // data/hora de última atualização automática
 
   @@index([idUsuario]) // índice para buscar lançamentos por usuário
   @@index([idCategoria]) // índice para buscar lançamentos por categoria
+  @@index([idConta]) // índice para buscar lançamentos por conta
   @@index([dataTransacao]) // índice para filtros por data
   @@index([tipo]) // índice para filtros por tipo
+}
+
+model Conta {
+  id           String             @id @default(cuid()) // chave primária da conta
+  idUsuario    String // usuário dono da conta
+  nome         String // nome da conta, como Nubank, Caixa ou Carteira
+  tipo         TipoContaBancaria // tipo da conta bancária
+  saldoInicial Decimal            @db.Decimal(12, 2) // saldo inicial informado pelo usuário
+  descricao    String? // descrição opcional
+  ativa        Boolean            @default(true) // indica se a conta está ativa para uso
+  usuario      Usuario            @relation(fields: [idUsuario], references: [id], onDelete: Cascade)
+  lancamentos  Lancamento[] // lançamentos associados a esta conta
+  criadoEm     DateTime           @default(now())
+  atualizadoEm DateTime           @updatedAt
+
+  @@unique([idUsuario, nome])
+  @@index([idUsuario])
+  @@index([tipo])
 }
 
 model Orcamento {
