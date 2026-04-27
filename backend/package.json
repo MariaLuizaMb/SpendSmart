@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node src/server.js",
-    "test": "vitest run",
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
     "test:watch": "vitest"
   },
   "repository": {
@@ -29,6 +29,7 @@
     "jsonwebtoken": "^9.0.3"
   },
   "devDependencies": {
+    "nodemon": "^3.1.14",
     "prisma": "^7.7.0",
     "supertest": "^7.2.2",
     "vitest": "^4.1.4"
