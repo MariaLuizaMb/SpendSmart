@@ -108,6 +108,172 @@ class LaunchService {
 
     return lancamento;
   }
+
+  static async editar(id, idUsuario, dados) {
+    // Validar se o lançamento existe e pertence ao usuário
+    const lancamento = await prisma.lancamento.findFirst({
+      where: {
+        id,
+        idUsuario,
+      },
+    });
+
+    if (!lancamento) {
+      throw new ValidationError("Lançamento não encontrado ou não pertence ao usuário.");
+    }
+
+    // Preparar dados a serem atualizados
+    const dadosAtualizacao = {};
+
+    // Validar e adicionar campos se fornecidos
+    if (dados.valor !== undefined) {
+      const valorNumerico = parseFloat(dados.valor);
+      if (isNaN(valorNumerico) || valorNumerico <= 0) {
+        throw new ValidationError("O valor deve ser um número positivo.");
+      }
+      dadosAtualizacao.valor = valorNumerico;
+    }
+
+    if (dados.dataTransacao !== undefined) {
+      const data = new Date(dados.dataTransacao);
+      if (isNaN(data.getTime())) {
+        throw new ValidationError("Data de transação inválida.");
+      }
+      dadosAtualizacao.dataTransacao = data;
+    }
+
+    if (dados.tipo !== undefined) {
+      if (!["DESPESA", "RECEITA"].includes(dados.tipo)) {
+        throw new ValidationError("Tipo deve ser 'DESPESA' ou 'RECEITA'.");
+      }
+      dadosAtualizacao.tipo = dados.tipo;
+    }
+
+    if (dados.recorrencia !== undefined) {
+      const recorrenciasValidas = ["NENHUMA", "DIARIA", "SEMANAL", "MENSAL", "ANUAL"];
+      if (!recorrenciasValidas.includes(dados.recorrencia)) {
+        throw new ValidationError("Recorrência inválida.");
+      }
+      dadosAtualizacao.recorrencia = dados.recorrencia;
+    }
+
+    if (dados.descricao !== undefined) {
+      dadosAtualizacao.descricao = dados.descricao?.trim() || null;
+    }
+
+    // Validar categoria se fornecida
+    if (dados.idCategoria !== undefined) {
+      const categoria = await prisma.categoria.findFirst({
+        where: {
+          id: dados.idCategoria,
+          OR: [
+            { idUsuario: idUsuario },
+            { ehPadrao: true },
+          ],
+        },
+      });
+
+      if (!categoria) {
+        throw new ValidationError("Categoria não encontrada ou não pertence ao usuário.");
+      }
+
+      // Verificar compatibilidade de tipo
+      const tipoAtual = dados.tipo || lancamento.tipo;
+      if (categoria.tipo !== tipoAtual) {
+        throw new ValidationError(`A categoria selecionada é do tipo ${categoria.tipo}, mas o lançamento é do tipo ${tipoAtual}.`);
+      }
+
+      dadosAtualizacao.idCategoria = dados.idCategoria;
+    }
+
+    // Validar conta se fornecida
+    if (dados.idConta !== undefined) {
+      if (dados.idConta !== null) {
+        const conta = await prisma.conta.findFirst({
+          where: {
+            id: dados.idConta,
+            idUsuario,
+            ativa: true,
+          },
+        });
+
+        if (!conta) {
+          throw new ValidationError("Conta não encontrada ou não pertence ao usuário.");
+        }
+      }
+      dadosAtualizacao.idConta = dados.idConta;
+    }
+
+    // Se nenhum campo foi fornecido para atualização
+    if (Object.keys(dadosAtualizacao).length === 0) {
+      throw new ValidationError("Nenhum campo foi fornecido para atualização.");
+    }
+
+    // Atualizar lançamento
+    const lancamentoAtualizado = await prisma.lancamento.update({
+      where: { id },
+      data: dadosAtualizacao,
+      include: {
+        categoria: true,
+        conta: true,
+        usuario: {
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    return lancamentoAtualizado;
+  }
+
+  static async remover(id, idUsuario) {
+    // Validar se o lançamento existe e pertence ao usuário
+    const lancamento = await prisma.lancamento.findFirst({
+      where: {
+        id,
+        idUsuario,
+      },
+    });
+
+    if (!lancamento) {
+      throw new ValidationError("Lançamento não encontrado ou não pertence ao usuário.");
+    }
+
+    // Remover lançamento
+    await prisma.lancamento.delete({
+      where: { id },
+    });
+
+    return { id, mensagem: "Lançamento removido com sucesso." };
+  }
+
+  static async listar(idUsuario) {
+    // Verificar se usuário existe
+    const usuario = await prisma.usuario.findUnique({
+      where: { id: idUsuario },
+    });
+
+    if (!usuario) {
+      throw new ValidationError("Usuário não encontrado.");
+    }
+
+    // Buscar todos os lançamentos do usuário
+    const lancamentos = await prisma.lancamento.findMany({
+      where: { idUsuario },
+      include: {
+        categoria: true,
+        conta: true,
+      },
+      orderBy: {
+        dataTransacao: "desc",
+      },
+    });
+
+    return lancamentos;
+  }
 }
 
 export default LaunchService;
