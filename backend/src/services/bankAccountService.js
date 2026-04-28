@@ -105,6 +105,159 @@ class BankAccountService {
 
     return conta;
   }
+
+  static async editar(id, idUsuario, dados) {
+    // Validar se a conta existe e pertence ao usuário
+    const conta = await prisma.conta.findFirst({
+      where: {
+        id,
+        idUsuario,
+      },
+    });
+
+    if (!conta) {
+      throw new ValidationError("Conta não encontrada ou não pertence ao usuário.");
+    }
+
+    // Preparar dados a serem atualizados
+    const dadosAtualizacao = {};
+
+    // Validar e adicionar campo nome se fornecido
+    if (dados.nome !== undefined) {
+      const nomeFormatado = dados.nome.trim();
+
+      if (nomeFormatado.length < 2) {
+        throw new ValidationError(
+          "O nome da conta deve ter pelo menos 2 caracteres."
+        );
+      }
+
+      // Verificar se já existe outra conta com esse nome
+      const contaComMesmoNome = await prisma.conta.findFirst({
+        where: {
+          idUsuario,
+          nome: nomeFormatado,
+          NOT: { id }, // Excluir a própria conta
+        },
+      });
+
+      if (contaComMesmoNome) {
+        throw new ConflictError("Você já possui outra conta com esse nome.");
+      }
+
+      dadosAtualizacao.nome = nomeFormatado;
+    }
+
+    // Validar e adicionar campo tipo se fornecido
+    if (dados.tipo !== undefined) {
+      const tiposValidos = [
+        "CONTA_CORRENTE",
+        "POUPANCA",
+        "CARTEIRA_DINHEIRO",
+        "CARTEIRA_DIGITAL",
+        "OUTRA",
+      ];
+
+      if (!tiposValidos.includes(dados.tipo)) {
+        throw new ValidationError(
+          "Tipo de conta inválido. Use: CONTA_CORRENTE, POUPANCA, CARTEIRA_DINHEIRO, CARTEIRA_DIGITAL ou OUTRA."
+        );
+      }
+
+      dadosAtualizacao.tipo = dados.tipo;
+    }
+
+    // Validar e adicionar campo saldoInicial se fornecido
+    if (dados.saldoInicial !== undefined) {
+      const saldoNumerico = Number(dados.saldoInicial);
+
+      if (!Number.isFinite(saldoNumerico) || saldoNumerico < 0) {
+        throw new ValidationError(
+          "O saldo inicial deve ser um número maior ou igual a zero."
+        );
+      }
+
+      dadosAtualizacao.saldoInicial = saldoNumerico.toFixed(2);
+    }
+
+    // Adicionar campo descricao se fornecido
+    if (dados.descricao !== undefined) {
+      dadosAtualizacao.descricao = dados.descricao?.trim() || null;
+    }
+
+    // Validar e adicionar campo ativa se fornecido
+    if (dados.ativa !== undefined) {
+      if (typeof dados.ativa !== "boolean") {
+        throw new ValidationError("O campo 'ativa' deve ser um valor booleano (true ou false).");
+      }
+
+      dadosAtualizacao.ativa = dados.ativa;
+    }
+
+    // Se nenhum campo foi fornecido para atualização
+    if (Object.keys(dadosAtualizacao).length === 0) {
+      throw new ValidationError(
+        "Nenhum campo foi fornecido para atualização."
+      );
+    }
+
+    // Atualizar conta
+    const contaAtualizada = await prisma.conta.update({
+      where: { id },
+      data: dadosAtualizacao,
+      include: {
+        usuario: {
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    return contaAtualizada;
+  }
+
+  static async remover(id, idUsuario) {
+    // Validar se a conta existe e pertence ao usuário
+    const conta = await prisma.conta.findFirst({
+      where: {
+        id,
+        idUsuario,
+      },
+    });
+
+    if (!conta) {
+      throw new ValidationError("Conta não encontrada ou não pertence ao usuário.");
+    }
+
+    // Verificar se a conta está sendo usada em lançamentos
+    const lancamentosUsandoConta = await prisma.lancamento.count({
+      where: {
+        idConta: id,
+      },
+    });
+
+    // Se tem lançamentos associados, fazer soft delete
+    if (lancamentosUsandoConta > 0) {
+      await prisma.conta.update({
+        where: { id },
+        data: {
+          ativa: false,
+        },
+      });
+
+      return { id, mensagem: "Conta desativada com sucesso (possui lançamentos associados)." };
+    }
+
+    // Se não tem lançamentos, fazer delete permanente
+    await prisma.conta.delete({
+      where: { id },
+    });
+
+    return { id, mensagem: "Conta removida com sucesso." };
+  }
 }
 
 export default BankAccountService;

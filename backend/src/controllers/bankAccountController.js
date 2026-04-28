@@ -37,6 +37,43 @@ class BankAccountController {
       next(error);
     }
   }
+
+  static async editar(req, res, next) {
+    try {
+      const { id } = req.params;
+      const dados = req.body;
+
+      const contaAtualizada = await BankAccountService.editar(
+        id,
+        req.usuario.id,
+        dados
+      );
+
+      return res.status(200).json({
+        success: true,
+        message: "Conta atualizada com sucesso.",
+        data: contaAtualizada,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async remover(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      const resultado = await BankAccountService.remover(id, req.usuario.id);
+
+      return res.status(200).json({
+        success: true,
+        message: "Conta removida com sucesso.",
+        data: resultado,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default BankAccountController;
