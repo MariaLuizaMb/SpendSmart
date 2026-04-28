@@ -34,16 +34,26 @@ Diferente de uma simples planilha, o sistema utiliza **análise comportamental e
 
 ---
 
-## 🛠️ Tecnologias e Stack
+## 🛠️ Tecnologias e Stack - SPRINT 1
 
 A arquitetura foi desenhada para garantir isolamento de responsabilidades e alta performance:
 
-- **Frontend:** React com Tailwind CSS (Interfaces responsivas e gráficos interativos).
-- **Backend:** Node.js (API RESTful para regras de negócio operacionais).
-- **Módulo Analítico:** Python com Pandas (Processamento estatístico e insights).
-- **Banco de Dados:** PostgreSQL (Persistência relacional com integridade financeira).
-- **Mensageria:** Redis (Processamento assíncrono de alertas e relatórios pesados).
-- **Infraestrutura:** Docker & Docker Compose (Containerização completa).
+### 🔹 Backend
+- **Node.js (LTS)**
+- **Express v5.2.x**
+- **Prisma ORM v7.7.x** (com suporte a Neon/PostgreSQL)
+- **JWT v9.0.x & Bcrypt v6.0.x** (Segurança)
+- **Vitest v4.1.x** (Testes Unitários e de Integração)
+
+### 🔹 Frontend
+- **React v19.0**
+- **Vite v8.0.x**
+- **Tailwind CSS v4.0**
+- **Shadcn/UI & Radix UI** (Componentização)
+- **React Router Dom v7.14.x** (Navegação)
+
+### 🔹 Infraestrutura
+- **Docker + Docker Compose**
 
 ---
 
@@ -55,50 +65,83 @@ Acompanhamos o desenvolvimento através de metodologias ágeis (Scrum), utilizan
 
 ---
 
-## 🚀 Como Usar?
+## 🚀 Como Executar o Projeto
 
 ### 📥 Pré-requisitos
-Antes de começar, você precisará ter instalado em sua máquina:
-- [Git](https://git-scm.com)
-- [Docker](https://www.docker.com/products/docker-desktop) e [Docker Compose](https://docs.docker.com/compose/)
-
-### 🛠️ Instalação e Execução (Passo a Passo)
-
-2.  **Configure as variáveis de ambiente:**
-    Crie um arquivo `.env` na raiz do projeto (ou dentro das pastas `backend` e `analytics`, conforme sua estrutura) baseando-se no arquivo de exemplo:
-    ```bash
-    cp .env.example .env
-    ```
-    Certifique-se de preencher as chaves de conexão do Banco de Dados e o `JWT_SECRET`.
-
-3.  **Suba a aplicação via Docker:**
-    O comando abaixo orquestra todos os containers (Frontend, Backend, Banco de Dados, Redis e Módulo Python) de forma automatizada:
-    ```bash
-    docker-compose up --build
-    ```
-
-4.  **Acesse a aplicação:**
-    Após os containers iniciarem, os serviços estarão disponíveis em:
-    * **Frontend:** [http://localhost:3000](http://localhost:3000)
-    * **API Backend:** [http://localhost:5000](http://localhost:5000)
-    * **Documentação API (Swagger):** [http://localhost:5000/docs](http://localhost:5000/docs)
+- Git instalado
+- Docker + Docker Compose instalados
 
 ---
 
-## 📂 Estrutura do Projeto
+### 🛠️ Passo a Passo
 
+#### 1. Clone o repositório
 ```bash
+git clone https://github.com/MariaLuizaMb/SpendSmart.git
+cd SpendSmart
+
+```
+#### 2. Configure os arquivos .env
+
+#### 3. Suba os containers
+```
+docker-compose up --build
+```
+#### 4. Acesse a aplicação
+
+🌐 Frontend: http://localhost:5173
+🔗 Backend API: http://localhost:3000
+
+## 📁 Estrutura de Pastas
+
+```
 📁 SpendSmart/
 │
-├── 📁 .github/             # Workflows do CI/CD (GitHub Actions)
-├── 📁 src/
-│   ├── 📁 backend/         # API RESTful em Node.js (Express + Prisma/Sequelize)
-│   ├── 📁 frontend/        # Aplicação Web em React (Tailwind + Vite)
-│   └── 📁 analytics/       # Engine de análise em Python (Pandas + Redis Consumer)
-├── 📁 tests/               # Suítes de testes automatizados (Jest/PyTest)
-├── 📁 docs/                # Retrospectivas, Diagramas ER e Backlog de Requisitos
-├── 📄 docker-compose.yml   # Arquivo de orquestração da stack completa
-└── 📄 README.md            # Documentação principal do projeto
+├── 📁 backend/
+│   ├── 📁 prisma/
+│   │   ├── 📁 migrations/
+│   │   └── 📄 schema.prisma
+│   │
+│   ├── 📁 generated/           # Cliente gerado pelo Prisma
+│   │
+│   ├── 📁 src/
+│   │   ├── 📁 controllers/     # Camada de controle (req/res)
+│   │   ├── 📁 services/        # Regras de negócio
+│   │   ├── 📁 routes/          # Definição de rotas
+│   │   ├── 📁 middlewares/     # Autenticação, etc
+│   │   ├── 📁 database/        # Configuração do Prisma
+│   │   ├── 📁 errors/          # Erros customizados
+│   │   ├── 📁 utils/           # Funções auxiliares
+│   │   ├── 📁 scripts/         # Scripts auxiliares
+│   │   ├── 📄 app.js           # Configuração do Express
+│   │   └── 📄 server.js        # Inicialização do servidor
+│   │
+│   ├── 📁 tests/               # Testes com Vitest
+│   ├── 📄 Dockerfile
+│   ├── 📄 package.json
+│   └── 📄 vitest.config.js
+│
+├── 📁 frontend/
+│   ├── 📁 public/              # Arquivos estáticos
+│   │
+│   ├── 📁 src/
+│   │   ├── 📁 assets/          # Imagens e recursos
+│   │   ├── 📁 components/
+│   │   │   └── 📁 ui/          # Componentes (Shadcn/Radix)
+│   │   ├── 📁 pages/           # Páginas
+│   │   ├── 📁 routes/          # Rotas da aplicação
+│   │   ├── 📁 services/        # Comunicação com API
+│   │   ├── 📁 lib/             # Helpers/utilitários
+│   │   ├── 📄 App.jsx
+│   │   └── 📄 main.jsx
+│   │
+│   ├── 📄 index.html
+│   ├── 📄 Dockerfile
+│   ├── 📄 package.json
+│   └── 📄 vite.config.js
+│
+├── 📄 docker-compose.yml       # Orquestração dos serviços
+└── 📄 .gitignore
 
 ```
 ---
@@ -113,7 +156,7 @@ O desenvolvimento do SpendSmart representa a consolidação de nossa jornada aca
 
 - **Banco de Dados:** Na modelagem relacional complexa e garantia da integridade e segurança da informação.
 
-- **Sistemas Distribuídos e DevOps: Com a containerização em Docker e o uso de mensageria para processamento assíncrono.
+- **Sistemas Distribuídos e DevOps**: Com a containerização em Docker e o uso de mensageria para processamento assíncrono.
 
 - **Inteligência de Dados:** No uso de ferramentas analíticas para transformar dados brutos em conhecimento estratégico.
 
