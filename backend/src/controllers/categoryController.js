@@ -31,6 +31,43 @@ class CategoryController {
       next(error);
     }
   }
+
+  static async editar(req, res, next) {
+    try {
+      const { id } = req.params;
+      const dados = req.body;
+
+      const categoriaAtualizada = await CategoryService.editar(
+        id,
+        req.usuario.id,
+        dados
+      );
+
+      res.status(200).json({
+        success: true,
+        message: "Categoria atualizada com sucesso.",
+        data: categoriaAtualizada,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async remover(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      const resultado = await CategoryService.remover(id, req.usuario.id);
+
+      res.status(200).json({
+        success: true,
+        message: "Categoria removida com sucesso.",
+        data: resultado,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default CategoryController;
