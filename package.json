@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "ui:add": "docker compose exec frontend npx shadcn add",
+    "shadcn:add": "npm --prefix frontend exec -- shadcn add"
+  }
+}

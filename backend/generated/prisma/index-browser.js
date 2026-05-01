@@ -159,6 +159,7 @@ exports.Prisma.ContaScalarFieldEnum = {
   nome: 'nome',
   tipo: 'tipo',
   saldoInicial: 'saldoInicial',
+  modeloCartao: 'modeloCartao',
   descricao: 'descricao',
   ativa: 'ativa',
   criadoEm: 'criadoEm',
@@ -215,6 +216,14 @@ exports.TipoContaBancaria = exports.$Enums.TipoContaBancaria = {
   CARTEIRA_DINHEIRO: 'CARTEIRA_DINHEIRO',
   CARTEIRA_DIGITAL: 'CARTEIRA_DIGITAL',
   OUTRA: 'OUTRA'
+};
+
+exports.ModeloCartao = exports.$Enums.ModeloCartao = {
+  NUBANK: 'NUBANK',
+  MERCADO_PAGO: 'MERCADO_PAGO',
+  CAIXA: 'CAIXA',
+  PICPAY: 'PICPAY',
+  DEFAULT: 'DEFAULT'
 };
 
 exports.Prisma.ModelName = {

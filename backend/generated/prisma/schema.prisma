@@ -38,6 +38,14 @@ enum TipoContaBancaria {
   OUTRA
 }
 
+enum ModeloCartao {
+  NUBANK
+  MERCADO_PAGO
+  CAIXA
+  PICPAY
+  DEFAULT
+}
+
 model Usuario {
   id           String       @id @default(cuid()) // chave primária; Prisma gera um id string único automaticamente
   nome         String // nome do usuário
@@ -96,6 +104,7 @@ model Conta {
   nome         String // nome da conta, como Nubank, Caixa ou Carteira
   tipo         TipoContaBancaria // tipo da conta bancária
   saldoInicial Decimal           @db.Decimal(12, 2) // saldo inicial informado pelo usuário
+  modeloCartao ModeloCartao      @default(DEFAULT)
   descricao    String? // descrição opcional
   ativa        Boolean           @default(true) // indica se a conta está ativa para uso
   usuario      Usuario           @relation(fields: [idUsuario], references: [id], onDelete: Cascade)

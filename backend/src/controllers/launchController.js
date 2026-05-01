@@ -76,7 +76,7 @@ class LaunchController {
 
   static async listar(req, res, next) {
     try {
-      const lancamentos = await LaunchService.listar(req.usuario.id);
+      const lancamentos = await LaunchService.listar(req.usuario.id, req.query);
 
       res.status(200).json({
         success: true,

@@ -87,3 +87,44 @@ export async function cadastrarConta(dados) {
 
   return resultado.data || resultado;
 }
+
+export async function listarLancamentos({
+  periodo,
+  idConta,
+  limite,
+  dataInicio,
+  dataFim,
+} = {}) {
+  const params = new URLSearchParams();
+
+  if (periodo) params.append("periodo", periodo);
+  if (idConta) params.append("idConta", idConta);
+  if (limite) params.append("limite", limite);
+  if (dataInicio) params.append("dataInicio", dataInicio);
+  if (dataFim) params.append("dataFim", dataFim);
+
+  const query = params.toString();
+  const path = `/lancamentos/listar${query ? `?${query}` : ""}`;
+  const deveLogarFiltroMes = periodo === "mes";
+
+  if (deveLogarFiltroMes) {
+    console.log("[API][Lancamentos][Filtro mes] parametros enviados:", {
+      periodo,
+      idConta,
+      limite,
+      dataInicio,
+      dataFim,
+      path,
+    });
+  }
+
+  const resultado = await request(path);
+  const dados = resultado.data || resultado;
+
+  if (deveLogarFiltroMes) {
+    console.log("[API][Lancamentos][Filtro mes] resposta completa:", resultado);
+    console.log("[API][Lancamentos][Filtro mes] dados usados na tela:", dados);
+  }
+
+  return dados;
+}

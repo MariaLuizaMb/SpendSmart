@@ -2,41 +2,77 @@ import prisma from "../database/prisma.js";
 
 import { ValidationError, ConflictError } from "../errors/AppError.js";
 
+function calcularSaldoAtual(conta) {
+  const saldoInicial = Number(conta.saldoInicial || 0);
+  const lancamentos = conta.lancamentos || [];
+
+  return lancamentos.reduce((saldo, lancamento) => {
+    const valor = Number(lancamento.valor || 0);
+
+    if (lancamento.tipo === "RECEITA") {
+      return saldo + valor;
+    }
+
+    if (lancamento.tipo === "DESPESA") {
+      return saldo - valor;
+    }
+
+    return saldo;
+  }, saldoInicial);
+}
+
+function adicionarSaldoAtual(conta) {
+  const { lancamentos, ...dadosConta } = conta;
+
+  return {
+    ...dadosConta,
+    saldoAtual: calcularSaldoAtual(conta).toFixed(2),
+  };
+}
+
 class BankAccountService {
   static async listarPorUsuario(idUsuario) {
     if (!idUsuario) {
       throw new ValidationError("Usuário é obrigatório.");
     }
 
-    return prisma.conta.findMany({
+    const contas = await prisma.conta.findMany({
       where: {
         idUsuario,
         ativa: true,
+      },
+      include: {
+        lancamentos: {
+          select: {
+            valor: true,
+            tipo: true,
+          },
+        },
       },
       orderBy: {
         nome: "asc",
       },
     });
+
+    return contas.map(adicionarSaldoAtual);
   }
 
-  static async cadastrar({ idUsuario, nome, tipo, saldoInicial, descricao }) {
+  static async cadastrar({
+    idUsuario,
+    nome,
+    tipo,
+    saldoInicial,
+    modeloCartao,
+    descricao,
+  }) {
     if (
       !idUsuario ||
-      !nome ||
       !tipo ||
       saldoInicial === undefined ||
       saldoInicial === null
     ) {
       throw new ValidationError(
-        "Todos os campos obrigatórios devem ser fornecidos: nome, tipo e saldoInicial.",
-      );
-    }
-
-    const nomeFormatado = nome.trim();
-
-    if (nomeFormatado.length < 2) {
-      throw new ValidationError(
-        "O nome da conta deve ter pelo menos 2 caracteres.",
+        "Todos os campos obrigatórios devem ser fornecidos: tipo e saldoInicial.",
       );
     }
 
@@ -51,6 +87,33 @@ class BankAccountService {
     if (!tiposValidos.includes(tipo)) {
       throw new ValidationError(
         "Tipo de conta inválido. Use: CONTA_CORRENTE, POUPANCA, CARTEIRA_DINHEIRO, CARTEIRA_DIGITAL ou OUTRA.",
+      );
+    }
+
+    const nomesPorModeloCartao = {
+      NUBANK: "Nubank",
+      MERCADO_PAGO: "Mercado Pago",
+      CAIXA: "Caixa",
+      PICPAY: "PicPay",
+      DEFAULT: null,
+    };
+    const modelosValidos = Object.keys(nomesPorModeloCartao);
+    const modeloCartaoFormatado = modeloCartao || "DEFAULT";
+
+    if (!modelosValidos.includes(modeloCartaoFormatado)) {
+      throw new ValidationError(
+        "Modelo de cartão inválido. Use: NUBANK, MERCADO_PAGO, CAIXA, PICPAY ou DEFAULT.",
+      );
+    }
+
+    const nomeFormatado =
+      modeloCartaoFormatado === "DEFAULT"
+        ? nome?.trim() || ""
+        : nomesPorModeloCartao[modeloCartaoFormatado];
+
+    if (nomeFormatado.length < 2) {
+      throw new ValidationError(
+        "O nome da conta deve ter pelo menos 2 caracteres.",
       );
     }
 
@@ -89,6 +152,7 @@ class BankAccountService {
         nome: nomeFormatado,
         tipo,
         saldoInicial: saldoNumerico.toFixed(2),
+        modeloCartao: modeloCartaoFormatado,
         descricao: descricao?.trim() || null,
         ativa: true,
       },
@@ -103,7 +167,10 @@ class BankAccountService {
       },
     });
 
-    return conta;
+    return {
+      ...conta,
+      saldoAtual: Number(conta.saldoInicial || 0).toFixed(2),
+    };
   }
 
   static async editar(id, idUsuario, dados) {
@@ -206,6 +273,12 @@ class BankAccountService {
       where: { id },
       data: dadosAtualizacao,
       include: {
+        lancamentos: {
+          select: {
+            valor: true,
+            tipo: true,
+          },
+        },
         usuario: {
           select: {
             id: true,
@@ -216,7 +289,7 @@ class BankAccountService {
       },
     });
 
-    return contaAtualizada;
+    return adicionarSaldoAtual(contaAtualizada);
   }
 
   static async remover(id, idUsuario) {

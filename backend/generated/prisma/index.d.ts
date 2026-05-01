@@ -80,6 +80,17 @@ export const TipoContaBancaria: {
 
 export type TipoContaBancaria = (typeof TipoContaBancaria)[keyof typeof TipoContaBancaria]
 
+
+export const ModeloCartao: {
+  NUBANK: 'NUBANK',
+  MERCADO_PAGO: 'MERCADO_PAGO',
+  CAIXA: 'CAIXA',
+  PICPAY: 'PICPAY',
+  DEFAULT: 'DEFAULT'
+};
+
+export type ModeloCartao = (typeof ModeloCartao)[keyof typeof ModeloCartao]
+
 }
 
 export type TipoCategoria = $Enums.TipoCategoria
@@ -97,6 +108,10 @@ export const TipoRecorrencia: typeof $Enums.TipoRecorrencia
 export type TipoContaBancaria = $Enums.TipoContaBancaria
 
 export const TipoContaBancaria: typeof $Enums.TipoContaBancaria
+
+export type ModeloCartao = $Enums.ModeloCartao
+
+export const ModeloCartao: typeof $Enums.ModeloCartao
 
 /**
  * ##  Prisma Client ʲˢ
@@ -4991,6 +5006,7 @@ export namespace Prisma {
     nome: string | null
     tipo: $Enums.TipoContaBancaria | null
     saldoInicial: Decimal | null
+    modeloCartao: $Enums.ModeloCartao | null
     descricao: string | null
     ativa: boolean | null
     criadoEm: Date | null
@@ -5003,6 +5019,7 @@ export namespace Prisma {
     nome: string | null
     tipo: $Enums.TipoContaBancaria | null
     saldoInicial: Decimal | null
+    modeloCartao: $Enums.ModeloCartao | null
     descricao: string | null
     ativa: boolean | null
     criadoEm: Date | null
@@ -5015,6 +5032,7 @@ export namespace Prisma {
     nome: number
     tipo: number
     saldoInicial: number
+    modeloCartao: number
     descricao: number
     ativa: number
     criadoEm: number
@@ -5037,6 +5055,7 @@ export namespace Prisma {
     nome?: true
     tipo?: true
     saldoInicial?: true
+    modeloCartao?: true
     descricao?: true
     ativa?: true
     criadoEm?: true
@@ -5049,6 +5068,7 @@ export namespace Prisma {
     nome?: true
     tipo?: true
     saldoInicial?: true
+    modeloCartao?: true
     descricao?: true
     ativa?: true
     criadoEm?: true
@@ -5061,6 +5081,7 @@ export namespace Prisma {
     nome?: true
     tipo?: true
     saldoInicial?: true
+    modeloCartao?: true
     descricao?: true
     ativa?: true
     criadoEm?: true
@@ -5160,6 +5181,7 @@ export namespace Prisma {
     nome: string
     tipo: $Enums.TipoContaBancaria
     saldoInicial: Decimal
+    modeloCartao: $Enums.ModeloCartao
     descricao: string | null
     ativa: boolean
     criadoEm: Date
@@ -5191,6 +5213,7 @@ export namespace Prisma {
     nome?: boolean
     tipo?: boolean
     saldoInicial?: boolean
+    modeloCartao?: boolean
     descricao?: boolean
     ativa?: boolean
     criadoEm?: boolean
@@ -5206,6 +5229,7 @@ export namespace Prisma {
     nome?: boolean
     tipo?: boolean
     saldoInicial?: boolean
+    modeloCartao?: boolean
     descricao?: boolean
     ativa?: boolean
     criadoEm?: boolean
@@ -5219,6 +5243,7 @@ export namespace Prisma {
     nome?: boolean
     tipo?: boolean
     saldoInicial?: boolean
+    modeloCartao?: boolean
     descricao?: boolean
     ativa?: boolean
     criadoEm?: boolean
@@ -5232,13 +5257,14 @@ export namespace Prisma {
     nome?: boolean
     tipo?: boolean
     saldoInicial?: boolean
+    modeloCartao?: boolean
     descricao?: boolean
     ativa?: boolean
     criadoEm?: boolean
     atualizadoEm?: boolean
   }
 
-  export type ContaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "idUsuario" | "nome" | "tipo" | "saldoInicial" | "descricao" | "ativa" | "criadoEm" | "atualizadoEm", ExtArgs["result"]["conta"]>
+  export type ContaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "idUsuario" | "nome" | "tipo" | "saldoInicial" | "modeloCartao" | "descricao" | "ativa" | "criadoEm" | "atualizadoEm", ExtArgs["result"]["conta"]>
   export type ContaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
     lancamentos?: boolean | Conta$lancamentosArgs<ExtArgs>
@@ -5263,6 +5289,7 @@ export namespace Prisma {
       nome: string
       tipo: $Enums.TipoContaBancaria
       saldoInicial: Prisma.Decimal
+      modeloCartao: $Enums.ModeloCartao
       descricao: string | null
       ativa: boolean
       criadoEm: Date
@@ -5697,6 +5724,7 @@ export namespace Prisma {
     readonly nome: FieldRef<"Conta", 'String'>
     readonly tipo: FieldRef<"Conta", 'TipoContaBancaria'>
     readonly saldoInicial: FieldRef<"Conta", 'Decimal'>
+    readonly modeloCartao: FieldRef<"Conta", 'ModeloCartao'>
     readonly descricao: FieldRef<"Conta", 'String'>
     readonly ativa: FieldRef<"Conta", 'Boolean'>
     readonly criadoEm: FieldRef<"Conta", 'DateTime'>
@@ -7390,6 +7418,7 @@ export namespace Prisma {
     nome: 'nome',
     tipo: 'tipo',
     saldoInicial: 'saldoInicial',
+    modeloCartao: 'modeloCartao',
     descricao: 'descricao',
     ativa: 'ativa',
     criadoEm: 'criadoEm',
@@ -7545,6 +7574,20 @@ export namespace Prisma {
    * Reference to a field of type 'TipoContaBancaria[]'
    */
   export type ListEnumTipoContaBancariaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoContaBancaria[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ModeloCartao'
+   */
+  export type EnumModeloCartaoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ModeloCartao'>
+    
+
+
+  /**
+   * Reference to a field of type 'ModeloCartao[]'
+   */
+  export type ListEnumModeloCartaoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ModeloCartao[]'>
     
 
 
@@ -7821,6 +7864,7 @@ export namespace Prisma {
     nome?: StringFilter<"Conta"> | string
     tipo?: EnumTipoContaBancariaFilter<"Conta"> | $Enums.TipoContaBancaria
     saldoInicial?: DecimalFilter<"Conta"> | Decimal | DecimalJsLike | number | string
+    modeloCartao?: EnumModeloCartaoFilter<"Conta"> | $Enums.ModeloCartao
     descricao?: StringNullableFilter<"Conta"> | string | null
     ativa?: BoolFilter<"Conta"> | boolean
     criadoEm?: DateTimeFilter<"Conta"> | Date | string
@@ -7835,6 +7879,7 @@ export namespace Prisma {
     nome?: SortOrder
     tipo?: SortOrder
     saldoInicial?: SortOrder
+    modeloCartao?: SortOrder
     descricao?: SortOrderInput | SortOrder
     ativa?: SortOrder
     criadoEm?: SortOrder
@@ -7853,6 +7898,7 @@ export namespace Prisma {
     nome?: StringFilter<"Conta"> | string
     tipo?: EnumTipoContaBancariaFilter<"Conta"> | $Enums.TipoContaBancaria
     saldoInicial?: DecimalFilter<"Conta"> | Decimal | DecimalJsLike | number | string
+    modeloCartao?: EnumModeloCartaoFilter<"Conta"> | $Enums.ModeloCartao
     descricao?: StringNullableFilter<"Conta"> | string | null
     ativa?: BoolFilter<"Conta"> | boolean
     criadoEm?: DateTimeFilter<"Conta"> | Date | string
@@ -7867,6 +7913,7 @@ export namespace Prisma {
     nome?: SortOrder
     tipo?: SortOrder
     saldoInicial?: SortOrder
+    modeloCartao?: SortOrder
     descricao?: SortOrderInput | SortOrder
     ativa?: SortOrder
     criadoEm?: SortOrder
@@ -7887,6 +7934,7 @@ export namespace Prisma {
     nome?: StringWithAggregatesFilter<"Conta"> | string
     tipo?: EnumTipoContaBancariaWithAggregatesFilter<"Conta"> | $Enums.TipoContaBancaria
     saldoInicial?: DecimalWithAggregatesFilter<"Conta"> | Decimal | DecimalJsLike | number | string
+    modeloCartao?: EnumModeloCartaoWithAggregatesFilter<"Conta"> | $Enums.ModeloCartao
     descricao?: StringNullableWithAggregatesFilter<"Conta"> | string | null
     ativa?: BoolWithAggregatesFilter<"Conta"> | boolean
     criadoEm?: DateTimeWithAggregatesFilter<"Conta"> | Date | string
@@ -8229,6 +8277,7 @@ export namespace Prisma {
     nome: string
     tipo: $Enums.TipoContaBancaria
     saldoInicial: Decimal | DecimalJsLike | number | string
+    modeloCartao?: $Enums.ModeloCartao
     descricao?: string | null
     ativa?: boolean
     criadoEm?: Date | string
@@ -8243,6 +8292,7 @@ export namespace Prisma {
     nome: string
     tipo: $Enums.TipoContaBancaria
     saldoInicial: Decimal | DecimalJsLike | number | string
+    modeloCartao?: $Enums.ModeloCartao
     descricao?: string | null
     ativa?: boolean
     criadoEm?: Date | string
@@ -8255,6 +8305,7 @@ export namespace Prisma {
     nome?: StringFieldUpdateOperationsInput | string
     tipo?: EnumTipoContaBancariaFieldUpdateOperationsInput | $Enums.TipoContaBancaria
     saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    modeloCartao?: EnumModeloCartaoFieldUpdateOperationsInput | $Enums.ModeloCartao
     descricao?: NullableStringFieldUpdateOperationsInput | string | null
     ativa?: BoolFieldUpdateOperationsInput | boolean
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -8269,6 +8320,7 @@ export namespace Prisma {
     nome?: StringFieldUpdateOperationsInput | string
     tipo?: EnumTipoContaBancariaFieldUpdateOperationsInput | $Enums.TipoContaBancaria
     saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    modeloCartao?: EnumModeloCartaoFieldUpdateOperationsInput | $Enums.ModeloCartao
     descricao?: NullableStringFieldUpdateOperationsInput | string | null
     ativa?: BoolFieldUpdateOperationsInput | boolean
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -8282,6 +8334,7 @@ export namespace Prisma {
     nome: string
     tipo: $Enums.TipoContaBancaria
     saldoInicial: Decimal | DecimalJsLike | number | string
+    modeloCartao?: $Enums.ModeloCartao
     descricao?: string | null
     ativa?: boolean
     criadoEm?: Date | string
@@ -8293,6 +8346,7 @@ export namespace Prisma {
     nome?: StringFieldUpdateOperationsInput | string
     tipo?: EnumTipoContaBancariaFieldUpdateOperationsInput | $Enums.TipoContaBancaria
     saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    modeloCartao?: EnumModeloCartaoFieldUpdateOperationsInput | $Enums.ModeloCartao
     descricao?: NullableStringFieldUpdateOperationsInput | string | null
     ativa?: BoolFieldUpdateOperationsInput | boolean
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -8305,6 +8359,7 @@ export namespace Prisma {
     nome?: StringFieldUpdateOperationsInput | string
     tipo?: EnumTipoContaBancariaFieldUpdateOperationsInput | $Enums.TipoContaBancaria
     saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    modeloCartao?: EnumModeloCartaoFieldUpdateOperationsInput | $Enums.ModeloCartao
     descricao?: NullableStringFieldUpdateOperationsInput | string | null
     ativa?: BoolFieldUpdateOperationsInput | boolean
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -8754,6 +8809,13 @@ export namespace Prisma {
     not?: NestedEnumTipoContaBancariaFilter<$PrismaModel> | $Enums.TipoContaBancaria
   }
 
+  export type EnumModeloCartaoFilter<$PrismaModel = never> = {
+    equals?: $Enums.ModeloCartao | EnumModeloCartaoFieldRefInput<$PrismaModel>
+    in?: $Enums.ModeloCartao[] | ListEnumModeloCartaoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ModeloCartao[] | ListEnumModeloCartaoFieldRefInput<$PrismaModel>
+    not?: NestedEnumModeloCartaoFilter<$PrismaModel> | $Enums.ModeloCartao
+  }
+
   export type ContaIdUsuarioNomeCompoundUniqueInput = {
     idUsuario: string
     nome: string
@@ -8765,6 +8827,7 @@ export namespace Prisma {
     nome?: SortOrder
     tipo?: SortOrder
     saldoInicial?: SortOrder
+    modeloCartao?: SortOrder
     descricao?: SortOrder
     ativa?: SortOrder
     criadoEm?: SortOrder
@@ -8781,6 +8844,7 @@ export namespace Prisma {
     nome?: SortOrder
     tipo?: SortOrder
     saldoInicial?: SortOrder
+    modeloCartao?: SortOrder
     descricao?: SortOrder
     ativa?: SortOrder
     criadoEm?: SortOrder
@@ -8793,6 +8857,7 @@ export namespace Prisma {
     nome?: SortOrder
     tipo?: SortOrder
     saldoInicial?: SortOrder
+    modeloCartao?: SortOrder
     descricao?: SortOrder
     ativa?: SortOrder
     criadoEm?: SortOrder
@@ -8811,6 +8876,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTipoContaBancariaFilter<$PrismaModel>
     _max?: NestedEnumTipoContaBancariaFilter<$PrismaModel>
+  }
+
+  export type EnumModeloCartaoWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ModeloCartao | EnumModeloCartaoFieldRefInput<$PrismaModel>
+    in?: $Enums.ModeloCartao[] | ListEnumModeloCartaoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ModeloCartao[] | ListEnumModeloCartaoFieldRefInput<$PrismaModel>
+    not?: NestedEnumModeloCartaoWithAggregatesFilter<$PrismaModel> | $Enums.ModeloCartao
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumModeloCartaoFilter<$PrismaModel>
+    _max?: NestedEnumModeloCartaoFilter<$PrismaModel>
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -9265,6 +9340,10 @@ export namespace Prisma {
     set?: $Enums.TipoContaBancaria
   }
 
+  export type EnumModeloCartaoFieldUpdateOperationsInput = {
+    set?: $Enums.ModeloCartao
+  }
+
   export type UsuarioUpdateOneRequiredWithoutContasNestedInput = {
     create?: XOR<UsuarioCreateWithoutContasInput, UsuarioUncheckedCreateWithoutContasInput>
     connectOrCreate?: UsuarioCreateOrConnectWithoutContasInput
@@ -9546,6 +9625,13 @@ export namespace Prisma {
     not?: NestedEnumTipoContaBancariaFilter<$PrismaModel> | $Enums.TipoContaBancaria
   }
 
+  export type NestedEnumModeloCartaoFilter<$PrismaModel = never> = {
+    equals?: $Enums.ModeloCartao | EnumModeloCartaoFieldRefInput<$PrismaModel>
+    in?: $Enums.ModeloCartao[] | ListEnumModeloCartaoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ModeloCartao[] | ListEnumModeloCartaoFieldRefInput<$PrismaModel>
+    not?: NestedEnumModeloCartaoFilter<$PrismaModel> | $Enums.ModeloCartao
+  }
+
   export type NestedEnumTipoContaBancariaWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TipoContaBancaria | EnumTipoContaBancariaFieldRefInput<$PrismaModel>
     in?: $Enums.TipoContaBancaria[] | ListEnumTipoContaBancariaFieldRefInput<$PrismaModel>
@@ -9554,6 +9640,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTipoContaBancariaFilter<$PrismaModel>
     _max?: NestedEnumTipoContaBancariaFilter<$PrismaModel>
+  }
+
+  export type NestedEnumModeloCartaoWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ModeloCartao | EnumModeloCartaoFieldRefInput<$PrismaModel>
+    in?: $Enums.ModeloCartao[] | ListEnumModeloCartaoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ModeloCartao[] | ListEnumModeloCartaoFieldRefInput<$PrismaModel>
+    not?: NestedEnumModeloCartaoWithAggregatesFilter<$PrismaModel> | $Enums.ModeloCartao
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumModeloCartaoFilter<$PrismaModel>
+    _max?: NestedEnumModeloCartaoFilter<$PrismaModel>
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -9688,6 +9784,7 @@ export namespace Prisma {
     nome: string
     tipo: $Enums.TipoContaBancaria
     saldoInicial: Decimal | DecimalJsLike | number | string
+    modeloCartao?: $Enums.ModeloCartao
     descricao?: string | null
     ativa?: boolean
     criadoEm?: Date | string
@@ -9700,6 +9797,7 @@ export namespace Prisma {
     nome: string
     tipo: $Enums.TipoContaBancaria
     saldoInicial: Decimal | DecimalJsLike | number | string
+    modeloCartao?: $Enums.ModeloCartao
     descricao?: string | null
     ativa?: boolean
     criadoEm?: Date | string
@@ -9835,6 +9933,7 @@ export namespace Prisma {
     nome?: StringFilter<"Conta"> | string
     tipo?: EnumTipoContaBancariaFilter<"Conta"> | $Enums.TipoContaBancaria
     saldoInicial?: DecimalFilter<"Conta"> | Decimal | DecimalJsLike | number | string
+    modeloCartao?: EnumModeloCartaoFilter<"Conta"> | $Enums.ModeloCartao
     descricao?: StringNullableFilter<"Conta"> | string | null
     ativa?: BoolFilter<"Conta"> | boolean
     criadoEm?: DateTimeFilter<"Conta"> | Date | string
@@ -10066,6 +10165,7 @@ export namespace Prisma {
     nome: string
     tipo: $Enums.TipoContaBancaria
     saldoInicial: Decimal | DecimalJsLike | number | string
+    modeloCartao?: $Enums.ModeloCartao
     descricao?: string | null
     ativa?: boolean
     criadoEm?: Date | string
@@ -10079,6 +10179,7 @@ export namespace Prisma {
     nome: string
     tipo: $Enums.TipoContaBancaria
     saldoInicial: Decimal | DecimalJsLike | number | string
+    modeloCartao?: $Enums.ModeloCartao
     descricao?: string | null
     ativa?: boolean
     criadoEm?: Date | string
@@ -10174,6 +10275,7 @@ export namespace Prisma {
     nome?: StringFieldUpdateOperationsInput | string
     tipo?: EnumTipoContaBancariaFieldUpdateOperationsInput | $Enums.TipoContaBancaria
     saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    modeloCartao?: EnumModeloCartaoFieldUpdateOperationsInput | $Enums.ModeloCartao
     descricao?: NullableStringFieldUpdateOperationsInput | string | null
     ativa?: BoolFieldUpdateOperationsInput | boolean
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10187,6 +10289,7 @@ export namespace Prisma {
     nome?: StringFieldUpdateOperationsInput | string
     tipo?: EnumTipoContaBancariaFieldUpdateOperationsInput | $Enums.TipoContaBancaria
     saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    modeloCartao?: EnumModeloCartaoFieldUpdateOperationsInput | $Enums.ModeloCartao
     descricao?: NullableStringFieldUpdateOperationsInput | string | null
     ativa?: BoolFieldUpdateOperationsInput | boolean
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10471,6 +10574,7 @@ export namespace Prisma {
     nome: string
     tipo: $Enums.TipoContaBancaria
     saldoInicial: Decimal | DecimalJsLike | number | string
+    modeloCartao?: $Enums.ModeloCartao
     descricao?: string | null
     ativa?: boolean
     criadoEm?: Date | string
@@ -10585,6 +10689,7 @@ export namespace Prisma {
     nome?: StringFieldUpdateOperationsInput | string
     tipo?: EnumTipoContaBancariaFieldUpdateOperationsInput | $Enums.TipoContaBancaria
     saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    modeloCartao?: EnumModeloCartaoFieldUpdateOperationsInput | $Enums.ModeloCartao
     descricao?: NullableStringFieldUpdateOperationsInput | string | null
     ativa?: BoolFieldUpdateOperationsInput | boolean
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10597,6 +10702,7 @@ export namespace Prisma {
     nome?: StringFieldUpdateOperationsInput | string
     tipo?: EnumTipoContaBancariaFieldUpdateOperationsInput | $Enums.TipoContaBancaria
     saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    modeloCartao?: EnumModeloCartaoFieldUpdateOperationsInput | $Enums.ModeloCartao
     descricao?: NullableStringFieldUpdateOperationsInput | string | null
     ativa?: BoolFieldUpdateOperationsInput | boolean
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10609,6 +10715,7 @@ export namespace Prisma {
     nome?: StringFieldUpdateOperationsInput | string
     tipo?: EnumTipoContaBancariaFieldUpdateOperationsInput | $Enums.TipoContaBancaria
     saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    modeloCartao?: EnumModeloCartaoFieldUpdateOperationsInput | $Enums.ModeloCartao
     descricao?: NullableStringFieldUpdateOperationsInput | string | null
     ativa?: BoolFieldUpdateOperationsInput | boolean
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string

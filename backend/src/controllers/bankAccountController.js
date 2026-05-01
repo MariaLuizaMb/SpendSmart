@@ -16,13 +16,14 @@ class BankAccountController {
 
   static async cadastrar(req, res, next) {
     try {
-      const { nome, tipo, saldoInicial, descricao } = req.body;
+      const { nome, tipo, saldoInicial, modeloCartao, descricao } = req.body;
 
       const dadosConta = {
         idUsuario: req.usuario.id,
         nome,
         tipo,
         saldoInicial,
+        modeloCartao,
         descricao,
       };
 
