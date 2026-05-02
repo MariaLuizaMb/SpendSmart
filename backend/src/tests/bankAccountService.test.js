@@ -19,7 +19,7 @@ vi.mock("../database/prisma.js", () => ({
 }));
 
 import prisma from "../database/prisma.js";
-import BankAccountService from "./bankAccountService.js";
+import BankAccountService from "../services/bankAccountService.js";
 
 describe("BankAccountService", () => {
   beforeEach(() => {

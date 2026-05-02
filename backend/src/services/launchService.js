@@ -99,10 +99,11 @@ class LaunchService {
     }
 
     // Validar valor
-    const valorNumerico = parseFloat(valor);
-    if (isNaN(valorNumerico) || valorNumerico <= 0) {
+    if (typeof valor !== "number" || Number.isNaN(valor) || valor <= 0) {
       throw new ValidationError("O valor deve ser um número positivo.");
     }
+
+    const valorNumerico = valor;
 
     // Validar data
     const data = converterDataTransacao(dataTransacao);

@@ -18,7 +18,7 @@ vi.mock("jsonwebtoken", () => ({
 
 import prisma from "../database/prisma.js";
 import jwt from "jsonwebtoken";
-import AuthService from "./authServices.js";
+import AuthService from "../services/authServices.js";
 
 describe("AuthService", () => {
   beforeEach(() => {

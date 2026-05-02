@@ -400,7 +400,9 @@ function criarFormularioLancamentoInicial(idConta = "") {
 export function HomeSidebar({ usuario, paginaAtiva = "home" }) {
   const navigate = useNavigate();
   const { open, setOpen, isMobile, setOpenMobile } = useSidebar();
-  const [settingsAberto, setSettingsAberto] = useState(false);
+  const [settingsAberto, setSettingsAberto] = useState(
+    paginaAtiva === "contas-bancarias",
+  );
 
   function handleLogoClick() {
     if (!open) {
@@ -518,7 +520,10 @@ export function HomeSidebar({ usuario, paginaAtiva = "home" }) {
                 {settingsAberto && (
                   <SidebarMenuSub>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton asChild>
+                      <SidebarMenuSubButton
+                        asChild
+                        isActive={paginaAtiva === "contas-bancarias"}
+                      >
                         <Link to="/contas-bancarias">
                           <span>Contas Bancárias</span>
                         </Link>
@@ -720,7 +725,6 @@ function ListaLancamentos({
           onClick={onNovoLancamento}
           className="h-9 rounded-md bg-zinc-950 px-4 text-xs text-white hover:bg-zinc-800"
         >
-          <Plus size={14} />
           Novo Lançamento
         </Button>
       </div>
@@ -1294,10 +1298,7 @@ export function NovoLancamentoDialog({
 
             <ScrollArea className="h-[60vh] max-h-[520px] min-h-0">
               <CardContent className="space-y-4 px-5 py-4 pr-6">
-                <div
-                  data-ui="modal-linha-tipo-e-valor"
-                  className="space-y-4"
-                >
+                <div data-ui="modal-linha-tipo-e-valor" className="space-y-4">
                   <div className="space-y-1.5">
                     <Label htmlFor="tipoLancamento">Tipo</Label>
                     <Select
@@ -1522,11 +1523,6 @@ export function NovoLancamentoDialog({
                 disabled={salvando || carregandoCategorias}
                 className="bg-zinc-950 text-white hover:bg-zinc-800"
               >
-                {salvando ? (
-                  <LoaderCircle className="animate-spin" size={16} />
-                ) : (
-                  <Plus size={16} />
-                )}
                 {salvando ? "Salvando..." : "Salvar lançamento"}
               </Button>
             </CardFooter>
@@ -1577,8 +1573,7 @@ export default function Home() {
       lancamentosMesAnterior,
       "DESPESA",
     );
-    const maiorCategoriaDespesa =
-      obterCategoriaComMaiorDespesa(lancamentosMes);
+    const maiorCategoriaDespesa = obterCategoriaComMaiorDespesa(lancamentosMes);
     const saldoMes = receitasMes - despesasMes;
     const saldoMesAnterior = receitasMesAnterior - despesasMesAnterior;
     const orcamentoRestante = Math.max(receitasMes - despesasMes, 0);
@@ -1621,16 +1616,16 @@ export default function Home() {
           mensagemMantido: "Saldo igual ao mês anterior",
         },
       ),
-      descricaoMaiorCategoriaDespesa: despesasMes
-        ? (
-            <>
-              <PercentualDescricao>
-                {percentualMaiorCategoriaDespesa}%
-              </PercentualDescricao>{" "}
-              das despesas do mês
-            </>
-          )
-        : "Sem despesas no mês",
+      descricaoMaiorCategoriaDespesa: despesasMes ? (
+        <>
+          <PercentualDescricao>
+            {percentualMaiorCategoriaDespesa}%
+          </PercentualDescricao>{" "}
+          das despesas do mês
+        </>
+      ) : (
+        "Sem despesas no mês"
+      ),
       descricaoReceitas: descreverVariacaoMetrica(
         receitasMes,
         receitasMesAnterior,
@@ -1649,14 +1644,14 @@ export default function Home() {
           mensagemMantido: "Despesas iguais ao mês anterior",
         },
       ),
-      descricaoOrcamentoRestante: receitasMes
-        ? (
-            <>
-              <PercentualDescricao>{percentualOrcamentoUsado}%</PercentualDescricao>{" "}
-              do orçamento utilizado
-            </>
-          )
-        : "Sem receitas no mês",
+      descricaoOrcamentoRestante: receitasMes ? (
+        <>
+          <PercentualDescricao>{percentualOrcamentoUsado}%</PercentualDescricao>{" "}
+          do orçamento utilizado
+        </>
+      ) : (
+        "Sem receitas no mês"
+      ),
     };
   }, [lancamentosMes, lancamentosMesAnterior]);
 

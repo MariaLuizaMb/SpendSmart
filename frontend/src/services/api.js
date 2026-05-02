@@ -73,6 +73,23 @@ export async function cadastrarLancamento(dados) {
   return resultado.data || resultado;
 }
 
+export async function editarLancamento(id, dados) {
+  const resultado = await request(`/lancamentos/editar/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(dados),
+  });
+
+  return resultado.data || resultado;
+}
+
+export async function removerLancamento(id) {
+  const resultado = await request(`/lancamentos/remover/${id}`, {
+    method: "DELETE",
+  });
+
+  return resultado.data || resultado;
+}
+
 export async function listarContas() {
   const resultado = await request("/contas");
 
@@ -83,6 +100,23 @@ export async function cadastrarConta(dados) {
   const resultado = await request("/contas", {
     method: "POST",
     body: JSON.stringify(dados),
+  });
+
+  return resultado.data || resultado;
+}
+
+export async function editarConta(id, dados) {
+  const resultado = await request(`/contas/editar/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(dados),
+  });
+
+  return resultado.data || resultado;
+}
+
+export async function removerConta(id) {
+  const resultado = await request(`/contas/remover/${id}`, {
+    method: "DELETE",
   });
 
   return resultado.data || resultado;

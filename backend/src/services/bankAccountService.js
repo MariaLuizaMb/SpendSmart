@@ -30,6 +30,16 @@ function adicionarSaldoAtual(conta) {
   };
 }
 
+const nomesPorModeloCartao = {
+  NUBANK: "Nubank",
+  MERCADO_PAGO: "Mercado Pago",
+  CAIXA: "Caixa",
+  PICPAY: "PicPay",
+  DEFAULT: null,
+};
+
+const modelosCartaoValidos = Object.keys(nomesPorModeloCartao);
+
 class BankAccountService {
   static async listarPorUsuario(idUsuario) {
     if (!idUsuario) {
@@ -90,17 +100,9 @@ class BankAccountService {
       );
     }
 
-    const nomesPorModeloCartao = {
-      NUBANK: "Nubank",
-      MERCADO_PAGO: "Mercado Pago",
-      CAIXA: "Caixa",
-      PICPAY: "PicPay",
-      DEFAULT: null,
-    };
-    const modelosValidos = Object.keys(nomesPorModeloCartao);
     const modeloCartaoFormatado = modeloCartao || "DEFAULT";
 
-    if (!modelosValidos.includes(modeloCartaoFormatado)) {
+    if (!modelosCartaoValidos.includes(modeloCartaoFormatado)) {
       throw new ValidationError(
         "Modelo de cartão inválido. Use: NUBANK, MERCADO_PAGO, CAIXA, PICPAY ou DEFAULT.",
       );
@@ -188,10 +190,29 @@ class BankAccountService {
 
     // Preparar dados a serem atualizados
     const dadosAtualizacao = {};
+    let nomeParaAtualizar = dados.nome;
+
+    if (dados.modeloCartao !== undefined) {
+      const modeloCartaoFormatado = dados.modeloCartao || "DEFAULT";
+
+      if (!modelosCartaoValidos.includes(modeloCartaoFormatado)) {
+        throw new ValidationError(
+          "Modelo de cartão inválido. Use: NUBANK, MERCADO_PAGO, CAIXA, PICPAY ou DEFAULT."
+        );
+      }
+
+      dadosAtualizacao.modeloCartao = modeloCartaoFormatado;
+
+      if (modeloCartaoFormatado !== "DEFAULT") {
+        nomeParaAtualizar = nomesPorModeloCartao[modeloCartaoFormatado];
+      } else if (nomeParaAtualizar === undefined) {
+        nomeParaAtualizar = conta.nome;
+      }
+    }
 
     // Validar e adicionar campo nome se fornecido
-    if (dados.nome !== undefined) {
-      const nomeFormatado = dados.nome.trim();
+    if (nomeParaAtualizar !== undefined) {
+      const nomeFormatado = nomeParaAtualizar.trim();
 
       if (nomeFormatado.length < 2) {
         throw new ValidationError(

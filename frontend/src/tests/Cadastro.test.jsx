@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import Cadastro from "./Cadastro";
+import Cadastro from "../pages/Cadastro";
 import { cadastrarUsuario } from "@/services/api";
 
 const mockNavigate = vi.fn();
@@ -121,9 +121,12 @@ describe("Cadastro", () => {
       await screen.findByText("Usuário cadastrado com sucesso."),
     ).toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith("/");
-    }, { timeout: 2000 });
+    await waitFor(
+      () => {
+        expect(mockNavigate).toHaveBeenCalledWith("/");
+      },
+      { timeout: 2000 },
+    );
   });
 
   it("deve mostrar carregamento enquanto envia o cadastro", async () => {
