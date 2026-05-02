@@ -397,7 +397,7 @@ function criarFormularioLancamentoInicial(idConta = "") {
   };
 }
 
-function HomeSidebar({ usuario }) {
+export function HomeSidebar({ usuario, paginaAtiva = "home" }) {
   const navigate = useNavigate();
   const { open, setOpen, isMobile, setOpenMobile } = useSidebar();
   const [settingsAberto, setSettingsAberto] = useState(false);
@@ -468,7 +468,11 @@ function HomeSidebar({ usuario }) {
           <SidebarGroupContent>
             <SidebarMenu className="gap-1">
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive tooltip="Home">
+                <SidebarMenuButton
+                  asChild
+                  isActive={paginaAtiva === "home"}
+                  tooltip="Home"
+                >
                   <Link to="/home">
                     <HomeIcon />
                     <span>Home</span>
@@ -484,9 +488,15 @@ function HomeSidebar({ usuario }) {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Transações">
-                  <CreditCard />
-                  <span>Transações</span>
+                <SidebarMenuButton
+                  asChild
+                  isActive={paginaAtiva === "transacoes"}
+                  tooltip="Transações"
+                >
+                  <Link to="/transacoes">
+                    <CreditCard />
+                    <span>Transações</span>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
@@ -1075,7 +1085,7 @@ function GraficoLancamentos({
   );
 }
 
-function NovoLancamentoDialog({
+export function NovoLancamentoDialog({
   aberto,
   onAbertoChange,
   contas,
