@@ -19,6 +19,12 @@ export class ConflictError extends AppError {
   }
 }
 
+export class NotFoundError extends AppError {
+  constructor(message) {
+    super(message, 404, "NOT_FOUND_ERROR");
+  }
+}
+
 export class AuthenticationError extends AppError {
   constructor(message) {
     super(message, 401, "AUTHENTICATION_ERROR");
