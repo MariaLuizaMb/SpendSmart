@@ -1,6 +1,6 @@
 import prisma from "../database/prisma.js";
 
-import { ValidationError, ConflictError } from "../errors/AppError.js";
+import { ValidationError, ConflictError } from "../errors/appError.js";
 
 function calcularSaldoAtual(conta) {
   const saldoInicial = Number(conta.saldoInicial || 0);

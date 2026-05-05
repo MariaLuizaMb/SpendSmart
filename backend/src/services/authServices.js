@@ -6,7 +6,7 @@ import {
   ValidationError,
   ConflictError,
   AuthenticationError,
-} from "../errors/AppError.js";
+} from "../errors/appError.js";
 
 import {
   validarEmail,

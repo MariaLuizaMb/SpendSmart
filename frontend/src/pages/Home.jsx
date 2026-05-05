@@ -101,6 +101,11 @@ import {
 
 const OPCAO_CATEGORIA_PERSONALIZADA = "__nova_categoria__";
 const OPCAO_CONTA_VAZIA = "__sem_conta__";
+const contaSemConta = {
+  id: OPCAO_CONTA_VAZIA,
+  nome: "Sem conta",
+  saldoAtual: 0,
+};
 
 function formatarMoeda(valor) {
   return Number(valor || 0).toLocaleString("pt-BR", {
@@ -397,6 +402,12 @@ function criarFormularioLancamentoInicial(idConta = "") {
   };
 }
 
+function obterContaInicialLancamento(contaSelecionada, contas) {
+  if (contaSelecionada === OPCAO_CONTA_VAZIA) return "";
+
+  return contaSelecionada || contas[0]?.id || "";
+}
+
 export function HomeSidebar({ usuario, paginaAtiva = "home" }) {
   const navigate = useNavigate();
   const { open, setOpen, isMobile, setOpenMobile } = useSidebar();
@@ -609,20 +620,13 @@ function ListaLancamentos({
         <Select
           textSize="xs"
           value={contaSelecionada || OPCAO_CONTA_VAZIA}
-          onValueChange={(valor) =>
-            setContaSelecionada(valor === OPCAO_CONTA_VAZIA ? "" : valor)
-          }
-          disabled={contas.length === 0}
+          onValueChange={setContaSelecionada}
         >
           <SelectTrigger className="h-8 w-auto min-w-0 max-w-[45vw] shrink border-zinc-950 bg-zinc-950 px-3 text-xs text-white hover:bg-zinc-900 focus-visible:ring-zinc-400 sm:max-w-44 [&_svg]:text-white">
-            <SelectValue placeholder="Sem contas" />
+            <SelectValue placeholder="Sem conta" />
           </SelectTrigger>
           <SelectContent>
-            {contas.length === 0 && (
-              <SelectItem value={OPCAO_CONTA_VAZIA} disabled>
-                Sem contas
-              </SelectItem>
-            )}
+            <SelectItem value={OPCAO_CONTA_VAZIA}>Sem conta</SelectItem>
             {contas.map((conta) => (
               <SelectItem key={conta.id} value={conta.id}>
                 {conta.nome}
@@ -1098,7 +1102,9 @@ export function NovoLancamentoDialog({
 }) {
   const [categorias, setCategorias] = useState([]);
   const [formulario, setFormulario] = useState(() =>
-    criarFormularioLancamentoInicial(contaSelecionada || contas[0]?.id || ""),
+    criarFormularioLancamentoInicial(
+      obterContaInicialLancamento(contaSelecionada, contas),
+    ),
   );
   const [carregandoCategorias, setCarregandoCategorias] = useState(false);
   const [salvando, setSalvando] = useState(false);
@@ -1262,7 +1268,7 @@ export function NovoLancamentoDialog({
       setSucesso("Lançamento cadastrado com sucesso.");
       setFormulario(
         criarFormularioLancamentoInicial(
-          contaSelecionada || contas[0]?.id || "",
+          obterContaInicialLancamento(contaSelecionada, contas),
         ),
       );
       setNomeCategoriaPersonalizada("");
@@ -1403,7 +1409,7 @@ export function NovoLancamentoDialog({
                     <Label htmlFor="contaLancamento">Conta</Label>
                     <Select
                       value={formulario.idConta || OPCAO_CONTA_VAZIA}
-                      disabled={salvando || contas.length === 0}
+                      disabled={salvando}
                       onValueChange={(valor) =>
                         atualizarCampoFormulario(
                           "idConta",
@@ -1555,6 +1561,7 @@ export default function Home() {
   const [erroMovimentacoes, setErroMovimentacoes] = useState("");
 
   const contaAtiva = useMemo(() => {
+    if (contaSelecionada === OPCAO_CONTA_VAZIA) return contaSemConta;
     if (!contaSelecionada) return contas[0] || null;
 
     return (
@@ -1662,7 +1669,10 @@ export default function Home() {
       const resultado = await listarContas();
       setContas(resultado);
 
-      setContaSelecionada((contaAtual) => contaAtual || resultado[0]?.id || "");
+      setContaSelecionada(
+        (contaAtual) =>
+          contaAtual || resultado[0]?.id || OPCAO_CONTA_VAZIA,
+      );
     } catch (error) {
       console.error("Erro ao carregar contas:", error.message);
     } finally {
@@ -1725,7 +1735,9 @@ export default function Home() {
 
     try {
       const resultado = await listarLancamentos({
-        idConta: contaSelecionada,
+        idConta:
+          contaSelecionada === OPCAO_CONTA_VAZIA ? undefined : contaSelecionada,
+        semConta: contaSelecionada === OPCAO_CONTA_VAZIA ? true : undefined,
         limite: 6,
       });
 

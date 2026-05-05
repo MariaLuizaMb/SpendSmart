@@ -125,17 +125,33 @@ export async function removerConta(id) {
 export async function listarLancamentos({
   periodo,
   idConta,
+  semConta,
+  tipo,
+  idCategoria,
+  valorMinimo,
+  valorMaximo,
   limite,
   dataInicio,
   dataFim,
 } = {}) {
   const params = new URLSearchParams();
+  const adicionarParametro = (nome, valor) => {
+    if (valor === "" || valor === null || valor === undefined) return;
+    if (valor === false) return;
 
-  if (periodo) params.append("periodo", periodo);
-  if (idConta) params.append("idConta", idConta);
-  if (limite) params.append("limite", limite);
-  if (dataInicio) params.append("dataInicio", dataInicio);
-  if (dataFim) params.append("dataFim", dataFim);
+    params.append(nome, valor);
+  };
+
+  adicionarParametro("periodo", periodo);
+  adicionarParametro("dataInicio", dataInicio);
+  adicionarParametro("dataFim", dataFim);
+  adicionarParametro("idConta", semConta ? undefined : idConta);
+  adicionarParametro("semConta", semConta);
+  adicionarParametro("tipo", tipo);
+  adicionarParametro("idCategoria", idCategoria);
+  adicionarParametro("valorMinimo", valorMinimo);
+  adicionarParametro("valorMaximo", valorMaximo);
+  adicionarParametro("limite", limite);
 
   const query = params.toString();
   const path = `/lancamentos/listar${query ? `?${query}` : ""}`;
