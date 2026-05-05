@@ -109,8 +109,8 @@ async function validarUsuario(idUsuario) {
   }
 }
 
-async function validarCategoriaVisivel(idCategoria, idUsuario) {
-  if (!idCategoria) return;
+async function validarCategoriaDespesaVisivel(idCategoria, idUsuario) {
+  if (!idCategoria) return null;
 
   const categoria = await prisma.categoria.findFirst({
     where: {
@@ -124,6 +124,14 @@ async function validarCategoriaVisivel(idCategoria, idUsuario) {
       "Categoria não encontrada ou não pertence ao usuário.",
     );
   }
+
+  if (categoria.tipo !== "DESPESA") {
+    throw new ValidationError(
+      "Orçamentos por categoria só podem ser vinculados a categorias de despesa.",
+    );
+  }
+
+  return categoria;
 }
 
 async function buscarDuplicidade({
@@ -166,7 +174,7 @@ class OrcamentoService {
     const anoValidado = validarAnoObrigatorio(ano);
     const idCategoriaNormalizado = normalizarIdCategoria(idCategoria ?? null);
 
-    await validarCategoriaVisivel(idCategoriaNormalizado, idUsuario);
+    await validarCategoriaDespesaVisivel(idCategoriaNormalizado, idUsuario);
 
     const orcamentoExistente = await buscarDuplicidade({
       idUsuario,
@@ -279,7 +287,7 @@ class OrcamentoService {
     if (dados.idCategoria !== undefined) {
       const idCategoriaNormalizado = normalizarIdCategoria(dados.idCategoria);
 
-      await validarCategoriaVisivel(idCategoriaNormalizado, idUsuario);
+      await validarCategoriaDespesaVisivel(idCategoriaNormalizado, idUsuario);
 
       dadosAtualizacao.idCategoria = idCategoriaNormalizado;
     }

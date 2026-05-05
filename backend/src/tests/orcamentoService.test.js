@@ -44,6 +44,22 @@ describe("OrcamentoService", () => {
     ehPadrao: false,
   };
 
+  const categoriaReceita = {
+    id: "categoria-receita",
+    idUsuario: usuarioId,
+    nome: "Salário",
+    tipo: "RECEITA",
+    ehPadrao: false,
+  };
+
+  const categoriaPadraoDespesa = {
+    id: "categoria-padrao-despesa",
+    idUsuario: null,
+    nome: "Alimentação",
+    tipo: "DESPESA",
+    ehPadrao: true,
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -89,7 +105,7 @@ describe("OrcamentoService", () => {
     });
   });
 
-  it("deve cadastrar orçamento por categoria visível ao usuário", async () => {
+  it("deve cadastrar orçamento por categoria de despesa visível ao usuário", async () => {
     const orcamentoCriado = {
       id: "orcamento-2",
       idUsuario: usuarioId,
@@ -120,6 +136,54 @@ describe("OrcamentoService", () => {
         OR: [{ idUsuario: usuarioId }, { ehPadrao: true }],
       },
     });
+  });
+
+  it("deve cadastrar orçamento por categoria padrão de despesa", async () => {
+    const orcamentoCriado = {
+      id: "orcamento-padrao",
+      idUsuario: usuarioId,
+      idCategoria: categoriaPadraoDespesa.id,
+      valor: "300.00",
+      mes: 5,
+      ano: 2026,
+      categoria: categoriaPadraoDespesa,
+    };
+
+    prismaMock.usuario.findUnique.mockResolvedValue(usuarioValido);
+    prismaMock.categoria.findFirst.mockResolvedValue(categoriaPadraoDespesa);
+    prismaMock.orcamento.findFirst.mockResolvedValue(null);
+    prismaMock.orcamento.create.mockResolvedValue(orcamentoCriado);
+
+    const resultado = await OrcamentoService.cadastrar({
+      idUsuario: usuarioId,
+      valor: 300,
+      mes: 5,
+      ano: 2026,
+      idCategoria: categoriaPadraoDespesa.id,
+    });
+
+    expect(resultado).toEqual(orcamentoCriado);
+    expect(prismaMock.orcamento.create).toHaveBeenCalled();
+  });
+
+  it("deve impedir cadastro de orçamento por categoria de receita", async () => {
+    prismaMock.usuario.findUnique.mockResolvedValue(usuarioValido);
+    prismaMock.categoria.findFirst.mockResolvedValue(categoriaReceita);
+
+    await expect(
+      OrcamentoService.cadastrar({
+        idUsuario: usuarioId,
+        valor: 500,
+        mes: 5,
+        ano: 2026,
+        idCategoria: categoriaReceita.id,
+      }),
+    ).rejects.toThrow(
+      "Orçamentos por categoria só podem ser vinculados a categorias de despesa.",
+    );
+
+    expect(prismaMock.orcamento.findFirst).not.toHaveBeenCalled();
+    expect(prismaMock.orcamento.create).not.toHaveBeenCalled();
   });
 
   it("deve impedir orçamento duplicado para o mesmo período e categoria", async () => {
@@ -208,6 +272,7 @@ describe("OrcamentoService", () => {
     });
 
     expect(resultado).toEqual(orcamentoAtualizado);
+    expect(prismaMock.categoria.findFirst).not.toHaveBeenCalled();
     expect(prismaMock.orcamento.update).toHaveBeenCalledWith({
       where: { id: "orcamento-1" },
       data: {
@@ -217,5 +282,78 @@ describe("OrcamentoService", () => {
         categoria: true,
       },
     });
+  });
+
+  it("deve permitir trocar orçamento para outra categoria de despesa", async () => {
+    const novaCategoriaId = "categoria-2";
+    const novaCategoriaDespesa = {
+      ...categoriaValida,
+      id: novaCategoriaId,
+      nome: "Transporte",
+    };
+    const orcamentoAtual = {
+      id: "orcamento-1",
+      idUsuario: usuarioId,
+      idCategoria: categoriaId,
+      valor: "500.00",
+      mes: 5,
+      ano: 2026,
+    };
+    const orcamentoAtualizado = {
+      ...orcamentoAtual,
+      idCategoria: novaCategoriaId,
+      categoria: novaCategoriaDespesa,
+    };
+
+    prismaMock.orcamento.findFirst
+      .mockResolvedValueOnce(orcamentoAtual)
+      .mockResolvedValueOnce(null);
+    prismaMock.categoria.findFirst.mockResolvedValue(novaCategoriaDespesa);
+    prismaMock.orcamento.update.mockResolvedValue(orcamentoAtualizado);
+
+    const resultado = await OrcamentoService.editar("orcamento-1", usuarioId, {
+      idCategoria: novaCategoriaId,
+    });
+
+    expect(resultado).toEqual(orcamentoAtualizado);
+    expect(prismaMock.categoria.findFirst).toHaveBeenCalledWith({
+      where: {
+        id: novaCategoriaId,
+        OR: [{ idUsuario: usuarioId }, { ehPadrao: true }],
+      },
+    });
+    expect(prismaMock.orcamento.update).toHaveBeenCalledWith({
+      where: { id: "orcamento-1" },
+      data: {
+        idCategoria: novaCategoriaId,
+      },
+      include: {
+        categoria: true,
+      },
+    });
+  });
+
+  it("deve impedir trocar orçamento para categoria de receita", async () => {
+    const orcamentoAtual = {
+      id: "orcamento-1",
+      idUsuario: usuarioId,
+      idCategoria: categoriaId,
+      valor: "500.00",
+      mes: 5,
+      ano: 2026,
+    };
+
+    prismaMock.orcamento.findFirst.mockResolvedValueOnce(orcamentoAtual);
+    prismaMock.categoria.findFirst.mockResolvedValue(categoriaReceita);
+
+    await expect(
+      OrcamentoService.editar("orcamento-1", usuarioId, {
+        idCategoria: categoriaReceita.id,
+      }),
+    ).rejects.toThrow(
+      "Orçamentos por categoria só podem ser vinculados a categorias de despesa.",
+    );
+
+    expect(prismaMock.orcamento.update).not.toHaveBeenCalled();
   });
 });
