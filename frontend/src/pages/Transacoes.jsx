@@ -4,6 +4,7 @@ import {
   CheckCircle2,
   Pencil,
   LoaderCircle,
+  PiggyBank,
   Plus,
   Save,
   Search,
@@ -57,6 +58,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import {
+  cadastrarOrcamento,
   editarLancamento,
   listarCategorias,
   listarContas,
@@ -74,6 +76,22 @@ const opcoesOrdenacao = [
 const OPCAO_CONTA_VAZIA = "__sem_conta__";
 const OPCAO_TODAS_CONTAS = "__todas_contas__";
 const OPCAO_CONTA_DESATIVADA = "__conta_desativada__";
+const OPCAO_ORCAMENTO_GERAL = "__orcamento_geral__";
+
+const nomesMeses = [
+  "Janeiro",
+  "Fevereiro",
+  "Março",
+  "Abril",
+  "Maio",
+  "Junho",
+  "Julho",
+  "Agosto",
+  "Setembro",
+  "Outubro",
+  "Novembro",
+  "Dezembro",
+];
 
 function formatarMoeda(valor) {
   return Number(valor || 0).toLocaleString("pt-BR", {
@@ -278,6 +296,300 @@ function CampoSomenteLeitura({ label, children }) {
         {children || "Não informado"}
       </div>
     </div>
+  );
+}
+
+function criarFormularioOrcamentoInicial() {
+  const hoje = new Date();
+
+  return {
+    valor: "",
+    mes: String(hoje.getMonth() + 1),
+    ano: String(hoje.getFullYear()),
+    idCategoria: OPCAO_ORCAMENTO_GERAL,
+    descricao: "",
+  };
+}
+
+function NovoOrcamentoDialog({ aberto, onAbertoChange, onOrcamentoCriado }) {
+  const [categorias, setCategorias] = useState([]);
+  const [formulario, setFormulario] = useState(criarFormularioOrcamentoInicial);
+  const [carregandoCategorias, setCarregandoCategorias] = useState(false);
+  const [salvando, setSalvando] = useState(false);
+  const [erro, setErro] = useState("");
+  const [sucesso, setSucesso] = useState("");
+
+  const categoriasDespesa = useMemo(
+    () =>
+      categorias.filter(
+        (categoria) => categoria.tipo?.toUpperCase() === "DESPESA",
+      ),
+    [categorias],
+  );
+
+  const carregarCategorias = useCallback(async () => {
+    setCarregandoCategorias(true);
+    setErro("");
+
+    try {
+      const resultado = await listarCategorias();
+      setCategorias(resultado);
+    } catch (error) {
+      setErro(error.message || "Não foi possível carregar as categorias.");
+    } finally {
+      setCarregandoCategorias(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!aberto) return;
+
+    setFormulario(criarFormularioOrcamentoInicial());
+    setErro("");
+    setSucesso("");
+    void Promise.resolve().then(carregarCategorias);
+  }, [aberto, carregarCategorias]);
+
+  function atualizarCampo(event) {
+    const { name, value } = event.target;
+
+    setFormulario((dadosAtuais) => ({
+      ...dadosAtuais,
+      [name]: value,
+    }));
+  }
+
+  function atualizarCampoFormulario(name, value) {
+    setFormulario((dadosAtuais) => ({
+      ...dadosAtuais,
+      [name]: value,
+    }));
+  }
+
+  function atualizarValorOrcamento(event) {
+    const valorFormatado = formatarValorMonetarioInput(event.target.value);
+
+    setFormulario((dadosAtuais) => ({
+      ...dadosAtuais,
+      valor: valorFormatado,
+    }));
+  }
+
+  async function salvarOrcamento(event) {
+    event.preventDefault();
+    setErro("");
+    setSucesso("");
+
+    const valor = converterValorMonetarioParaNumero(formulario.valor);
+    const mes = Number(formulario.mes);
+    const ano = Number(formulario.ano);
+
+    if (!Number.isFinite(valor) || valor <= 0) {
+      setErro("Informe um valor maior que zero.");
+      return;
+    }
+
+    if (!Number.isInteger(mes) || mes < 1 || mes > 12) {
+      setErro("Selecione um mês válido.");
+      return;
+    }
+
+    if (!Number.isInteger(ano) || ano < 1900 || ano > 9999) {
+      setErro("Informe um ano válido.");
+      return;
+    }
+
+    setSalvando(true);
+
+    try {
+      await cadastrarOrcamento({
+        valor,
+        mes,
+        ano,
+        idCategoria:
+          formulario.idCategoria === OPCAO_ORCAMENTO_GERAL
+            ? null
+            : formulario.idCategoria,
+        descricao: formulario.descricao.trim() || undefined,
+      });
+
+      setSucesso("Orçamento cadastrado com sucesso.");
+      setFormulario(criarFormularioOrcamentoInicial());
+      await onOrcamentoCriado();
+      onAbertoChange(false);
+    } catch (error) {
+      setErro(error.message || "Não foi possível cadastrar o orçamento.");
+    } finally {
+      setSalvando(false);
+    }
+  }
+
+  return (
+    <Dialog open={aberto} onOpenChange={onAbertoChange}>
+      <DialogContent
+        data-ui="modal-novo-orcamento-conteudo"
+        className="max-h-[92vh] overflow-hidden p-0 sm:max-w-lg"
+      >
+        <form
+          data-ui="modal-novo-orcamento-formulario"
+          onSubmit={salvarOrcamento}
+          className="flex max-h-[92vh] flex-col"
+        >
+          <Card className="max-h-[92vh] overflow-hidden border-0 py-0 ring-0">
+            <CardHeader className="px-5 pb-2 pt-5">
+              <DialogTitle asChild>
+                <CardTitle>Definir orçamento</CardTitle>
+              </DialogTitle>
+              <DialogDescription>
+                Cadastre um limite mensal geral ou por categoria.
+              </DialogDescription>
+            </CardHeader>
+
+            <ScrollArea className="h-[52vh] max-h-[430px] min-h-0">
+              <CardContent className="space-y-4 px-5 py-4 pr-6">
+                <div className="space-y-1.5">
+                  <Label htmlFor="valorOrcamento">Valor</Label>
+                  <div className="relative">
+                    <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                      R$
+                    </span>
+                    <Input
+                      id="valorOrcamento"
+                      name="valor"
+                      type="text"
+                      inputMode="numeric"
+                      value={formulario.valor}
+                      onChange={atualizarValorOrcamento}
+                      placeholder="0,00"
+                      disabled={salvando}
+                      className="h-10 pl-10 pr-3"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="mesOrcamento">Mês</Label>
+                    <Select
+                      value={formulario.mes}
+                      disabled={salvando}
+                      onValueChange={(valor) =>
+                        atualizarCampoFormulario("mes", valor)
+                      }
+                    >
+                      <SelectTrigger id="mesOrcamento">
+                        <SelectValue placeholder="Selecione o mês" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {nomesMeses.map((nome, indice) => (
+                          <SelectItem key={nome} value={String(indice + 1)}>
+                            {nome}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label htmlFor="anoOrcamento">Ano</Label>
+                    <Input
+                      id="anoOrcamento"
+                      name="ano"
+                      type="number"
+                      min="1900"
+                      max="9999"
+                      value={formulario.ano}
+                      onChange={atualizarCampo}
+                      disabled={salvando}
+                      className="h-10 px-3"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="categoriaOrcamento">Categoria</Label>
+                  <Select
+                    value={formulario.idCategoria}
+                    disabled={salvando || carregandoCategorias}
+                    onValueChange={(valor) =>
+                      atualizarCampoFormulario("idCategoria", valor)
+                    }
+                  >
+                    <SelectTrigger id="categoriaOrcamento">
+                      <SelectValue placeholder="Selecione o tipo de orçamento" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={OPCAO_ORCAMENTO_GERAL}>
+                        Orçamento geral
+                      </SelectItem>
+
+                      {carregandoCategorias && (
+                        <SelectItem value="__carregando_categorias__" disabled>
+                          Carregando...
+                        </SelectItem>
+                      )}
+
+                      {!carregandoCategorias &&
+                        categoriasDespesa.map((categoria) => (
+                          <SelectItem key={categoria.id} value={categoria.id}>
+                            {categoria.nome}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="descricaoOrcamento">Descrição</Label>
+                  <Textarea
+                    id="descricaoOrcamento"
+                    name="descricao"
+                    value={formulario.descricao}
+                    onChange={atualizarCampo}
+                    placeholder="Observações sobre o orçamento"
+                    disabled={salvando}
+                    className="min-h-20 px-3"
+                  />
+                </div>
+
+                {erro && (
+                  <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                    {erro}
+                  </p>
+                )}
+
+                {sucesso && (
+                  <p className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+                    <CheckCircle2 size={16} />
+                    {sucesso}
+                  </p>
+                )}
+              </CardContent>
+            </ScrollArea>
+
+            <CardFooter className="justify-end gap-2 border-t-0 bg-transparent px-5 pb-5 pt-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onAbertoChange(false)}
+                disabled={salvando}
+              >
+                Cancelar
+              </Button>
+              <Button
+                type="submit"
+                disabled={salvando || carregandoCategorias}
+                className="bg-zinc-950 text-white hover:bg-zinc-800"
+              >
+                {salvando ? "Salvando..." : "Salvar orçamento"}
+              </Button>
+            </CardFooter>
+          </Card>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -900,6 +1212,7 @@ export default function Transacoes() {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
   const [modalLancamentoAberto, setModalLancamentoAberto] = useState(false);
+  const [modalOrcamentoAberto, setModalOrcamentoAberto] = useState(false);
   const [lancamentoDetalhes, setLancamentoDetalhes] = useState(null);
   const [lancamentoRemovendo, setLancamentoRemovendo] = useState("");
   const [removendoSelecionados, setRemovendoSelecionados] = useState(false);
@@ -1070,6 +1383,10 @@ export default function Transacoes() {
 
   async function atualizarAposCadastro() {
     await carregarLancamentos();
+  }
+
+  function atualizarAposCadastroOrcamento() {
+    setMensagemSucesso("Orçamento cadastrado com sucesso.");
   }
 
   async function atualizarAposEdicao(lancamentoAtualizado) {
@@ -1513,9 +1830,20 @@ export default function Transacoes() {
                   <Button
                     type="button"
                     variant="outline"
+                    onClick={() => setModalOrcamentoAberto(true)}
+                    className="border-zinc-200 bg-white text-xs text-zinc-950 hover:bg-zinc-50"
+                  >
+                    <PiggyBank size={14} />
+                    Definir orçamento
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="outline"
                     onClick={() => setModalLancamentoAberto(true)}
                     className="border-zinc-200 bg-white text-xs text-zinc-950 hover:bg-zinc-50"
                   >
+                    <Plus size={14} />
                     Novo Lançamento
                   </Button>
                 </div>
@@ -1530,6 +1858,14 @@ export default function Transacoes() {
               contas={contas}
               contaSelecionada={contaParaNovoLancamento}
               onLancamentoCriado={atualizarAposCadastro}
+            />
+          )}
+
+          {modalOrcamentoAberto && (
+            <NovoOrcamentoDialog
+              aberto={modalOrcamentoAberto}
+              onAbertoChange={setModalOrcamentoAberto}
+              onOrcamentoCriado={atualizarAposCadastroOrcamento}
             />
           )}
 

@@ -73,6 +73,36 @@ export async function cadastrarLancamento(dados) {
   return resultado.data || resultado;
 }
 
+export async function cadastrarOrcamento(dados) {
+  const resultado = await request("/orcamentos", {
+    method: "POST",
+    body: JSON.stringify(dados),
+  });
+
+  return resultado.data || resultado;
+}
+
+export async function listarOrcamentos({ mes, ano, idCategoria } = {}) {
+  const params = new URLSearchParams();
+
+  if (mes !== undefined && mes !== null && mes !== "") {
+    params.append("mes", mes);
+  }
+
+  if (ano !== undefined && ano !== null && ano !== "") {
+    params.append("ano", ano);
+  }
+
+  if (idCategoria !== undefined && idCategoria !== "") {
+    params.append("idCategoria", idCategoria);
+  }
+
+  const query = params.toString();
+  const resultado = await request(`/orcamentos${query ? `?${query}` : ""}`);
+
+  return resultado.data || resultado;
+}
+
 export async function editarLancamento(id, dados) {
   const resultado = await request(`/lancamentos/editar/${id}`, {
     method: "PUT",
@@ -92,6 +122,20 @@ export async function removerLancamento(id) {
 
 export async function listarContas() {
   const resultado = await request("/contas");
+
+  return resultado.data || resultado;
+}
+
+export async function buscarAnalisePreditiva({ mes, ano } = {}) {
+  const params = new URLSearchParams();
+
+  if (mes) params.append("mes", mes);
+  if (ano) params.append("ano", ano);
+
+  const query = params.toString();
+  const resultado = await request(
+    `/analytics/preditiva${query ? `?${query}` : ""}`,
+  );
 
   return resultado.data || resultado;
 }

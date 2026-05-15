@@ -5,6 +5,7 @@ import Home from "@/pages/Home";
 import Perfil from "@/pages/Perfil";
 import ContasBancarias from "@/pages/contasBancarias";
 import Transacoes from "@/pages/Transacoes";
+import Dashboard from "@/pages/Dashboard";
 import { estaAutenticado } from "@/lib/auth";
 
 function RotaPrivada({ children }) {
@@ -38,6 +39,14 @@ export default function AppRoutes() {
           element={
             <RotaPrivada>
               <Transacoes />
+            </RotaPrivada>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <RotaPrivada>
+              <Dashboard />
             </RotaPrivada>
           }
         />

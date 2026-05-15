@@ -97,6 +97,7 @@ import {
   listarCategorias,
   listarContas,
   listarLancamentos,
+  listarOrcamentos,
 } from "@/services/api";
 
 const OPCAO_CATEGORIA_PERSONALIZADA = "__nova_categoria__";
@@ -168,6 +169,19 @@ function somarLancamentosPorTipo(lancamentos, tipo) {
 
     return total + obterValorLancamento(lancamento);
   }, 0);
+}
+
+function obterLimiteOrcamentoMensal(orcamentos) {
+  const orcamentoGeral = orcamentos.find((orcamento) => !orcamento.idCategoria);
+
+  if (orcamentoGeral) {
+    return Number(orcamentoGeral.valor || 0);
+  }
+
+  return orcamentos.reduce(
+    (total, orcamento) => total + Number(orcamento.valor || 0),
+    0,
+  );
 }
 
 function obterCategoriaComMaiorDespesa(lancamentos) {
@@ -494,9 +508,15 @@ export function HomeSidebar({ usuario, paginaAtiva = "home" }) {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Dashboard">
-                  <LayoutDashboard />
-                  <span>Dashboard</span>
+                <SidebarMenuButton
+                  asChild
+                  isActive={paginaAtiva === "dashboard"}
+                  tooltip="Dashboard"
+                >
+                  <Link to="/dashboard">
+                    <LayoutDashboard />
+                    <span>Dashboard</span>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
@@ -1547,6 +1567,7 @@ export default function Home() {
   const [lancamentosPeriodo, setLancamentosPeriodo] = useState([]);
   const [lancamentosMes, setLancamentosMes] = useState([]);
   const [lancamentosMesAnterior, setLancamentosMesAnterior] = useState([]);
+  const [orcamentosMes, setOrcamentosMes] = useState([]);
   const [movimentacoesCartao, setMovimentacoesCartao] = useState([]);
   const [periodo, setPeriodo] = useState("semana");
   const [modalLancamentoAberto, setModalLancamentoAberto] = useState(false);
@@ -1583,12 +1604,16 @@ export default function Home() {
     const maiorCategoriaDespesa = obterCategoriaComMaiorDespesa(lancamentosMes);
     const saldoMes = receitasMes - despesasMes;
     const saldoMesAnterior = receitasMesAnterior - despesasMesAnterior;
-    const orcamentoRestante = Math.max(receitasMes - despesasMes, 0);
+    const limiteOrcamentoMensal = obterLimiteOrcamentoMensal(orcamentosMes);
+    const orcamentoRestante = Math.max(
+      limiteOrcamentoMensal - despesasMes,
+      0,
+    );
     const percentualMaiorCategoriaDespesa = despesasMes
       ? Math.round((maiorCategoriaDespesa.total / despesasMes) * 100)
       : 0;
-    const percentualOrcamentoUsado = receitasMes
-      ? Math.round((despesasMes / receitasMes) * 100)
+    const percentualOrcamentoUsado = limiteOrcamentoMensal
+      ? Math.round((despesasMes / limiteOrcamentoMensal) * 100)
       : 0;
     const variacaoSaldo = calcularVariacaoPercentualPorDiferenca(
       saldoMes,
@@ -1651,16 +1676,16 @@ export default function Home() {
           mensagemMantido: "Despesas iguais ao mês anterior",
         },
       ),
-      descricaoOrcamentoRestante: receitasMes ? (
+      descricaoOrcamentoRestante: limiteOrcamentoMensal ? (
         <>
           <PercentualDescricao>{percentualOrcamentoUsado}%</PercentualDescricao>{" "}
           do orçamento utilizado
         </>
       ) : (
-        "Sem receitas no mês"
+        "Nenhum orçamento definido"
       ),
     };
-  }, [lancamentosMes, lancamentosMesAnterior]);
+  }, [lancamentosMes, lancamentosMesAnterior, orcamentosMes]);
 
   const carregarContas = useCallback(async () => {
     setCarregandoContas(true);
@@ -1706,7 +1731,13 @@ export default function Home() {
     setErroMetricas("");
 
     try {
-      const resultado = await listarLancamentos();
+      const hoje = new Date();
+      const mesAtual = hoje.getMonth() + 1;
+      const anoAtual = hoje.getFullYear();
+      const [resultado, orcamentosResultado] = await Promise.all([
+        listarLancamentos(),
+        listarOrcamentos({ mes: mesAtual, ano: anoAtual }),
+      ]);
       const intervaloMesAtual = obterIntervaloPorPeriodo("mes");
       const intervaloMesAnterior = obterIntervaloMesAnterior();
 
@@ -1716,6 +1747,7 @@ export default function Home() {
       setLancamentosMesAnterior(
         filtrarLancamentosPorIntervalo(resultado, intervaloMesAnterior),
       );
+      setOrcamentosMes(orcamentosResultado);
     } catch (error) {
       setErroMetricas(error.message || "Erro ao carregar métricas.");
     } finally {
