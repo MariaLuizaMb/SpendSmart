@@ -54,19 +54,19 @@ export default function RecentHistoryChart({
   );
 
   return (
-    <Card className="min-h-[360px] rounded-2xl border-0 bg-white py-0 shadow-lg ring-0">
-      <CardHeader className="grid gap-4 px-5 pb-2 pt-5 sm:grid-cols-[1fr_220px] sm:items-start">
+    <Card className="@container/recent-history flex h-full min-h-[320px] flex-col rounded-2xl border-0 bg-white py-0 shadow-lg ring-0">
+      <CardHeader className="grid gap-[clamp(0.75rem,2.5cqw,1rem)] px-[clamp(1rem,2.4cqw,1.25rem)] pb-2 pt-[clamp(1rem,2.4cqw,1.25rem)] sm:grid-cols-[1fr_minmax(180px,220px)] sm:items-start">
         <div>
-          <CardTitle className={dashboardTypography.cardTitle}>
+          <CardTitle className="text-[clamp(1.05rem,2.35cqw,1.25rem)] font-bold text-zinc-950">
             Histórico Recente
           </CardTitle>
-          <CardDescription className={dashboardTypography.cardDescription}>
+          <CardDescription className="mt-1 text-[clamp(0.78rem,1.6cqw,0.875rem)] text-zinc-500">
             Receitas e Despesas dos últimos meses
           </CardDescription>
         </div>
 
         <Select value={periodo} onValueChange={onPeriodoChange}>
-          <SelectTrigger className="h-10 w-full rounded-lg">
+          <SelectTrigger className="h-[clamp(2.25rem,4.5cqw,2.5rem)] w-full rounded-lg text-[clamp(0.78rem,1.7cqw,0.875rem)]">
             <SelectValue placeholder="Período" />
           </SelectTrigger>
           <SelectContent align="end">
@@ -79,12 +79,12 @@ export default function RecentHistoryChart({
         </Select>
       </CardHeader>
 
-      <CardContent className="px-5 pb-5">
+      <CardContent className="min-h-0 flex-1 px-[clamp(1rem,2.4cqw,1.25rem)] pb-[clamp(1rem,2.4cqw,1.25rem)]">
         {carregando ? (
-          <Skeleton className="h-[270px] w-full" />
+          <Skeleton className="h-[300px] w-full sm:h-[340px] xl:h-[400px]" />
         ) : dados.length === 0 ? (
           <div
-            className={`flex h-[270px] items-center justify-center rounded-xl border border-dashed border-zinc-300 ${dashboardTypography.emptyState}`}
+            className={`flex h-[300px] items-center justify-center rounded-xl border border-dashed border-zinc-300 sm:h-[340px] xl:h-[400px] ${dashboardTypography.emptyState}`}
           >
             Sem histórico suficiente para montar o gráfico.
           </div>
@@ -94,9 +94,9 @@ export default function RecentHistoryChart({
               receitas: { label: "Receitas", color: "#2f9e92" },
               despesas: { label: "Despesas", color: "#ef6748" },
             }}
-            className="h-[270px] w-full"
+            className="h-[300px] w-full aspect-auto sm:h-[340px] xl:h-[400px]"
           >
-            <AreaChart data={dados} margin={{ left: 0, right: 8, top: 16 }}>
+            <AreaChart data={dados} margin={{ left: 8, right: 8, top: 16 }}>
               <defs>
                 <linearGradient id="receitasDashboard" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#2f9e92" stopOpacity={0.35} />
@@ -115,9 +115,10 @@ export default function RecentHistoryChart({
                 tickMargin={12}
               />
               <YAxis
-                width={38}
+                width={72}
                 axisLine={false}
                 tickLine={false}
+                tickMargin={8}
                 tickFormatter={(valor) => formatarMoeda(valor).replace("R$", "")}
               />
               <ChartTooltip

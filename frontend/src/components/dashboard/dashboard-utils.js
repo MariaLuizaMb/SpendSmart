@@ -35,7 +35,7 @@ export const dashboardTypography = {
   footer: "text-xs text-zinc-500",
   metricValue: "text-3xl font-bold tracking-normal text-zinc-950",
   metricTitle: "text-base font-semibold leading-tight text-zinc-950",
-  metricDescription: "text-sm leading-snug text-zinc-900",
+  metricDescription: "text-[13px] leading-snug text-zinc-900",
   subMetricValue: "text-2xl font-bold text-zinc-950",
 };
 

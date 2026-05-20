@@ -40,17 +40,17 @@ export default function CategoryRankingCard({ categorias, carregando }) {
   );
 
   return (
-    <Card className="min-h-[360px] rounded-2xl border-0 bg-white py-0 shadow-lg ring-0">
-      <CardHeader className="px-5 pb-2 pt-5">
-        <CardTitle className={dashboardTypography.cardTitle}>
+    <Card className="@container/category-ranking min-h-[320px] rounded-2xl border-0 bg-white py-0 shadow-lg ring-0">
+      <CardHeader className="px-[clamp(1rem,3.8cqw,1.25rem)] pb-2 pt-[clamp(1rem,3.8cqw,1.25rem)]">
+        <CardTitle className="text-[clamp(1.05rem,4.1cqw,1.25rem)] font-bold text-zinc-950">
           Ranking de categorias
         </CardTitle>
-        <CardDescription className={dashboardTypography.cardDescription}>
+        <CardDescription className="mt-1 text-[clamp(0.76rem,2.8cqw,0.875rem)] text-zinc-500">
           Principais despesas do período selecionado.
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="px-5 pb-5">
+      <CardContent className="px-[clamp(1rem,3.8cqw,1.25rem)] pb-[clamp(1rem,3.8cqw,1.25rem)]">
         {carregando ? (
           <div className="space-y-4 pt-4">
             {[1, 2, 3, 4, 5].map((item) => (
@@ -64,8 +64,8 @@ export default function CategoryRankingCard({ categorias, carregando }) {
             Nenhuma despesa por categoria encontrada para este período.
           </div>
         ) : (
-          <div className="space-y-4 pt-3">
-            <div className="space-y-3">
+          <div className="space-y-[clamp(0.75rem,3cqw,1rem)] pt-3">
+            <div className="space-y-[clamp(0.6rem,2.5cqw,0.75rem)]">
               {categoriasOrdenadas.map((categoria) => {
                 const valor = paraNumero(categoria.projecaoFutura ?? categoria.total);
                 const largura = maiorValor ? (valor / maiorValor) * 100 : 0;
@@ -86,11 +86,11 @@ export default function CategoryRankingCard({ categorias, carregando }) {
                 return (
                   <div
                     key={categoria.idCategoria || categoria.nome}
-                    className="space-y-2"
+                    className="space-y-[clamp(0.4rem,1.8cqw,0.5rem)]"
                   >
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex min-w-0 items-center gap-2">
-                        <span className={`truncate ${dashboardTypography.itemTitle}`}>
+                        <span className="truncate text-[clamp(0.78rem,3.2cqw,0.875rem)] font-semibold text-zinc-950">
                           {categoria.nome || "Categoria"}
                         </span>
                         <AlertTooltip mensagem={alerta} />
@@ -98,11 +98,11 @@ export default function CategoryRankingCard({ categorias, carregando }) {
 
                       <div className="flex shrink-0 items-center gap-2">
                         {percentual !== undefined && (
-                          <Badge variant="outline" className={riscoClassName}>
+                          <Badge variant="outline" className={`${riscoClassName} text-[clamp(0.68rem,2.8cqw,0.75rem)]`}>
                             {formatarPercentual(percentual)}
                           </Badge>
                         )}
-                        <span className={dashboardTypography.itemMeta}>
+                        <span className="text-[clamp(0.76rem,3cqw,0.875rem)] font-medium text-zinc-700">
                           {formatarMoeda(valor)}
                         </span>
                       </div>
@@ -110,7 +110,7 @@ export default function CategoryRankingCard({ categorias, carregando }) {
 
                     <Progress
                       value={limitarPercentual(largura)}
-                      className="h-3 rounded-full bg-zinc-100"
+                      className="h-[clamp(0.55rem,2.4cqw,0.75rem)] rounded-full bg-zinc-100"
                       indicatorClassName="bg-[#2f9e92]"
                     />
                   </div>
@@ -119,10 +119,10 @@ export default function CategoryRankingCard({ categorias, carregando }) {
             </div>
 
             <div className="border-t border-zinc-200 pt-4">
-              <p className={dashboardTypography.itemTitle}>
+              <p className="text-[clamp(0.78rem,3.2cqw,0.875rem)] font-semibold text-zinc-950">
                 Categorias com maior impacto no período selecionado
               </p>
-              <p className={`mt-2 ${dashboardTypography.body}`}>
+              <p className="mt-2 text-[clamp(0.76rem,3cqw,0.875rem)] leading-relaxed text-zinc-600">
                 O ranking usa os totais e projeções retornados pela análise
                 preditiva.
               </p>

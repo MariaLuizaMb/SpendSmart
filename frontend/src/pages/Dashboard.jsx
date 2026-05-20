@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  CalendarDays,
-  LoaderCircle,
+  CalendarIcon,
+  CircleAlert,
   PiggyBank,
   ReceiptText,
   Wallet,
@@ -18,7 +18,6 @@ import TrendsCard from "@/components/dashboard/TrendsCard";
 import {
   formatarMoeda,
   formatarPercentual,
-  nomesMeses,
   obterAlertasPorTipo,
   obterPeriodoAtual,
   paraNumero,
@@ -27,36 +26,112 @@ import {
 import { NovoLancamentoDialog, HomeSidebar } from "@/pages/Home";
 import { obterUsuario } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   buscarAnalisePreditiva,
   listarContas,
   listarLancamentos,
 } from "@/services/api";
 
+function criarDataDashboard(mes, ano) {
+  const mesNumerico = Number(mes);
+  const anoNumerico = Number(ano);
+  const hoje = new Date();
+
+  if (!Number.isInteger(mesNumerico) || !Number.isInteger(anoNumerico)) {
+    return hoje;
+  }
+
+  const ultimoDiaDoMes = new Date(anoNumerico, mesNumerico, 0).getDate();
+  const dia = Math.min(hoje.getDate(), ultimoDiaDoMes);
+
+  return new Date(anoNumerico, mesNumerico - 1, dia);
+}
+
+function formatarDataDashboard(data) {
+  const dia = String(data.getDate()).padStart(2, "0");
+  const mes = String(data.getMonth() + 1).padStart(2, "0");
+  const ano = data.getFullYear();
+
+  return `${dia}/${mes}/${ano}`;
+}
+
+function validarData(data) {
+  return data instanceof Date && !Number.isNaN(data.getTime());
+}
+
+function criarDataSemHorario(ano, mes, dia) {
+  const data = new Date(ano, mes - 1, dia);
+
+  if (
+    data.getFullYear() !== ano ||
+    data.getMonth() !== mes - 1 ||
+    data.getDate() !== dia
+  ) {
+    return undefined;
+  }
+
+  return data;
+}
+
+function converterTextoParaData(valor) {
+  const texto = valor.trim();
+
+  if (!texto) return undefined;
+
+  const dataPtBr = texto.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/);
+
+  if (dataPtBr) {
+    const [, dia, mes, ano] = dataPtBr.map(Number);
+    return criarDataSemHorario(ano, mes, dia);
+  }
+
+  const dataIso = texto.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+
+  if (dataIso) {
+    const [, ano, mes, dia] = dataIso.map(Number);
+    return criarDataSemHorario(ano, mes, dia);
+  }
+
+  const data = new Date(texto);
+
+  return validarData(data) ? data : undefined;
+}
+
+function aplicarMascaraData(valor) {
+  const digitos = valor.replace(/\D/g, "").slice(0, 8);
+  const partes = [
+    digitos.slice(0, 2),
+    digitos.slice(2, 4),
+    digitos.slice(4, 8),
+  ].filter(Boolean);
+
+  return partes.join("/");
+}
+
 export default function Dashboard() {
   const usuario = obterUsuario();
   const [periodoInicial] = useState(() => obterPeriodoAtual());
-  const [mes, setMes] = useState(periodoInicial.mes);
-  const [ano, setAno] = useState(periodoInicial.ano);
+  const [dataDashboard, setDataDashboard] = useState(() =>
+    criarDataDashboard(periodoInicial.mes, periodoInicial.ano),
+  );
+  const [mesCalendario, setMesCalendario] = useState(dataDashboard);
+  const [valorDataDashboard, setValorDataDashboard] = useState(() =>
+    formatarDataDashboard(dataDashboard),
+  );
+  const [calendarioAberto, setCalendarioAberto] = useState(false);
   const [periodoHistorico, setPeriodoHistorico] = useState("6");
   const [analise, setAnalise] = useState(null);
   const [lancamentos, setLancamentos] = useState([]);
@@ -66,6 +141,9 @@ export default function Dashboard() {
   const [erroAnalise, setErroAnalise] = useState("");
   const [erroLancamentos, setErroLancamentos] = useState("");
   const [modalLancamentoAberto, setModalLancamentoAberto] = useState(false);
+  const seletorDataRef = useRef(null);
+  const mes = String(dataDashboard.getMonth() + 1);
+  const ano = String(dataDashboard.getFullYear());
 
   const carregarAnalise = useCallback(async () => {
     setCarregandoAnalise(true);
@@ -124,6 +202,56 @@ export default function Dashboard() {
     void Promise.resolve().then(atualizarDados);
   }, [atualizarDados]);
 
+  useEffect(() => {
+    if (!calendarioAberto) return undefined;
+
+    function fecharAoClicarFora(event) {
+      if (seletorDataRef.current?.contains(event.target)) return;
+
+      setCalendarioAberto(false);
+    }
+
+    document.addEventListener("mousedown", fecharAoClicarFora);
+
+    return () => {
+      document.removeEventListener("mousedown", fecharAoClicarFora);
+    };
+  }, [calendarioAberto]);
+
+  function atualizarDataDashboard(data) {
+    if (!data) return;
+
+    setDataDashboard(data);
+    setMesCalendario(data);
+    setValorDataDashboard(formatarDataDashboard(data));
+    setCalendarioAberto(false);
+  }
+
+  function atualizarTextoDataDashboard(event) {
+    const proximoValor = aplicarMascaraData(event.target.value);
+    const proximaData = converterTextoParaData(proximoValor);
+
+    setValorDataDashboard(proximoValor);
+
+    if (!proximaData) return;
+
+    setDataDashboard(proximaData);
+    setMesCalendario(proximaData);
+  }
+
+  function formatarTextoDataDashboard() {
+    const proximaData = converterTextoParaData(valorDataDashboard);
+
+    if (!proximaData) {
+      setValorDataDashboard(formatarDataDashboard(dataDashboard));
+      return;
+    }
+
+    setDataDashboard(proximaData);
+    setMesCalendario(proximaData);
+    setValorDataDashboard(formatarDataDashboard(proximaData));
+  }
+
   const resumo = analise?.resumo || {};
   const projecoes = analise?.projecoes || {};
   const saldo = analise?.saldo || {};
@@ -154,19 +282,43 @@ export default function Dashboard() {
   const confiabilidadeBaixa =
     confiabilidade.qualidadeDosDados === "BAIXA" ||
     insights.dadosInsuficientes;
-  const alertaDespesas = obterAlertasPorTipo(alertas, [
-    "DESPESAS_ACIMA_RENDA",
-    "AUMENTO_GASTOS",
-  ]);
-  const alertaOrcamento = obterAlertasPorTipo(alertas, [
-    "ORCAMENTO_ESTOURADO",
-    "ORCAMENTO_RISCO",
-    "AUSENCIA_ORCAMENTO",
-  ]);
+  const alertaOrcamento =
+    obterAlertasPorTipo(alertas, [
+      "ORCAMENTO_ESTOURADO",
+      "ORCAMENTO_RISCO",
+      "AUSENCIA_ORCAMENTO",
+    ]) ||
+    alertas.find((alerta) =>
+      String(alerta.tipo || "").startsWith("CATEGORIA_ACIMA_ORCAMENTO"),
+    ) ||
+    alertas.find((alerta) =>
+      String(alerta.tipo || "").startsWith("CATEGORIA_PROXIMA_LIMITE"),
+    );
   const alertaSaldo = obterAlertasPorTipo(alertas, [
     "SALDO_NEGATIVO",
     "RISCO_FINANCEIRO_FUTURO",
   ]);
+  const alertaCritico = alertas.find((alerta) => alerta.severidade === "ALTA");
+  const avisoDados = erroAnalise
+    ? {
+        mensagem: erroAnalise,
+        className: "text-red-600 hover:bg-red-50 focus-visible:ring-red-400",
+      }
+    : semDadosPrevisao
+      ? {
+          mensagem:
+            "Ainda não há lançamentos suficientes para gerar uma previsão financeira.",
+          className:
+            "text-amber-600 hover:bg-amber-50 focus-visible:ring-amber-400",
+        }
+      : confiabilidadeBaixa
+        ? {
+            mensagem:
+              "A confiabilidade da previsão está baixa por falta de histórico suficiente.",
+            className:
+              "text-amber-600 hover:bg-amber-50 focus-visible:ring-amber-400",
+          }
+        : null;
 
   const cardsResumo = useMemo(
     () => [
@@ -183,7 +335,7 @@ export default function Dashboard() {
         valor: formatarMoeda(despesaProjetada),
         descricao: "Previsão de gasto até o fim do mês com base nas despesas.",
         icon: ReceiptText,
-        alerta: alertaDespesas?.descricao,
+        alerta: "",
         variante: "rose",
       },
       {
@@ -211,7 +363,6 @@ export default function Dashboard() {
       },
     ],
     [
-      alertaDespesas,
       alertaOrcamento,
       alertaSaldo,
       despesaProjetada,
@@ -239,8 +390,8 @@ export default function Dashboard() {
       >
         <HomeSidebar usuario={usuario} paginaAtiva="dashboard" />
 
-        <SidebarInset className="grid h-screen min-h-0 min-w-0 grid-rows-[auto_minmax(0,1fr)] gap-5 overflow-y-auto bg-[#E9E9E9] p-4 sm:py-4 sm:pl-2 sm:pr-4">
-          <header className="flex shrink-0 flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+        <SidebarInset className="flex h-screen min-h-0 min-w-0 flex-col gap-5 overflow-y-auto bg-[#E9E9E9] p-4 sm:py-4 sm:pl-2 sm:pr-4">
+          <header className="flex shrink-0 flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex min-w-0 items-start gap-3">
               <SidebarTrigger className="mt-1 size-9 shrink-0 md:hidden" />
 
@@ -255,69 +406,92 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div className="grid w-full gap-3 rounded-xl bg-white p-3 shadow-sm sm:w-auto sm:grid-cols-[170px_112px]">
-              <div className="space-y-1.5">
-                <Label htmlFor="periodoDashboard" className="sr-only">
-                  Mês
-                </Label>
-                <Select value={mes} onValueChange={setMes}>
-                  <SelectTrigger id="periodoDashboard" className="h-10">
-                    <CalendarDays className="size-4" />
-                    <SelectValue placeholder="Selecione o mês" />
-                  </SelectTrigger>
-                  <SelectContent align="end">
-                    {nomesMeses.map((nomeMes, indice) => (
-                      <SelectItem key={nomeMes} value={String(indice + 1)}>
-                        {nomeMes}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="flex w-full items-center gap-2 sm:w-auto">
+              {avisoDados && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      className={`inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-white shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 ${avisoDados.className}`}
+                      aria-label={avisoDados.mensagem}
+                    >
+                      <CircleAlert className="size-5" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" align="end" sideOffset={8}>
+                    {avisoDados.mensagem}
+                  </TooltipContent>
+                </Tooltip>
+              )}
 
-              <div className="space-y-1.5">
-                <Label htmlFor="anoDashboard" className="sr-only">
-                  Ano
-                </Label>
-                <Input
-                  id="anoDashboard"
-                  type="number"
-                  inputMode="numeric"
-                  min="1900"
-                  max="9999"
-                  value={ano}
-                  onChange={(event) => setAno(event.target.value)}
-                  className="h-10"
-                />
+              <div ref={seletorDataRef} className="relative min-w-0 flex-1 sm:flex-none">
+                <div className="relative w-full sm:w-[250px]">
+                  <Input
+                    id="periodoDashboard"
+                    value={valorDataDashboard}
+                    placeholder="dd/mm/aaaa"
+                    inputMode="numeric"
+                    maxLength={10}
+                    onChange={atualizarTextoDataDashboard}
+                    onBlur={formatarTextoDataDashboard}
+                    onKeyDown={(event) => {
+                      if (event.key === "ArrowDown") {
+                        event.preventDefault();
+                        setCalendarioAberto(true);
+                      }
+                    }}
+                    className="h-10 rounded-xl border-zinc-300 bg-white pl-4 pr-11 text-zinc-950 shadow-sm"
+                    aria-label="Data do período do dashboard"
+                  />
+
+                  <Button
+                    id="periodoDashboardCalendario"
+                    type="button"
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={() =>
+                      setCalendarioAberto((abertoAtual) => !abertoAtual)
+                    }
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-950 active:translate-y-[-50%]"
+                    aria-label="Selecionar data"
+                    aria-haspopup="dialog"
+                    aria-expanded={calendarioAberto}
+                  >
+                    <CalendarIcon className="size-4" />
+                    <span className="sr-only">Selecionar data</span>
+                  </Button>
+                </div>
+
+                {calendarioAberto && (
+                  <div className="absolute right-0 top-12 z-50 rounded-xl border border-zinc-200 bg-white p-1 shadow-lg">
+                    <Calendar
+                      mode="single"
+                      selected={dataDashboard}
+                      month={mesCalendario}
+                      onMonthChange={setMesCalendario}
+                      onSelect={atualizarDataDashboard}
+                      captionLayout="dropdown"
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </header>
 
-          <main className="min-h-0 space-y-5 pb-2">
-            {(erroAnalise || semDadosPrevisao || confiabilidadeBaixa) && (
-              <Card className="rounded-2xl border border-zinc-200 bg-white py-0 shadow-sm">
-                <CardContent className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-sm text-zinc-700">
-                    {erroAnalise ||
-                      (semDadosPrevisao
-                        ? "Ainda não há lançamentos suficientes para gerar uma previsão financeira."
-                        : "A confiabilidade da previsão está baixa por falta de histórico suficiente.")}
+          <main className="space-y-5">
+            {alertaCritico && !carregandoAnalise && (
+              <section className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-800 shadow-sm">
+                <CircleAlert className="mt-0.5 size-5 shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold">
+                    {alertaCritico.titulo || "Alerta financeiro crítico"}
                   </p>
-
-                  {erroAnalise && (
-                    <Button
-                      type="button"
-                      onClick={carregarAnalise}
-                      className="bg-zinc-950 text-white hover:bg-zinc-800"
-                    >
-                      {carregandoAnalise && (
-                        <LoaderCircle className="animate-spin" size={16} />
-                      )}
-                      Tentar novamente
-                    </Button>
-                  )}
-                </CardContent>
-              </Card>
+                  <p className="mt-1 text-sm leading-relaxed">
+                    {alertaCritico.descricao ||
+                      "Há um risco financeiro importante na sua projeção."}
+                  </p>
+                </div>
+              </section>
             )}
 
             <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -344,7 +518,7 @@ export default function Dashboard() {
               />
             </section>
 
-            <section className="grid gap-5 xl:grid-cols-[minmax(280px,0.8fr)_minmax(360px,1fr)_minmax(320px,0.95fr)]">
+            <section className="grid gap-5 xl:grid-cols-[minmax(280px,0.68fr)_minmax(360px,0.85fr)_minmax(320px,0.85fr)]">
               <BudgetStatusCard
                 resumo={resumo}
                 orcamento={orcamento}

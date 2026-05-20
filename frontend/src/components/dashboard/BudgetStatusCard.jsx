@@ -27,6 +27,10 @@ export default function BudgetStatusCard({ resumo, orcamento, alerta, carregando
   );
   const percentualLimitado = limitarPercentual(percentual);
   const limiteMensal = paraNumero(orcamento?.limiteMensal);
+  const orcamentoDisponivel = Math.max(
+    limiteMensal - (limiteMensal * percentualLimitado) / 100,
+    0,
+  );
   const dados = [
     { name: "Utilizado", value: percentualLimitado },
     { name: "Disponível", value: Math.max(100 - percentualLimitado, 0) },
@@ -49,6 +53,7 @@ export default function BudgetStatusCard({ resumo, orcamento, alerta, carregando
           };
   const mensagemAlerta =
     alerta?.descricao ||
+    orcamento?.mensagemTemporal ||
     (percentual >= 100
       ? "Seu orçamento pode ser ultrapassado até o fim do mês."
       : percentual >= 80
@@ -56,10 +61,10 @@ export default function BudgetStatusCard({ resumo, orcamento, alerta, carregando
         : "");
 
   return (
-    <Card className="rounded-2xl border-0 bg-white py-0 shadow-lg ring-0">
-      <CardHeader className="px-5 pb-0 pt-5 text-center">
+    <Card className="@container/budget-status flex h-full flex-col rounded-2xl border-0 bg-white py-0 shadow-lg ring-0">
+      <CardHeader className="px-[clamp(1rem,5cqw,1.25rem)] pb-0 pt-[clamp(1rem,5cqw,1.25rem)] text-center">
         <div className="flex items-center justify-center gap-2">
-          <CardTitle className={dashboardTypography.cardTitle}>
+          <CardTitle className="text-[clamp(1rem,5cqw,1.25rem)] font-bold text-zinc-950">
             Status do Orçamento
           </CardTitle>
           <AlertTooltip mensagem={mensagemAlerta} />
@@ -69,12 +74,12 @@ export default function BudgetStatusCard({ resumo, orcamento, alerta, carregando
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="px-5 pb-5">
+      <CardContent className="flex min-h-0 flex-1 px-[clamp(1rem,5cqw,1.25rem)] pb-[clamp(1rem,5cqw,1.25rem)]">
         {carregando ? (
-          <Skeleton className="mx-auto h-56 w-full" />
+          <Skeleton className="mx-auto min-h-56 flex-1 w-full" />
         ) : (
-          <div className="flex flex-col items-center">
-            <div className="relative w-full max-w-64">
+          <div className="flex min-h-full flex-1 flex-col items-center justify-between gap-[clamp(1rem,5cqw,1.5rem)]">
+            <div className="relative flex w-full max-w-64 flex-1 items-center">
               <ChartContainer
                 config={{
                   utilizado: { label: "Utilizado", color: cor },
@@ -111,27 +116,47 @@ export default function BudgetStatusCard({ resumo, orcamento, alerta, carregando
               </div>
             </div>
 
-            <div className="w-full space-y-3">
+            <div className="w-full space-y-[clamp(0.5rem,3cqw,0.75rem)]">
               <div className="flex justify-center">
                 <Badge variant="outline" className={statusConfig.className}>
                   {statusConfig.label}
                 </Badge>
               </div>
 
-              <p className={`text-center ${dashboardTypography.body}`}>
+              <p className="text-center text-[clamp(0.74rem,3.5cqw,0.875rem)] leading-relaxed text-zinc-600">
                 {orcamento?.mensagem ||
                   "Acompanhe sua projeção para manter o orçamento sob controle."}
               </p>
 
+              {orcamento?.mensagemTemporal && !orcamento?.semOrcamento && (
+                <div
+                  className={`rounded-xl border px-3 py-2 text-center text-[clamp(0.74rem,3.4cqw,0.875rem)] font-medium ${
+                    orcamento.esgotaDentroDoMes
+                      ? "border-red-200 bg-red-50 text-red-700"
+                      : "border-emerald-200 bg-emerald-50 text-emerald-700"
+                  }`}
+                >
+                  {orcamento.mensagemTemporal}
+                </div>
+              )}
+
               {limiteMensal > 0 ? (
-                <div className="flex items-center justify-between rounded-xl border border-zinc-200 px-3 py-2">
-                  <span className="text-zinc-500">Limite mensal</span>
-                  <strong className={dashboardTypography.itemTitle}>
-                    {formatarMoeda(limiteMensal)}
-                  </strong>
+                <div className="rounded-xl border border-zinc-200 px-3 py-2">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="text-[clamp(0.74rem,3.4cqw,0.875rem)] text-zinc-500">Limite mensal</span>
+                    <strong className="text-[clamp(0.74rem,3.4cqw,0.875rem)] font-semibold text-zinc-950">
+                      {formatarMoeda(limiteMensal)}
+                    </strong>
+                  </div>
+                  <div className="mt-2 flex items-center justify-between gap-3 border-t border-zinc-100 pt-2">
+                    <span className="text-[clamp(0.74rem,3.4cqw,0.875rem)] text-zinc-500">Disponível</span>
+                    <strong className="text-[clamp(0.74rem,3.4cqw,0.875rem)] font-semibold text-zinc-950">
+                      {formatarMoeda(orcamentoDisponivel)}
+                    </strong>
+                  </div>
                 </div>
               ) : (
-                <div className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-700">
+                <div className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[clamp(0.74rem,3.4cqw,0.875rem)] text-amber-700">
                   <AlertTriangle className="mt-0.5 shrink-0" size={16} />
                   Nenhum orçamento mensal foi definido para este período.
                 </div>

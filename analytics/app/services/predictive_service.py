@@ -1,7 +1,15 @@
 import calendar
+import math
 from datetime import datetime, timedelta, timezone
 
 import pandas as pd
+
+try:
+    from sklearn.linear_model import LinearRegression
+    from sklearn.metrics import mean_absolute_error
+except ImportError:  # pragma: no cover - fallback for environments not rebuilt yet.
+    LinearRegression = None
+    mean_absolute_error = None
 
 from app.repositories.finance_repository import (
     buscar_lancamentos_periodo,
@@ -18,6 +26,8 @@ LIMIAR_CRESCIMENTO_EXCESSIVO = 25
 LIMIAR_ECONOMIA_BAIXA = 10
 PESO_HISTORICO = 0.45
 PESO_RECENTE = 0.55
+PESO_REGRESSAO = 0.35
+MINIMO_MESES_REGRESSAO = 3
 
 TIPO_RECEITA = "RECEITA"
 TIPO_DESPESA = "DESPESA"
@@ -187,6 +197,85 @@ def combinar_media(historico, campo):
         return media_hist
 
     return (media_hist * PESO_HISTORICO) + (media_rec * PESO_RECENTE)
+
+
+def calcular_previsao_regressao(historico, campo):
+    if LinearRegression is None or mean_absolute_error is None:
+        return None
+
+    pontos = [
+        (indice, float(mes[campo] or 0))
+        for indice, mes in enumerate(historico)
+        if float(mes[campo] or 0) > 0
+    ]
+
+    if len(pontos) < MINIMO_MESES_REGRESSAO:
+        return None
+
+    entradas = [[indice] for indice, _ in pontos]
+    valores = [valor for _, valor in pontos]
+    modelo = LinearRegression()
+    modelo.fit(entradas, valores)
+
+    indice_proximo_mes = max(indice for indice, _ in pontos) + 1
+    previsao = max(float(modelo.predict([[indice_proximo_mes]])[0]), 0)
+    previsoes_treino = modelo.predict(entradas)
+    margem_erro = float(mean_absolute_error(valores, previsoes_treino))
+
+    return {
+        "valor": previsao,
+        "margemErro": margem_erro,
+        "coeficiente": float(modelo.coef_[0]),
+        "intercepto": float(modelo.intercept_),
+        "mesesUsados": len(pontos),
+    }
+
+
+def combinar_previsao_com_regressao(previsao_base, previsao_regressao, minimo=0):
+    previsao_base = float(previsao_base or 0)
+
+    if not previsao_regressao:
+        return max(previsao_base, float(minimo or 0))
+
+    previsao_ml = float(previsao_regressao["valor"] or 0)
+    previsao_combinada = (
+        previsao_base * (1 - PESO_REGRESSAO)
+    ) + (previsao_ml * PESO_REGRESSAO)
+
+    return max(previsao_combinada, float(minimo or 0))
+
+
+def criar_metadados_modelo(previsao_receitas, previsao_despesas):
+    regressao_ativa = bool(previsao_receitas or previsao_despesas)
+
+    return {
+        "biblioteca": "scikit-learn" if LinearRegression is not None else "indisponivel",
+        "algoritmo": "LinearRegression" if regressao_ativa else "MEDIA_PONDERADA",
+        "regressaoAtiva": regressao_ativa,
+        "pesoRegressao": PESO_REGRESSAO if regressao_ativa else 0,
+        "receitas": {
+            "valorPrevisto": arredondar(previsao_receitas["valor"])
+            if previsao_receitas
+            else None,
+            "margemErro": arredondar(previsao_receitas["margemErro"])
+            if previsao_receitas
+            else None,
+            "mesesUsados": previsao_receitas["mesesUsados"]
+            if previsao_receitas
+            else 0,
+        },
+        "despesas": {
+            "valorPrevisto": arredondar(previsao_despesas["valor"])
+            if previsao_despesas
+            else None,
+            "margemErro": arredondar(previsao_despesas["margemErro"])
+            if previsao_despesas
+            else None,
+            "mesesUsados": previsao_despesas["mesesUsados"]
+            if previsao_despesas
+            else 0,
+        },
+    }
 
 
 def assinatura_recorrencia(lancamento):
@@ -380,6 +469,53 @@ def obter_status_orcamento(percentual_projetado, limite_mensal):
     return {
         "status": "DENTRO_DO_ORCAMENTO",
         "mensagem": "Seus gastos estão dentro do orçamento previsto.",
+    }
+
+
+def calcular_esgotamento_orcamento(
+    total_gasto_atual,
+    media_diaria_despesa,
+    limite_mensal,
+    dias_considerados,
+    dias_no_mes,
+):
+    if limite_mensal <= 0 or media_diaria_despesa <= 0:
+        return {
+            "diasAteEsgotar": None,
+            "diaEstimado": None,
+            "dentroDoMes": False,
+            "mensagem": None,
+        }
+
+    if total_gasto_atual >= limite_mensal:
+        return {
+            "diasAteEsgotar": 0,
+            "diaEstimado": min(max(dias_considerados, 1), dias_no_mes),
+            "dentroDoMes": True,
+            "mensagem": "Seu orçamento já foi totalmente utilizado.",
+        }
+
+    dias_ate_esgotar = math.ceil(
+        (limite_mensal - total_gasto_atual) / media_diaria_despesa
+    )
+    dia_estimado = dias_considerados + dias_ate_esgotar
+    dentro_do_mes = dia_estimado <= dias_no_mes
+
+    if not dentro_do_mes:
+        return {
+            "diasAteEsgotar": dias_ate_esgotar,
+            "diaEstimado": None,
+            "dentroDoMes": False,
+            "mensagem": "No ritmo atual, seu orçamento deve durar até o fim do mês.",
+        }
+
+    texto_dia = "dia" if dias_ate_esgotar == 1 else "dias"
+
+    return {
+        "diasAteEsgotar": dias_ate_esgotar,
+        "diaEstimado": dia_estimado,
+        "dentroDoMes": True,
+        "mensagem": f"Seu orçamento deve acabar em {dias_ate_esgotar} {texto_dia}.",
     }
 
 
@@ -748,6 +884,18 @@ def gerar_analise_preditiva_mensal(
     despesa_completa = somar_por_tipo(lancamentos_alvo_completo, TIPO_DESPESA)
     media_receita_base = combinar_media(historico, "receitas")
     media_despesa_base = combinar_media(historico, "despesas")
+    previsao_receitas_regressao = calcular_previsao_regressao(
+        historico,
+        "receitas",
+    )
+    previsao_despesas_regressao = calcular_previsao_regressao(
+        historico,
+        "despesas",
+    )
+    modelo_preditivo = criar_metadados_modelo(
+        previsao_receitas_regressao,
+        previsao_despesas_regressao,
+    )
     data_inicio_recorrencias = (
         data_fim_alvo if periodo_passado else max(limite_observado, data_inicio_alvo)
     )
@@ -769,26 +917,46 @@ def gerar_analise_preditiva_mensal(
         receita_projetada = receita_completa
         despesa_projetada = despesa_completa
     elif analisando_mes_atual:
-        receita_projetada = max(
+        receita_base = max(
             receita_observada + recorrencias_restantes["receitas"],
             (projecao_diaria_receita * 0.4) + (media_receita_base * 0.6),
             receita_observada,
         )
-        despesa_projetada = max(
+        despesa_base = max(
             despesa_observada + recorrencias_restantes["despesas"],
             (projecao_diaria_despesa * 0.4) + (media_despesa_base * 0.6),
             despesa_observada,
         )
+        receita_projetada = combinar_previsao_com_regressao(
+            receita_base,
+            previsao_receitas_regressao,
+            receita_observada,
+        )
+        despesa_projetada = combinar_previsao_com_regressao(
+            despesa_base,
+            previsao_despesas_regressao,
+            despesa_observada,
+        )
     else:
-        receita_projetada = max(
+        receita_base = max(
             receita_completa,
             recorrencias_mes["receitas"],
             media_receita_base,
         )
-        despesa_projetada = max(
+        despesa_base = max(
             despesa_completa,
             recorrencias_mes["despesas"],
             media_despesa_base,
+        )
+        receita_projetada = combinar_previsao_com_regressao(
+            receita_base,
+            previsao_receitas_regressao,
+            receita_completa,
+        )
+        despesa_projetada = combinar_previsao_com_regressao(
+            despesa_base,
+            previsao_despesas_regressao,
+            despesa_completa,
         )
 
     saldo_mes_projetado = receita_projetada - despesa_projetada
@@ -800,6 +968,13 @@ def gerar_analise_preditiva_mensal(
     percentual_projetado = dividir_seguro(despesa_projetada, limite_mensal) * 100
     status_orcamento = obter_status_orcamento(percentual_projetado, limite_mensal)
     media_diaria_despesa = dividir_seguro(despesa_observada, dias_considerados)
+    esgotamento_orcamento = calcular_esgotamento_orcamento(
+        total_gasto_atual=despesa_observada,
+        media_diaria_despesa=media_diaria_despesa,
+        limite_mensal=limite_mensal,
+        dias_considerados=dias_considerados,
+        dias_no_mes=dias_no_mes,
+    )
 
     tendencias = {
         "tendenciaReceitas": calcular_tendencia(
@@ -962,12 +1137,17 @@ def gerar_analise_preditiva_mensal(
             "percentualProjetado": arredondar(percentual_projetado),
             "status": status_orcamento["status"],
             "mensagem": status_orcamento["mensagem"],
+            "diasAteEsgotar": esgotamento_orcamento["diasAteEsgotar"],
+            "diaEstimadoEsgotamento": esgotamento_orcamento["diaEstimado"],
+            "esgotaDentroDoMes": esgotamento_orcamento["dentroDoMes"],
+            "mensagemTemporal": esgotamento_orcamento["mensagem"],
             "semOrcamento": limite_mensal <= 0,
         },
         "categorias": categorias,
         "tendencias": tendencias,
         "alertas": alertas,
         "confiabilidade": confiabilidade,
+        "modeloPreditivo": modelo_preditivo,
         "historico": {
             "meses": historico,
             "mediaReceitas": arredondar(media_mensal(historico, "receitas")),

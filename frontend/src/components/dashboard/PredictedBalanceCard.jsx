@@ -34,14 +34,14 @@ export default function PredictedBalanceCard({
   );
 
   return (
-    <Card className="rounded-2xl border-0 bg-white py-0 shadow-lg ring-0">
-      <CardHeader className="px-5 pb-2 pt-5">
+    <Card className="@container/predicted-balance flex h-full flex-col rounded-2xl border-0 bg-white py-0 shadow-lg ring-0">
+      <CardHeader className="px-[clamp(1rem,5cqw,1.25rem)] pb-2 pt-[clamp(1rem,5cqw,1.25rem)]">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <CardTitle className={dashboardTypography.cardTitle}>
+            <CardTitle className="text-[clamp(1rem,5cqw,1.25rem)] font-bold text-zinc-950">
               Saldo previsto
             </CardTitle>
-            <CardDescription className={dashboardTypography.cardDescription}>
+            <CardDescription className="mt-1 text-[clamp(0.74rem,3.2cqw,0.875rem)] text-zinc-500">
               Projeção baseada nas contas e lançamentos.
             </CardDescription>
           </div>
@@ -54,12 +54,12 @@ export default function PredictedBalanceCard({
         </div>
       </CardHeader>
 
-      <CardContent className="px-5 pb-5">
+      <CardContent className="min-h-0 flex-1 px-[clamp(1rem,5cqw,1.25rem)] pb-[clamp(1rem,5cqw,1.25rem)]">
         {carregando ? (
-          <Skeleton className="h-[260px] w-full" />
+          <Skeleton className="h-full min-h-[260px] w-full" />
         ) : !temDados ? (
           <div
-            className={`flex h-[260px] items-center justify-center rounded-xl border border-dashed border-zinc-300 ${dashboardTypography.emptyState}`}
+            className={`flex h-full min-h-[260px] items-center justify-center rounded-xl border border-dashed border-zinc-300 ${dashboardTypography.emptyState}`}
           >
             Sem dados suficientes para projetar o saldo.
           </div>
@@ -70,15 +70,16 @@ export default function PredictedBalanceCard({
               despesas: { label: "Despesas previstas", color: "#ef6748" },
               saldo: { label: "Saldo projetado", color: "#18181b" },
             }}
-            className="h-[260px] w-full"
+            className="h-full min-h-[260px] w-full"
           >
-            <BarChart data={dados} margin={{ left: 0, right: 8, top: 10 }}>
+            <BarChart data={dados} margin={{ left: 8, right: 8, top: 10 }}>
               <CartesianGrid vertical={false} stroke="#e4e4e7" />
               <XAxis dataKey="mes" axisLine={false} tickLine={false} />
               <YAxis
-                width={40}
+                width={72}
                 axisLine={false}
                 tickLine={false}
+                tickMargin={8}
                 tickFormatter={(valor) => formatarMoeda(valor).replace("R$", "")}
               />
               <ChartTooltip
@@ -101,7 +102,11 @@ export default function PredictedBalanceCard({
                   />
                 }
               />
-              <Legend content={<ChartLegendContent />} />
+              <Legend
+                content={
+                  <ChartLegendContent className="text-[clamp(0.65rem,2.8cqw,0.75rem)]" />
+                }
+              />
               <Bar dataKey="receitas" fill="var(--color-receitas)" radius={5} />
               <Bar dataKey="despesas" fill="var(--color-despesas)" radius={5} />
               <Bar dataKey="saldo" fill="var(--color-saldo)" radius={5} />

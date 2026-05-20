@@ -3,13 +3,11 @@ import { createElement } from "react";
 import {
   Card,
   CardContent,
-  CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import AlertTooltip from "./AlertTooltip";
-import { dashboardTypography } from "./dashboard-utils";
 
 export default function DashboardSummaryCard({
   titulo,
@@ -56,22 +54,25 @@ export default function DashboardSummaryCard({
 
   return (
     <Card
-      className={`h-full min-h-[136px] overflow-hidden rounded-[18px] border-0 bg-linear-to-r py-3 shadow-lg ring-0 sm:min-h-[148px] sm:py-4 ${estilos.gradiente}`}
+      className={`@container/dashboard-summary-card relative h-full min-h-[clamp(8rem,42cqw,9.25rem)] overflow-hidden rounded-[18px] border-0 bg-linear-to-r py-[clamp(0.75rem,4cqw,1rem)] shadow-lg ring-0 ${estilos.gradiente}`}
     >
-      <CardContent className="@container/dashboard-summary-card relative flex size-full min-h-0 min-w-0 flex-1 flex-col justify-center px-5 sm:px-6">
-        <div
-          className={`absolute right-3 top-3 flex size-8 items-center justify-center rounded-full border-2 sm:right-4 sm:top-4 sm:size-9 ${estilos.bordaIcone} ${estilos.fundoIcone} ${estilos.textoIcone}`}
-        >
-          {createElement(icon, { size: 18, strokeWidth: 2.1 })}
-        </div>
+      <div
+        className={`absolute right-[clamp(0.75rem,4cqw,1rem)] top-[clamp(0.75rem,4cqw,1rem)] flex size-[clamp(2rem,11cqw,2.25rem)] items-center justify-center rounded-full border-2 ${estilos.bordaIcone} ${estilos.fundoIcone} ${estilos.textoIcone}`}
+      >
+        {createElement(icon, {
+          className: "size-[clamp(1rem,5cqw,1.125rem)]",
+          strokeWidth: 2.1,
+        })}
+      </div>
 
-        <div className="absolute right-12 top-3 sm:right-14 sm:top-4">
-          <AlertTooltip mensagem={alerta} />
-        </div>
+      <div className="absolute right-[clamp(3rem,15cqw,3.5rem)] top-[clamp(0.75rem,4cqw,1rem)]">
+        <AlertTooltip mensagem={alerta} />
+      </div>
 
-        <div className="flex min-h-0 min-w-0 flex-col gap-1.5 sm:gap-2">
+      <CardContent className="flex size-full min-h-0 min-w-0 flex-1 flex-col justify-center px-[clamp(1rem,6cqw,1.5rem)] pr-[clamp(3.5rem,18cqw,4rem)]">
+        <div className="flex min-h-0 min-w-0 flex-col gap-[clamp(0.3rem,1.8cqw,0.5rem)]">
           <CardTitle
-            className={`max-w-full shrink-0 overflow-hidden text-ellipsis whitespace-nowrap pr-12 ${dashboardTypography.metricTitle}`}
+            className="max-w-full shrink-0 whitespace-normal break-words text-[clamp(0.78rem,4.4cqw,1rem)] font-semibold leading-tight text-zinc-950"
           >
             {titulo}
           </CardTitle>
@@ -84,12 +85,12 @@ export default function DashboardSummaryCard({
           ) : (
             <>
               <p
-                className={`max-w-full shrink-0 overflow-hidden text-ellipsis whitespace-nowrap leading-none ${dashboardTypography.metricValue}`}
+                className="max-w-full shrink-0 whitespace-normal break-words text-[clamp(1.15rem,8.2cqw,1.875rem)] font-bold leading-tight tracking-normal text-zinc-950"
               >
                 {valor}
               </p>
               <p
-                className={`max-w-full overflow-hidden text-ellipsis whitespace-nowrap ${dashboardTypography.metricDescription}`}
+                className="max-w-full whitespace-normal break-words text-[clamp(0.68rem,3.4cqw,0.8125rem)] leading-snug text-zinc-900"
               >
                 {descricao}
               </p>

@@ -93,8 +93,11 @@ class PredictiveServiceTest(unittest.TestCase):
         self.assertIn("saldoProjetado", resultado["saldo"])
         self.assertIn("tendenciaReceitas", resultado["tendencias"])
         self.assertIn("confiabilidadeAnalise", resultado["confiabilidade"])
+        self.assertIn("modeloPreditivo", resultado)
         self.assertEqual(resultado["categorias"][0]["nome"], "Moradia")
         self.assertIn("projecaoGastoMensal", resultado["resumo"])
+        self.assertIn("diasAteEsgotar", resultado["orcamento"])
+        self.assertIn("mensagemTemporal", resultado["orcamento"])
 
     def test_mes_futuro_usa_recorrencias_sem_depender_de_lancamento_no_mes(self):
         lancamentos = [
@@ -107,6 +110,7 @@ class PredictiveServiceTest(unittest.TestCase):
         self.assertGreaterEqual(resultado["projecoes"]["receitaProjetada"], 4000)
         self.assertGreaterEqual(resultado["projecoes"]["despesaProjetada"], 1200)
         self.assertEqual(resultado["periodo"]["tipoPeriodo"], "FUTURO")
+        self.assertEqual(resultado["modeloPreditivo"]["biblioteca"], "scikit-learn")
 
     def test_alerta_saldo_negativo_e_despesas_acima_da_renda(self):
         lancamentos = [
