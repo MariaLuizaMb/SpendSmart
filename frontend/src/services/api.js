@@ -73,6 +73,36 @@ export async function cadastrarLancamento(dados) {
   return resultado.data || resultado;
 }
 
+export async function cadastrarOrcamento(dados) {
+  const resultado = await request("/orcamentos", {
+    method: "POST",
+    body: JSON.stringify(dados),
+  });
+
+  return resultado.data || resultado;
+}
+
+export async function listarOrcamentos({ mes, ano, idCategoria } = {}) {
+  const params = new URLSearchParams();
+
+  if (mes !== undefined && mes !== null && mes !== "") {
+    params.append("mes", mes);
+  }
+
+  if (ano !== undefined && ano !== null && ano !== "") {
+    params.append("ano", ano);
+  }
+
+  if (idCategoria !== undefined && idCategoria !== "") {
+    params.append("idCategoria", idCategoria);
+  }
+
+  const query = params.toString();
+  const resultado = await request(`/orcamentos${query ? `?${query}` : ""}`);
+
+  return resultado.data || resultado;
+}
+
 export async function editarLancamento(id, dados) {
   const resultado = await request(`/lancamentos/editar/${id}`, {
     method: "PUT",
@@ -92,6 +122,20 @@ export async function removerLancamento(id) {
 
 export async function listarContas() {
   const resultado = await request("/contas");
+
+  return resultado.data || resultado;
+}
+
+export async function buscarAnalisePreditiva({ mes, ano } = {}) {
+  const params = new URLSearchParams();
+
+  if (mes) params.append("mes", mes);
+  if (ano) params.append("ano", ano);
+
+  const query = params.toString();
+  const resultado = await request(
+    `/analytics/preditiva${query ? `?${query}` : ""}`,
+  );
 
   return resultado.data || resultado;
 }
@@ -125,17 +169,33 @@ export async function removerConta(id) {
 export async function listarLancamentos({
   periodo,
   idConta,
+  semConta,
+  tipo,
+  idCategoria,
+  valorMinimo,
+  valorMaximo,
   limite,
   dataInicio,
   dataFim,
 } = {}) {
   const params = new URLSearchParams();
+  const adicionarParametro = (nome, valor) => {
+    if (valor === "" || valor === null || valor === undefined) return;
+    if (valor === false) return;
 
-  if (periodo) params.append("periodo", periodo);
-  if (idConta) params.append("idConta", idConta);
-  if (limite) params.append("limite", limite);
-  if (dataInicio) params.append("dataInicio", dataInicio);
-  if (dataFim) params.append("dataFim", dataFim);
+    params.append(nome, valor);
+  };
+
+  adicionarParametro("periodo", periodo);
+  adicionarParametro("dataInicio", dataInicio);
+  adicionarParametro("dataFim", dataFim);
+  adicionarParametro("idConta", semConta ? undefined : idConta);
+  adicionarParametro("semConta", semConta);
+  adicionarParametro("tipo", tipo);
+  adicionarParametro("idCategoria", idCategoria);
+  adicionarParametro("valorMinimo", valorMinimo);
+  adicionarParametro("valorMaximo", valorMaximo);
+  adicionarParametro("limite", limite);
 
   const query = params.toString();
   const path = `/lancamentos/listar${query ? `?${query}` : ""}`;

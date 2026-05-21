@@ -20,6 +20,9 @@ const { prismaMock } = vi.hoisted(() => {
     lancamento: {
       create: vi.fn(),
       count: vi.fn(),
+      findFirst: vi.fn(),
+      findMany: vi.fn(),
+      update: vi.fn(),
     },
 
     orcamento: {
@@ -216,6 +219,137 @@ describe("US02 - Gestão de gastos", () => {
       ).rejects.toThrow(/categoria selecionada|tipo/i);
 
       expect(prismaMock.lancamento.create).not.toHaveBeenCalled();
+    });
+
+    it("deve impedir edição que deixe tipo e categoria incompatíveis", async () => {
+      prismaMock.lancamento.findFirst.mockResolvedValue({
+        id: "lancamento-1",
+        idUsuario: usuarioId,
+        idCategoria: categoriaId,
+        tipo: "DESPESA",
+      });
+      prismaMock.categoria.findFirst.mockResolvedValue(categoriaValida);
+
+      await expect(
+        LaunchService.editar("lancamento-1", usuarioId, {
+          tipo: "RECEITA",
+        }),
+      ).rejects.toThrow(/categoria selecionada|tipo/i);
+
+      expect(prismaMock.lancamento.update).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("Filtros de lançamentos", () => {
+    it("deve combinar filtros incluindo lançamentos sem conta e data final inclusiva", async () => {
+      prismaMock.usuario.findUnique.mockResolvedValue(usuarioValido);
+      prismaMock.lancamento.findMany.mockResolvedValue([]);
+
+      await LaunchService.listar(usuarioId, {
+        semConta: "true",
+        tipo: "DESPESA",
+        idCategoria: categoriaId,
+        valorMinimo: "50",
+        valorMaximo: "200",
+        dataInicio: "2026-05-01",
+        dataFim: "2026-05-31",
+      });
+
+      expect(prismaMock.lancamento.findMany).toHaveBeenCalledWith({
+        where: {
+          idUsuario: usuarioId,
+          dataTransacao: {
+            gte: new Date(Date.UTC(2026, 4, 1)),
+            lt: new Date(Date.UTC(2026, 5, 1)),
+          },
+          idConta: null,
+          tipo: "DESPESA",
+          idCategoria: categoriaId,
+          valor: {
+            gte: 50,
+            lte: 200,
+          },
+        },
+        include: {
+          categoria: true,
+          conta: true,
+        },
+        orderBy: {
+          dataTransacao: "desc",
+        },
+        take: undefined,
+      });
+    });
+
+    it("deve rejeitar filtros conflitantes de conta específica e sem conta", async () => {
+      prismaMock.usuario.findUnique.mockResolvedValue(usuarioValido);
+
+      await expect(
+        LaunchService.listar(usuarioId, {
+          semConta: "true",
+          idConta: "conta-1",
+        }),
+      ).rejects.toThrow(/conta específica|sem conta/i);
+
+      expect(prismaMock.lancamento.findMany).not.toHaveBeenCalled();
+    });
+
+    it("deve rejeitar faixa de valor inválida", async () => {
+      prismaMock.usuario.findUnique.mockResolvedValue(usuarioValido);
+
+      await expect(
+        LaunchService.listar(usuarioId, {
+          valorMinimo: "200",
+          valorMaximo: "50",
+        }),
+      ).rejects.toThrow(/valorMinimo|valorMaximo/i);
+
+      expect(prismaMock.lancamento.findMany).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("Conta opcional em lançamentos", () => {
+    it("deve permitir remover o vínculo de conta na edição", async () => {
+      const lancamentoExistente = {
+        id: "lancamento-1",
+        idUsuario: usuarioId,
+        idCategoria: categoriaId,
+        idConta: "conta-1",
+        tipo: "DESPESA",
+      };
+      const lancamentoAtualizado = {
+        ...lancamentoExistente,
+        idConta: null,
+      };
+
+      prismaMock.lancamento.findFirst.mockResolvedValue(lancamentoExistente);
+      prismaMock.lancamento.update.mockResolvedValue(lancamentoAtualizado);
+
+      const resultado = await LaunchService.editar("lancamento-1", usuarioId, {
+        idConta: null,
+      });
+
+      expect(resultado).toEqual(lancamentoAtualizado);
+      expect(prismaMock.conta.findFirst).not.toHaveBeenCalled();
+      expect(prismaMock.lancamento.update).toHaveBeenCalledWith({
+        where: {
+          id: "lancamento-1",
+        },
+        data: {
+          idConta: null,
+        },
+        include: {
+          categoria: true,
+          conta: true,
+          usuario: {
+            select: {
+              id: true,
+              nome: true,
+              email: true,
+            },
+          },
+        },
+      });
     });
   });
 

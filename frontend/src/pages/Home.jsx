@@ -97,10 +97,16 @@ import {
   listarCategorias,
   listarContas,
   listarLancamentos,
+  listarOrcamentos,
 } from "@/services/api";
 
 const OPCAO_CATEGORIA_PERSONALIZADA = "__nova_categoria__";
 const OPCAO_CONTA_VAZIA = "__sem_conta__";
+const contaSemConta = {
+  id: OPCAO_CONTA_VAZIA,
+  nome: "Sem conta",
+  saldoAtual: 0,
+};
 
 function formatarMoeda(valor) {
   return Number(valor || 0).toLocaleString("pt-BR", {
@@ -163,6 +169,19 @@ function somarLancamentosPorTipo(lancamentos, tipo) {
 
     return total + obterValorLancamento(lancamento);
   }, 0);
+}
+
+function obterLimiteOrcamentoMensal(orcamentos) {
+  const orcamentoGeral = orcamentos.find((orcamento) => !orcamento.idCategoria);
+
+  if (orcamentoGeral) {
+    return Number(orcamentoGeral.valor || 0);
+  }
+
+  return orcamentos.reduce(
+    (total, orcamento) => total + Number(orcamento.valor || 0),
+    0,
+  );
 }
 
 function obterCategoriaComMaiorDespesa(lancamentos) {
@@ -397,6 +416,12 @@ function criarFormularioLancamentoInicial(idConta = "") {
   };
 }
 
+function obterContaInicialLancamento(contaSelecionada, contas) {
+  if (contaSelecionada === OPCAO_CONTA_VAZIA) return "";
+
+  return contaSelecionada || contas[0]?.id || "";
+}
+
 export function HomeSidebar({ usuario, paginaAtiva = "home" }) {
   const navigate = useNavigate();
   const { open, setOpen, isMobile, setOpenMobile } = useSidebar();
@@ -483,9 +508,15 @@ export function HomeSidebar({ usuario, paginaAtiva = "home" }) {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Dashboard">
-                  <LayoutDashboard />
-                  <span>Dashboard</span>
+                <SidebarMenuButton
+                  asChild
+                  isActive={paginaAtiva === "dashboard"}
+                  tooltip="Dashboard"
+                >
+                  <Link to="/dashboard">
+                    <LayoutDashboard />
+                    <span>Dashboard</span>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
@@ -609,20 +640,13 @@ function ListaLancamentos({
         <Select
           textSize="xs"
           value={contaSelecionada || OPCAO_CONTA_VAZIA}
-          onValueChange={(valor) =>
-            setContaSelecionada(valor === OPCAO_CONTA_VAZIA ? "" : valor)
-          }
-          disabled={contas.length === 0}
+          onValueChange={setContaSelecionada}
         >
           <SelectTrigger className="h-8 w-auto min-w-0 max-w-[45vw] shrink border-zinc-950 bg-zinc-950 px-3 text-xs text-white hover:bg-zinc-900 focus-visible:ring-zinc-400 sm:max-w-44 [&_svg]:text-white">
-            <SelectValue placeholder="Sem contas" />
+            <SelectValue placeholder="Sem conta" />
           </SelectTrigger>
           <SelectContent>
-            {contas.length === 0 && (
-              <SelectItem value={OPCAO_CONTA_VAZIA} disabled>
-                Sem contas
-              </SelectItem>
-            )}
+            <SelectItem value={OPCAO_CONTA_VAZIA}>Sem conta</SelectItem>
             {contas.map((conta) => (
               <SelectItem key={conta.id} value={conta.id}>
                 {conta.nome}
@@ -1098,7 +1122,9 @@ export function NovoLancamentoDialog({
 }) {
   const [categorias, setCategorias] = useState([]);
   const [formulario, setFormulario] = useState(() =>
-    criarFormularioLancamentoInicial(contaSelecionada || contas[0]?.id || ""),
+    criarFormularioLancamentoInicial(
+      obterContaInicialLancamento(contaSelecionada, contas),
+    ),
   );
   const [carregandoCategorias, setCarregandoCategorias] = useState(false);
   const [salvando, setSalvando] = useState(false);
@@ -1262,7 +1288,7 @@ export function NovoLancamentoDialog({
       setSucesso("Lançamento cadastrado com sucesso.");
       setFormulario(
         criarFormularioLancamentoInicial(
-          contaSelecionada || contas[0]?.id || "",
+          obterContaInicialLancamento(contaSelecionada, contas),
         ),
       );
       setNomeCategoriaPersonalizada("");
@@ -1403,7 +1429,7 @@ export function NovoLancamentoDialog({
                     <Label htmlFor="contaLancamento">Conta</Label>
                     <Select
                       value={formulario.idConta || OPCAO_CONTA_VAZIA}
-                      disabled={salvando || contas.length === 0}
+                      disabled={salvando}
                       onValueChange={(valor) =>
                         atualizarCampoFormulario(
                           "idConta",
@@ -1541,6 +1567,7 @@ export default function Home() {
   const [lancamentosPeriodo, setLancamentosPeriodo] = useState([]);
   const [lancamentosMes, setLancamentosMes] = useState([]);
   const [lancamentosMesAnterior, setLancamentosMesAnterior] = useState([]);
+  const [orcamentosMes, setOrcamentosMes] = useState([]);
   const [movimentacoesCartao, setMovimentacoesCartao] = useState([]);
   const [periodo, setPeriodo] = useState("semana");
   const [modalLancamentoAberto, setModalLancamentoAberto] = useState(false);
@@ -1555,6 +1582,7 @@ export default function Home() {
   const [erroMovimentacoes, setErroMovimentacoes] = useState("");
 
   const contaAtiva = useMemo(() => {
+    if (contaSelecionada === OPCAO_CONTA_VAZIA) return contaSemConta;
     if (!contaSelecionada) return contas[0] || null;
 
     return (
@@ -1576,12 +1604,16 @@ export default function Home() {
     const maiorCategoriaDespesa = obterCategoriaComMaiorDespesa(lancamentosMes);
     const saldoMes = receitasMes - despesasMes;
     const saldoMesAnterior = receitasMesAnterior - despesasMesAnterior;
-    const orcamentoRestante = Math.max(receitasMes - despesasMes, 0);
+    const limiteOrcamentoMensal = obterLimiteOrcamentoMensal(orcamentosMes);
+    const orcamentoRestante = Math.max(
+      limiteOrcamentoMensal - despesasMes,
+      0,
+    );
     const percentualMaiorCategoriaDespesa = despesasMes
       ? Math.round((maiorCategoriaDespesa.total / despesasMes) * 100)
       : 0;
-    const percentualOrcamentoUsado = receitasMes
-      ? Math.round((despesasMes / receitasMes) * 100)
+    const percentualOrcamentoUsado = limiteOrcamentoMensal
+      ? Math.round((despesasMes / limiteOrcamentoMensal) * 100)
       : 0;
     const variacaoSaldo = calcularVariacaoPercentualPorDiferenca(
       saldoMes,
@@ -1644,16 +1676,16 @@ export default function Home() {
           mensagemMantido: "Despesas iguais ao mês anterior",
         },
       ),
-      descricaoOrcamentoRestante: receitasMes ? (
+      descricaoOrcamentoRestante: limiteOrcamentoMensal ? (
         <>
           <PercentualDescricao>{percentualOrcamentoUsado}%</PercentualDescricao>{" "}
           do orçamento utilizado
         </>
       ) : (
-        "Sem receitas no mês"
+        "Nenhum orçamento definido"
       ),
     };
-  }, [lancamentosMes, lancamentosMesAnterior]);
+  }, [lancamentosMes, lancamentosMesAnterior, orcamentosMes]);
 
   const carregarContas = useCallback(async () => {
     setCarregandoContas(true);
@@ -1662,7 +1694,10 @@ export default function Home() {
       const resultado = await listarContas();
       setContas(resultado);
 
-      setContaSelecionada((contaAtual) => contaAtual || resultado[0]?.id || "");
+      setContaSelecionada(
+        (contaAtual) =>
+          contaAtual || resultado[0]?.id || OPCAO_CONTA_VAZIA,
+      );
     } catch (error) {
       console.error("Erro ao carregar contas:", error.message);
     } finally {
@@ -1696,7 +1731,13 @@ export default function Home() {
     setErroMetricas("");
 
     try {
-      const resultado = await listarLancamentos();
+      const hoje = new Date();
+      const mesAtual = hoje.getMonth() + 1;
+      const anoAtual = hoje.getFullYear();
+      const [resultado, orcamentosResultado] = await Promise.all([
+        listarLancamentos(),
+        listarOrcamentos({ mes: mesAtual, ano: anoAtual }),
+      ]);
       const intervaloMesAtual = obterIntervaloPorPeriodo("mes");
       const intervaloMesAnterior = obterIntervaloMesAnterior();
 
@@ -1706,6 +1747,7 @@ export default function Home() {
       setLancamentosMesAnterior(
         filtrarLancamentosPorIntervalo(resultado, intervaloMesAnterior),
       );
+      setOrcamentosMes(orcamentosResultado);
     } catch (error) {
       setErroMetricas(error.message || "Erro ao carregar métricas.");
     } finally {
@@ -1725,7 +1767,9 @@ export default function Home() {
 
     try {
       const resultado = await listarLancamentos({
-        idConta: contaSelecionada,
+        idConta:
+          contaSelecionada === OPCAO_CONTA_VAZIA ? undefined : contaSelecionada,
+        semConta: contaSelecionada === OPCAO_CONTA_VAZIA ? true : undefined,
         limite: 6,
       });
 

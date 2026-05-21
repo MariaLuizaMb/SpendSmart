@@ -1,5 +1,7 @@
-import { ValidationError } from "../errors/AppError.js";
-import { InternalServerError } from "../errors/AppError.js";
+import {
+  ValidationError,
+  InternalServerError,
+} from "../errors/appError.js";
 
 export function validarJwtSecret() {
   if (!process.env.JWT_SECRET || process.env.JWT_SECRET.trim() === "") {

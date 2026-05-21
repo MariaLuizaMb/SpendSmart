@@ -1,6 +1,15 @@
 import prisma from "../database/prisma.js";
 
-import { ValidationError } from "../errors/AppError.js";
+import { ValidationError } from "../errors/appError.js";
+
+const TIPOS_LANCAMENTO_VALIDOS = ["DESPESA", "RECEITA"];
+const RECORRENCIAS_VALIDAS = [
+  "NENHUMA",
+  "DIARIA",
+  "SEMANAL",
+  "MENSAL",
+  "ANUAL",
+];
 
 function converterDataTransacao(dataTransacao) {
   if (
@@ -74,10 +83,25 @@ function obterIntervaloPorDatas(dataInicio, dataFim) {
       throw new ValidationError("Data final inválida.");
     }
 
+    fim.setUTCDate(fim.getUTCDate() + 1);
     intervalo.lt = fim;
   }
 
   return intervalo;
+}
+
+function obterValorMonetarioFiltro(nomeCampo, valor) {
+  if (valor === undefined) return undefined;
+
+  const valorNumerico = Number(valor);
+
+  if (!Number.isFinite(valorNumerico) || valorNumerico < 0) {
+    throw new ValidationError(
+      `${nomeCampo} deve ser um número maior ou igual a zero.`,
+    );
+  }
+
+  return valorNumerico;
 }
 
 class LaunchService {
@@ -112,19 +136,12 @@ class LaunchService {
     }
 
     // Validar tipo
-    if (!["DESPESA", "RECEITA"].includes(tipo)) {
+    if (!TIPOS_LANCAMENTO_VALIDOS.includes(tipo)) {
       throw new ValidationError("Tipo deve ser 'DESPESA' ou 'RECEITA'.");
     }
 
     // Validar recorrencia
-    const recorrenciasValidas = [
-      "NENHUMA",
-      "DIARIA",
-      "SEMANAL",
-      "MENSAL",
-      "ANUAL",
-    ];
-    if (!recorrenciasValidas.includes(recorrencia)) {
+    if (!RECORRENCIAS_VALIDAS.includes(recorrencia)) {
       throw new ValidationError("Recorrência inválida.");
     }
 
@@ -238,21 +255,14 @@ class LaunchService {
     }
 
     if (dados.tipo !== undefined) {
-      if (!["DESPESA", "RECEITA"].includes(dados.tipo)) {
+      if (!TIPOS_LANCAMENTO_VALIDOS.includes(dados.tipo)) {
         throw new ValidationError("Tipo deve ser 'DESPESA' ou 'RECEITA'.");
       }
       dadosAtualizacao.tipo = dados.tipo;
     }
 
     if (dados.recorrencia !== undefined) {
-      const recorrenciasValidas = [
-        "NENHUMA",
-        "DIARIA",
-        "SEMANAL",
-        "MENSAL",
-        "ANUAL",
-      ];
-      if (!recorrenciasValidas.includes(dados.recorrencia)) {
+      if (!RECORRENCIAS_VALIDAS.includes(dados.recorrencia)) {
         throw new ValidationError("Recorrência inválida.");
       }
       dadosAtualizacao.recorrencia = dados.recorrencia;
@@ -262,11 +272,27 @@ class LaunchService {
       dadosAtualizacao.descricao = dados.descricao?.trim() || null;
     }
 
-    // Validar categoria se fornecida
     if (dados.idCategoria !== undefined) {
+      dadosAtualizacao.idCategoria = dados.idCategoria;
+    }
+
+    const deveValidarCategoria =
+      dados.idCategoria !== undefined || dados.tipo !== undefined;
+
+    if (deveValidarCategoria) {
+      const idCategoriaFinal =
+        dados.idCategoria !== undefined
+          ? dados.idCategoria
+          : lancamento.idCategoria;
+      const tipoFinal = dados.tipo !== undefined ? dados.tipo : lancamento.tipo;
+
+      if (!idCategoriaFinal) {
+        throw new ValidationError("Categoria é obrigatória.");
+      }
+
       const categoria = await prisma.categoria.findFirst({
         where: {
-          id: dados.idCategoria,
+          id: idCategoriaFinal,
           OR: [{ idUsuario: idUsuario }, { ehPadrao: true }],
         },
       });
@@ -277,15 +303,11 @@ class LaunchService {
         );
       }
 
-      // Verificar compatibilidade de tipo
-      const tipoAtual = dados.tipo || lancamento.tipo;
-      if (categoria.tipo !== tipoAtual) {
+      if (categoria.tipo !== tipoFinal) {
         throw new ValidationError(
-          `A categoria selecionada é do tipo ${categoria.tipo}, mas o lançamento é do tipo ${tipoAtual}.`,
+          `A categoria selecionada é do tipo ${categoria.tipo}, mas o lançamento é do tipo ${tipoFinal}.`,
         );
       }
-
-      dadosAtualizacao.idCategoria = dados.idCategoria;
     }
 
     // Validar conta se fornecida
@@ -367,11 +389,23 @@ class LaunchService {
     }
 
     const where = { idUsuario };
-    const { periodo, idConta, limite, dataInicio, dataFim } = filtros;
+    const {
+      periodo,
+      idConta,
+      limite,
+      dataInicio,
+      dataFim,
+      semConta,
+      tipo,
+      idCategoria,
+      valorMinimo,
+      valorMaximo,
+    } = filtros;
     const intervalo =
       obterIntervaloPorDatas(dataInicio, dataFim) ||
       obterIntervaloPorPeriodo(periodo);
-    const deveLogarFiltroMes = periodo === "mes";
+    const deveLogarFiltroMes =
+      process.env.NODE_ENV === "development" && periodo === "mes";
 
     if (deveLogarFiltroMes) {
       console.log("[Backend][Lancamentos][Filtro mes] filtros recebidos:", {
@@ -393,8 +427,61 @@ class LaunchService {
       where.dataTransacao = intervalo;
     }
 
-    if (idConta) {
+    const filtroSemConta = semConta === "true" || semConta === true;
+
+    if (filtroSemConta && idConta) {
+      throw new ValidationError(
+        "Não é possível filtrar por uma conta específica e por lançamentos sem conta ao mesmo tempo.",
+      );
+    }
+
+    if (filtroSemConta) {
+      where.idConta = null;
+    } else if (idConta) {
       where.idConta = idConta;
+    }
+
+    if (tipo) {
+      if (!TIPOS_LANCAMENTO_VALIDOS.includes(tipo)) {
+        throw new ValidationError("Tipo deve ser 'DESPESA' ou 'RECEITA'.");
+      }
+
+      where.tipo = tipo;
+    }
+
+    if (idCategoria) {
+      where.idCategoria = idCategoria;
+    }
+
+    const valorMinimoNumerico = obterValorMonetarioFiltro(
+      "valorMinimo",
+      valorMinimo,
+    );
+    const valorMaximoNumerico = obterValorMonetarioFiltro(
+      "valorMaximo",
+      valorMaximo,
+    );
+
+    if (
+      valorMinimoNumerico !== undefined &&
+      valorMaximoNumerico !== undefined &&
+      valorMinimoNumerico > valorMaximoNumerico
+    ) {
+      throw new ValidationError(
+        "valorMinimo não pode ser maior que valorMaximo.",
+      );
+    }
+
+    if (valorMinimoNumerico !== undefined || valorMaximoNumerico !== undefined) {
+      where.valor = {};
+
+      if (valorMinimoNumerico !== undefined) {
+        where.valor.gte = valorMinimoNumerico;
+      }
+
+      if (valorMaximoNumerico !== undefined) {
+        where.valor.lte = valorMaximoNumerico;
+      }
     }
 
     const quantidade = Number(limite);

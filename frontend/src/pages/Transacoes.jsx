@@ -4,6 +4,7 @@ import {
   CheckCircle2,
   Pencil,
   LoaderCircle,
+  PiggyBank,
   Plus,
   Save,
   Search,
@@ -57,6 +58,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import {
+  cadastrarOrcamento,
   editarLancamento,
   listarCategorias,
   listarContas,
@@ -72,6 +74,24 @@ const opcoesOrdenacao = [
 ];
 
 const OPCAO_CONTA_VAZIA = "__sem_conta__";
+const OPCAO_TODAS_CONTAS = "__todas_contas__";
+const OPCAO_CONTA_DESATIVADA = "__conta_desativada__";
+const OPCAO_ORCAMENTO_GERAL = "__orcamento_geral__";
+
+const nomesMeses = [
+  "Janeiro",
+  "Fevereiro",
+  "Março",
+  "Abril",
+  "Maio",
+  "Junho",
+  "Julho",
+  "Agosto",
+  "Setembro",
+  "Outubro",
+  "Novembro",
+  "Dezembro",
+];
 
 function formatarMoeda(valor) {
   return Number(valor || 0).toLocaleString("pt-BR", {
@@ -108,6 +128,12 @@ function formatarData(data) {
   return new Date(data).toLocaleDateString("pt-BR", {
     timeZone: "UTC",
   });
+}
+
+function formatarDataParaBusca(data) {
+  if (!data) return "";
+
+  return formatarDataParaInput(data);
 }
 
 function formatarDataHora(data) {
@@ -157,7 +183,17 @@ function obterNomeCategoria(lancamento) {
 }
 
 function obterNomeConta(lancamento) {
-  return lancamento.conta?.nome || lancamento.nomeConta || "Sem conta";
+  if (lancamento.conta?.nome) {
+    return lancamento.conta.ativa === false
+      ? `${lancamento.conta.nome} (desativada)`
+      : lancamento.conta.nome;
+  }
+
+  return lancamento.nomeConta || "Sem conta";
+}
+
+function lancamentoTemContaDesativada(lancamento) {
+  return Boolean(lancamento.conta && lancamento.conta.ativa === false);
 }
 
 function obterPrefixoCodigoTransacao(tipo) {
@@ -260,6 +296,300 @@ function CampoSomenteLeitura({ label, children }) {
         {children || "Não informado"}
       </div>
     </div>
+  );
+}
+
+function criarFormularioOrcamentoInicial() {
+  const hoje = new Date();
+
+  return {
+    valor: "",
+    mes: String(hoje.getMonth() + 1),
+    ano: String(hoje.getFullYear()),
+    idCategoria: OPCAO_ORCAMENTO_GERAL,
+    descricao: "",
+  };
+}
+
+function NovoOrcamentoDialog({ aberto, onAbertoChange, onOrcamentoCriado }) {
+  const [categorias, setCategorias] = useState([]);
+  const [formulario, setFormulario] = useState(criarFormularioOrcamentoInicial);
+  const [carregandoCategorias, setCarregandoCategorias] = useState(false);
+  const [salvando, setSalvando] = useState(false);
+  const [erro, setErro] = useState("");
+  const [sucesso, setSucesso] = useState("");
+
+  const categoriasDespesa = useMemo(
+    () =>
+      categorias.filter(
+        (categoria) => categoria.tipo?.toUpperCase() === "DESPESA",
+      ),
+    [categorias],
+  );
+
+  const carregarCategorias = useCallback(async () => {
+    setCarregandoCategorias(true);
+    setErro("");
+
+    try {
+      const resultado = await listarCategorias();
+      setCategorias(resultado);
+    } catch (error) {
+      setErro(error.message || "Não foi possível carregar as categorias.");
+    } finally {
+      setCarregandoCategorias(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!aberto) return;
+
+    setFormulario(criarFormularioOrcamentoInicial());
+    setErro("");
+    setSucesso("");
+    void Promise.resolve().then(carregarCategorias);
+  }, [aberto, carregarCategorias]);
+
+  function atualizarCampo(event) {
+    const { name, value } = event.target;
+
+    setFormulario((dadosAtuais) => ({
+      ...dadosAtuais,
+      [name]: value,
+    }));
+  }
+
+  function atualizarCampoFormulario(name, value) {
+    setFormulario((dadosAtuais) => ({
+      ...dadosAtuais,
+      [name]: value,
+    }));
+  }
+
+  function atualizarValorOrcamento(event) {
+    const valorFormatado = formatarValorMonetarioInput(event.target.value);
+
+    setFormulario((dadosAtuais) => ({
+      ...dadosAtuais,
+      valor: valorFormatado,
+    }));
+  }
+
+  async function salvarOrcamento(event) {
+    event.preventDefault();
+    setErro("");
+    setSucesso("");
+
+    const valor = converterValorMonetarioParaNumero(formulario.valor);
+    const mes = Number(formulario.mes);
+    const ano = Number(formulario.ano);
+
+    if (!Number.isFinite(valor) || valor <= 0) {
+      setErro("Informe um valor maior que zero.");
+      return;
+    }
+
+    if (!Number.isInteger(mes) || mes < 1 || mes > 12) {
+      setErro("Selecione um mês válido.");
+      return;
+    }
+
+    if (!Number.isInteger(ano) || ano < 1900 || ano > 9999) {
+      setErro("Informe um ano válido.");
+      return;
+    }
+
+    setSalvando(true);
+
+    try {
+      await cadastrarOrcamento({
+        valor,
+        mes,
+        ano,
+        idCategoria:
+          formulario.idCategoria === OPCAO_ORCAMENTO_GERAL
+            ? null
+            : formulario.idCategoria,
+        descricao: formulario.descricao.trim() || undefined,
+      });
+
+      setSucesso("Orçamento cadastrado com sucesso.");
+      setFormulario(criarFormularioOrcamentoInicial());
+      await onOrcamentoCriado();
+      onAbertoChange(false);
+    } catch (error) {
+      setErro(error.message || "Não foi possível cadastrar o orçamento.");
+    } finally {
+      setSalvando(false);
+    }
+  }
+
+  return (
+    <Dialog open={aberto} onOpenChange={onAbertoChange}>
+      <DialogContent
+        data-ui="modal-novo-orcamento-conteudo"
+        className="max-h-[92vh] overflow-hidden p-0 sm:max-w-lg"
+      >
+        <form
+          data-ui="modal-novo-orcamento-formulario"
+          onSubmit={salvarOrcamento}
+          className="flex max-h-[92vh] flex-col"
+        >
+          <Card className="max-h-[92vh] overflow-hidden border-0 py-0 ring-0">
+            <CardHeader className="px-5 pb-2 pt-5">
+              <DialogTitle asChild>
+                <CardTitle>Definir orçamento</CardTitle>
+              </DialogTitle>
+              <DialogDescription>
+                Cadastre um limite mensal geral ou por categoria.
+              </DialogDescription>
+            </CardHeader>
+
+            <ScrollArea className="h-[52vh] max-h-[430px] min-h-0">
+              <CardContent className="space-y-4 px-5 py-4 pr-6">
+                <div className="space-y-1.5">
+                  <Label htmlFor="valorOrcamento">Valor</Label>
+                  <div className="relative">
+                    <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                      R$
+                    </span>
+                    <Input
+                      id="valorOrcamento"
+                      name="valor"
+                      type="text"
+                      inputMode="numeric"
+                      value={formulario.valor}
+                      onChange={atualizarValorOrcamento}
+                      placeholder="0,00"
+                      disabled={salvando}
+                      className="h-10 pl-10 pr-3"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="mesOrcamento">Mês</Label>
+                    <Select
+                      value={formulario.mes}
+                      disabled={salvando}
+                      onValueChange={(valor) =>
+                        atualizarCampoFormulario("mes", valor)
+                      }
+                    >
+                      <SelectTrigger id="mesOrcamento">
+                        <SelectValue placeholder="Selecione o mês" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {nomesMeses.map((nome, indice) => (
+                          <SelectItem key={nome} value={String(indice + 1)}>
+                            {nome}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label htmlFor="anoOrcamento">Ano</Label>
+                    <Input
+                      id="anoOrcamento"
+                      name="ano"
+                      type="number"
+                      min="1900"
+                      max="9999"
+                      value={formulario.ano}
+                      onChange={atualizarCampo}
+                      disabled={salvando}
+                      className="h-10 px-3"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="categoriaOrcamento">Categoria</Label>
+                  <Select
+                    value={formulario.idCategoria}
+                    disabled={salvando || carregandoCategorias}
+                    onValueChange={(valor) =>
+                      atualizarCampoFormulario("idCategoria", valor)
+                    }
+                  >
+                    <SelectTrigger id="categoriaOrcamento">
+                      <SelectValue placeholder="Selecione o tipo de orçamento" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={OPCAO_ORCAMENTO_GERAL}>
+                        Orçamento geral
+                      </SelectItem>
+
+                      {carregandoCategorias && (
+                        <SelectItem value="__carregando_categorias__" disabled>
+                          Carregando...
+                        </SelectItem>
+                      )}
+
+                      {!carregandoCategorias &&
+                        categoriasDespesa.map((categoria) => (
+                          <SelectItem key={categoria.id} value={categoria.id}>
+                            {categoria.nome}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="descricaoOrcamento">Descrição</Label>
+                  <Textarea
+                    id="descricaoOrcamento"
+                    name="descricao"
+                    value={formulario.descricao}
+                    onChange={atualizarCampo}
+                    placeholder="Observações sobre o orçamento"
+                    disabled={salvando}
+                    className="min-h-20 px-3"
+                  />
+                </div>
+
+                {erro && (
+                  <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                    {erro}
+                  </p>
+                )}
+
+                {sucesso && (
+                  <p className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+                    <CheckCircle2 size={16} />
+                    {sucesso}
+                  </p>
+                )}
+              </CardContent>
+            </ScrollArea>
+
+            <CardFooter className="justify-end gap-2 border-t-0 bg-transparent px-5 pb-5 pt-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onAbertoChange(false)}
+                disabled={salvando}
+              >
+                Cancelar
+              </Button>
+              <Button
+                type="submit"
+                disabled={salvando || carregandoCategorias}
+                className="bg-zinc-950 text-white hover:bg-zinc-800"
+              >
+                {salvando ? "Salvando..." : "Salvar orçamento"}
+              </Button>
+            </CardFooter>
+          </Card>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -876,41 +1206,82 @@ export default function Transacoes() {
   const [contas, setContas] = useState([]);
   const [contaSelecionada, setContaSelecionada] = useState("");
   const [filtro, setFiltro] = useState("");
+  const [filtroConta, setFiltroConta] = useState(OPCAO_TODAS_CONTAS);
   const [ordenacao, setOrdenacao] = useState("recentes");
   const [selecionados, setSelecionados] = useState(() => new Set());
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
   const [modalLancamentoAberto, setModalLancamentoAberto] = useState(false);
+  const [modalOrcamentoAberto, setModalOrcamentoAberto] = useState(false);
   const [lancamentoDetalhes, setLancamentoDetalhes] = useState(null);
   const [lancamentoRemovendo, setLancamentoRemovendo] = useState("");
   const [removendoSelecionados, setRemovendoSelecionados] = useState(false);
   const [mensagemSucesso, setMensagemSucesso] = useState("");
 
-  const carregarDados = useCallback(async () => {
-    setCarregando(true);
-    setErro("");
+  const haFiltrosAtivos = useMemo(
+    () => filtroConta !== OPCAO_TODAS_CONTAS || Boolean(filtro.trim()),
+    [filtro, filtroConta],
+  );
 
+  const contaParaNovoLancamento = useMemo(() => {
+    if (filtroConta === OPCAO_CONTA_VAZIA) {
+      return OPCAO_CONTA_VAZIA;
+    }
+
+    return contaSelecionada;
+  }, [contaSelecionada, filtroConta]);
+
+  const carregarMetadados = useCallback(async () => {
     try {
-      const [lancamentosResultado, contasResultado] = await Promise.all([
-        listarLancamentos(),
-        listarContas(),
-      ]);
+      const contasResultado = await listarContas();
 
-      setLancamentos(lancamentosResultado);
       setContas(contasResultado);
       setContaSelecionada(
         (contaAtual) => contaAtual || contasResultado[0]?.id || "",
       );
     } catch (error) {
+      setErro(
+        error.message || "Não foi possível carregar os filtros da tela.",
+      );
+    }
+  }, []);
+
+  const carregarLancamentos = useCallback(async () => {
+    setCarregando(true);
+    setErro("");
+
+    try {
+      const lancamentosResultado = await listarLancamentos({
+        semConta: filtroConta === OPCAO_CONTA_VAZIA ? true : undefined,
+      });
+
+      setLancamentos(lancamentosResultado);
+      setSelecionados((selecionadosAtuais) => {
+        const idsVisiveis = new Set(
+          lancamentosResultado.map((lancamento) => lancamento.id),
+        );
+        const proximos = new Set();
+
+        selecionadosAtuais.forEach((id) => {
+          if (idsVisiveis.has(id)) proximos.add(id);
+        });
+
+        return proximos;
+      });
+    } catch (error) {
       setErro(error.message || "Não foi possível carregar as transações.");
     } finally {
       setCarregando(false);
     }
-  }, []);
+  }, [filtroConta]);
 
   useEffect(() => {
-    void Promise.resolve().then(carregarDados);
-  }, [carregarDados]);
+    void Promise.resolve().then(carregarMetadados);
+  }, [carregarMetadados]);
+
+  useEffect(() => {
+    void Promise.resolve().then(carregarLancamentos);
+  }, [carregarLancamentos]);
 
   const codigosTransacao = useMemo(
     () => criarMapaCodigosTransacao(lancamentos),
@@ -920,15 +1291,31 @@ export default function Transacoes() {
   const lancamentosFiltrados = useMemo(() => {
     const termo = filtro.trim().toLocaleLowerCase("pt-BR");
 
+    const filtradosPorConta = lancamentos.filter((lancamento) => {
+      if (filtroConta === OPCAO_CONTA_VAZIA) {
+        return !lancamento.idConta && !lancamento.conta;
+      }
+
+      if (filtroConta === OPCAO_CONTA_DESATIVADA) {
+        return lancamentoTemContaDesativada(lancamento);
+      }
+
+      return true;
+    });
+
     const filtrados = termo
-      ? lancamentos.filter((lancamento) => {
+      ? filtradosPorConta.filter((lancamento) => {
           const textoBusca = [
             obterCodigoTransacao(lancamento, codigosTransacao),
             formatarTipo(lancamento.tipo),
             obterNomeCategoria(lancamento),
             obterNomeConta(lancamento),
+            lancamentoTemContaDesativada(lancamento)
+              ? "Conta desativada Desativada"
+              : "Conta ativa Ativa",
             formatarMoeda(lancamento.valor),
             formatarData(lancamento.dataTransacao),
+            formatarDataParaBusca(lancamento.dataTransacao),
             lancamento.descricao,
           ]
             .filter(Boolean)
@@ -937,10 +1324,10 @@ export default function Transacoes() {
 
           return textoBusca.includes(termo);
         })
-      : lancamentos;
+      : filtradosPorConta;
 
     return ordenarLancamentos(filtrados, ordenacao);
-  }, [codigosTransacao, filtro, lancamentos, ordenacao]);
+  }, [codigosTransacao, filtro, filtroConta, lancamentos, ordenacao]);
 
   useEffect(() => {
     if (!mensagemSucesso) return undefined;
@@ -957,6 +1344,11 @@ export default function Transacoes() {
   const todosSelecionados =
     lancamentosFiltrados.length > 0 &&
     lancamentosFiltrados.every((lancamento) => selecionados.has(lancamento.id));
+
+  function limparFiltrosLancamentos() {
+    setFiltro("");
+    setFiltroConta(OPCAO_TODAS_CONTAS);
+  }
 
   function alternarTodosSelecionados() {
     setSelecionados((selecionadosAtuais) => {
@@ -990,7 +1382,11 @@ export default function Transacoes() {
   }
 
   async function atualizarAposCadastro() {
-    await carregarDados();
+    await carregarLancamentos();
+  }
+
+  function atualizarAposCadastroOrcamento() {
+    setMensagemSucesso("Orçamento cadastrado com sucesso.");
   }
 
   async function atualizarAposEdicao(lancamentoAtualizado) {
@@ -1008,7 +1404,7 @@ export default function Transacoes() {
     setMensagemSucesso("Transação atualizada com sucesso.");
     setLancamentoDetalhes(null);
 
-    await carregarDados();
+    await carregarLancamentos();
   }
 
   async function atualizarAposExclusao(idLancamento) {
@@ -1019,7 +1415,7 @@ export default function Transacoes() {
     });
 
     setLancamentoDetalhes(null);
-    await carregarDados();
+    await carregarLancamentos();
   }
 
   async function removerLancamentoSelecionado(lancamento) {
@@ -1064,7 +1460,7 @@ export default function Transacoes() {
       setLancamentoDetalhes(null);
       setMensagemSucesso("Transações removidas com sucesso.");
 
-      await carregarDados();
+      await carregarLancamentos();
     } catch (error) {
       setErro(error.message || "Não foi possível excluir as transações.");
     } finally {
@@ -1105,34 +1501,54 @@ export default function Transacoes() {
 
           <main className="min-h-0">
             <Card className="h-full min-h-0 gap-0 rounded-2xl border-0 bg-white shadow-none ring-0">
-              <CardHeader className="gap-3 px-4 pb-3 pt-4 sm:flex sm:flex-row sm:items-center sm:justify-between">
-                <div className="relative w-full sm:max-w-sm">
-                  <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-400" />
+              <CardHeader className="gap-3 px-4 pb-3 pt-4">
+                <div className="grid gap-3 lg:grid-cols-[minmax(220px,1fr)_180px_150px] lg:items-center">
+                  <div className="relative w-full">
+                    <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-400" />
 
-                  <Input
-                    value={filtro}
-                    onChange={(event) => setFiltro(event.target.value)}
-                    placeholder="Filtros"
-                    className="h-10 rounded-lg pl-9"
-                  />
+                    <Input
+                      value={filtro}
+                      onChange={(event) => setFiltro(event.target.value)}
+                      placeholder="Buscar na listagem"
+                      className="h-10 rounded-lg pl-9"
+                    />
+                  </div>
+
+                  <Select value={filtroConta} onValueChange={setFiltroConta}>
+                    <SelectTrigger className="h-10 w-full">
+                      <SelectValue placeholder="Contas" />
+                    </SelectTrigger>
+
+                    <SelectContent align="end">
+                      <SelectItem value={OPCAO_TODAS_CONTAS}>
+                        Todas as contas
+                      </SelectItem>
+                      <SelectItem value={OPCAO_CONTA_VAZIA}>
+                        Sem conta
+                      </SelectItem>
+                      <SelectItem value={OPCAO_CONTA_DESATIVADA}>
+                        Conta desativada
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <Select value={ordenacao} onValueChange={setOrdenacao}>
+                    <SelectTrigger className="h-10 w-full">
+                      <SelectValue placeholder="Ordenar" />
+                    </SelectTrigger>
+
+                    <SelectContent align="end">
+                      {opcoesOrdenacao.map((opcao) => (
+                        <SelectItem key={opcao.value} value={opcao.value}>
+                          {opcao.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
-                <Select value={ordenacao} onValueChange={setOrdenacao}>
-                  <SelectTrigger className="h-10 w-full sm:w-32">
-                    <SelectValue placeholder="Ordenar" />
-                  </SelectTrigger>
-
-                  <SelectContent align="end">
-                    {opcoesOrdenacao.map((opcao) => (
-                      <SelectItem key={opcao.value} value={opcao.value}>
-                        {opcao.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
                 {mensagemSucesso && (
-                  <div className="flex w-full items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700 sm:col-span-2">
+                  <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
                     <CheckCircle2 size={16} />
                     {mensagemSucesso}
                   </div>
@@ -1232,7 +1648,7 @@ export default function Transacoes() {
                                 className="mx-auto mb-2 animate-spin"
                                 size={20}
                               />
-                              Carregando transações...
+                              Carregando lançamentos...
                             </td>
                           </tr>
                         )}
@@ -1243,7 +1659,7 @@ export default function Transacoes() {
                               colSpan={8}
                               className="h-80 text-center text-sm text-red-600"
                             >
-                              {erro}
+                              {erro || "Erro ao carregar lançamentos."}
                             </td>
                           </tr>
                         )}
@@ -1256,7 +1672,9 @@ export default function Transacoes() {
                                 colSpan={8}
                                 className="h-80 text-center text-sm text-zinc-500"
                               >
-                                Nenhuma transação encontrada.
+                                {haFiltrosAtivos
+                                  ? "Nenhum lançamento encontrado para os filtros selecionados."
+                                  : "Nenhum lançamento encontrado."}
                               </td>
                             </tr>
                           )}
@@ -1398,14 +1816,37 @@ export default function Transacoes() {
                   {selecionados.size === 1 ? "" : "s"}.
                 </span>
 
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setModalLancamentoAberto(true)}
-                  className="shrink-0 border-zinc-200 bg-white text-xs text-zinc-950 hover:bg-zinc-50"
-                >
-                  Novo Lançamento
-                </Button>
+                <div className="flex shrink-0 flex-wrap justify-end gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={limparFiltrosLancamentos}
+                    disabled={!haFiltrosAtivos}
+                    className="border-zinc-200 bg-white text-xs text-zinc-950 hover:bg-zinc-50"
+                  >
+                    Limpar filtros
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setModalOrcamentoAberto(true)}
+                    className="border-zinc-200 bg-white text-xs text-zinc-950 hover:bg-zinc-50"
+                  >
+                    <PiggyBank size={14} />
+                    Definir orçamento
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setModalLancamentoAberto(true)}
+                    className="border-zinc-200 bg-white text-xs text-zinc-950 hover:bg-zinc-50"
+                  >
+                    <Plus size={14} />
+                    Novo Lançamento
+                  </Button>
+                </div>
               </CardFooter>
             </Card>
           </main>
@@ -1415,8 +1856,16 @@ export default function Transacoes() {
               aberto={modalLancamentoAberto}
               onAbertoChange={setModalLancamentoAberto}
               contas={contas}
-              contaSelecionada={contaSelecionada}
+              contaSelecionada={contaParaNovoLancamento}
               onLancamentoCriado={atualizarAposCadastro}
+            />
+          )}
+
+          {modalOrcamentoAberto && (
+            <NovoOrcamentoDialog
+              aberto={modalOrcamentoAberto}
+              onAbertoChange={setModalOrcamentoAberto}
+              onOrcamentoCriado={atualizarAposCadastroOrcamento}
             />
           )}
 
