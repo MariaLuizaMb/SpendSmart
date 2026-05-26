@@ -45,7 +45,7 @@ import {
   listarLancamentos,
 } from "@/services/api";
 
-function criarDataDashboard(mes, ano) {
+export function criarDataDashboard(mes, ano) {
   const mesNumerico = Number(mes);
   const anoNumerico = Number(ano);
   const hoje = new Date();
@@ -60,7 +60,7 @@ function criarDataDashboard(mes, ano) {
   return new Date(anoNumerico, mesNumerico - 1, dia);
 }
 
-function formatarDataDashboard(data) {
+export function formatarDataDashboard(data) {
   const dia = String(data.getDate()).padStart(2, "0");
   const mes = String(data.getMonth() + 1).padStart(2, "0");
   const ano = data.getFullYear();
@@ -68,11 +68,11 @@ function formatarDataDashboard(data) {
   return `${dia}/${mes}/${ano}`;
 }
 
-function validarData(data) {
+export function validarData(data) {
   return data instanceof Date && !Number.isNaN(data.getTime());
 }
 
-function criarDataSemHorario(ano, mes, dia) {
+export function criarDataSemHorario(ano, mes, dia) {
   const data = new Date(ano, mes - 1, dia);
 
   if (
@@ -86,7 +86,7 @@ function criarDataSemHorario(ano, mes, dia) {
   return data;
 }
 
-function converterTextoParaData(valor) {
+export function converterTextoParaData(valor) {
   const texto = valor.trim();
 
   if (!texto) return undefined;
@@ -110,7 +110,7 @@ function converterTextoParaData(valor) {
   return validarData(data) ? data : undefined;
 }
 
-function aplicarMascaraData(valor) {
+export function aplicarMascaraData(valor) {
   const digitos = valor.replace(/\D/g, "").slice(0, 8);
   const partes = [
     digitos.slice(0, 2),

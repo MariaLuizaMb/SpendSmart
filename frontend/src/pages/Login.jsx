@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { loginUsuario } from "@/services/api";
 import { salvarAuth } from "@/lib/auth";
+import { emailTemFormatoValido } from "@/utils/emailValidator";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,7 +43,7 @@ export default function Login() {
     switch (nome) {
       case "email":
         if (!valor.trim()) return "O email é obrigatório.";
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor)) {
+        if (!emailTemFormatoValido(valor)) {
           return "Digite um email válido.";
         }
         return "";

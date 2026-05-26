@@ -9,7 +9,30 @@ import analyticsRoutes from "./routes/analyticsRoute.js";
 
 const app = express();
 
-app.use(cors());
+app.disable("x-powered-by");
+
+const DEFAULT_CORS_ORIGINS = ["http://localhost:5173"];
+
+function getAllowedCorsOrigins() {
+  const origins = process.env.CORS_ORIGIN
+    ? process.env.CORS_ORIGIN.split(",")
+    : DEFAULT_CORS_ORIGINS;
+
+  return origins.map((origin) => origin.trim()).filter(Boolean);
+}
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      callback(null, getAllowedCorsOrigins().includes(origin));
+    },
+  }),
+);
 app.use(express.json());
 
 app.use("/auth", authRoutes);

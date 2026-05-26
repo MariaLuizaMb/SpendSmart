@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { cadastrarUsuario } from "@/services/api";
+import { emailTemFormatoValido } from "@/utils/emailValidator";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -48,7 +49,7 @@ export default function Cadastro() {
 
       case "email":
         if (!valor.trim()) return "O email é obrigatório.";
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor)) {
+        if (!emailTemFormatoValido(valor)) {
           return "Digite um email válido.";
         }
         return "";

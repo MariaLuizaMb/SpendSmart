@@ -517,12 +517,12 @@ function SidebarMenuBadge({ className, ...props }) {
   );
 }
 
-function SidebarMenuSkeleton({ className, showIcon = false, ...props }) {
-  // Random width between 50 to 90%.
-  const [width] = React.useState(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`;
-  });
-
+function SidebarMenuSkeleton({
+  className,
+  showIcon = false,
+  width = "72%",
+  ...props
+}) {
   return (
     <div
       data-slot="sidebar-menu-skeleton"

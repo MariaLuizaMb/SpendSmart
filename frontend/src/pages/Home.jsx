@@ -108,14 +108,14 @@ const contaSemConta = {
   saldoAtual: 0,
 };
 
-function formatarMoeda(valor) {
+export function formatarMoeda(valor) {
   return Number(valor || 0).toLocaleString("pt-BR", {
     style: "currency",
     currency: "BRL",
   });
 }
 
-function formatarValorMonetarioInput(valor) {
+export function formatarValorMonetarioInput(valor) {
   const digitos = String(valor || "").replace(/\D/g, "");
 
   if (!digitos) return "";
@@ -126,7 +126,7 @@ function formatarValorMonetarioInput(valor) {
   });
 }
 
-function converterValorMonetarioParaNumero(valor) {
+export function converterValorMonetarioParaNumero(valor) {
   if (!valor) return 0;
 
   const valorNormalizado = String(valor)
@@ -137,7 +137,7 @@ function converterValorMonetarioParaNumero(valor) {
   return Number(valorNormalizado);
 }
 
-function formatarData(data) {
+export function formatarData(data) {
   if (!data) return "00/00/0000";
 
   return new Date(data).toLocaleDateString("pt-BR", {
@@ -145,25 +145,25 @@ function formatarData(data) {
   });
 }
 
-function obterValorLancamento(lancamento) {
+export function obterValorLancamento(lancamento) {
   return Number(lancamento.valor || 0);
 }
 
-function obterNomeCategoria(lancamento) {
+export function obterNomeCategoria(lancamento) {
   return lancamento.categoria?.nome || lancamento.nomeCategoria || "Categoria";
 }
 
-function normalizarNomeCategoria(nomeCategoria) {
+export function normalizarNomeCategoria(nomeCategoria) {
   return nomeCategoria.toLocaleLowerCase("pt-BR");
 }
 
-function formatarValorEixoGrafico(valor) {
+export function formatarValorEixoGrafico(valor) {
   return `R$\u00A0${Number(valor || 0).toLocaleString("pt-BR", {
     maximumFractionDigits: 2,
   })}`;
 }
 
-function somarLancamentosPorTipo(lancamentos, tipo) {
+export function somarLancamentosPorTipo(lancamentos, tipo) {
   return lancamentos.reduce((total, lancamento) => {
     if (lancamento.tipo?.toUpperCase() !== tipo) return total;
 
@@ -171,7 +171,7 @@ function somarLancamentosPorTipo(lancamentos, tipo) {
   }, 0);
 }
 
-function obterLimiteOrcamentoMensal(orcamentos) {
+export function obterLimiteOrcamentoMensal(orcamentos) {
   const orcamentoGeral = orcamentos.find((orcamento) => !orcamento.idCategoria);
 
   if (orcamentoGeral) {
@@ -184,7 +184,7 @@ function obterLimiteOrcamentoMensal(orcamentos) {
   );
 }
 
-function obterCategoriaComMaiorDespesa(lancamentos) {
+export function obterCategoriaComMaiorDespesa(lancamentos) {
   const totaisPorCategoria = lancamentos.reduce((categorias, lancamento) => {
     const ehDespesa = lancamento.tipo?.toUpperCase() === "DESPESA";
 
@@ -213,7 +213,7 @@ function obterCategoriaComMaiorDespesa(lancamentos) {
   );
 }
 
-function calcularVariacaoPercentual(valorAtual, valorAnterior) {
+export function calcularVariacaoPercentual(valorAtual, valorAnterior) {
   if (!valorAnterior) {
     return valorAtual ? 100 : 0;
   }
@@ -221,7 +221,7 @@ function calcularVariacaoPercentual(valorAtual, valorAnterior) {
   return ((valorAtual - valorAnterior) / valorAnterior) * 100;
 }
 
-function calcularVariacaoPercentualPorDiferenca(valorAtual, valorAnterior) {
+export function calcularVariacaoPercentualPorDiferenca(valorAtual, valorAnterior) {
   if (!valorAnterior) {
     if (valorAtual > 0) return 100;
     if (valorAtual < 0) return -100;
@@ -232,7 +232,7 @@ function calcularVariacaoPercentualPorDiferenca(valorAtual, valorAnterior) {
   return ((valorAtual - valorAnterior) / Math.abs(valorAnterior)) * 100;
 }
 
-function formatarPercentualAbsoluto(valor) {
+export function formatarPercentualAbsoluto(valor) {
   return `${Math.abs(valor).toLocaleString("pt-BR", {
     maximumFractionDigits: 0,
   })}%`;
@@ -284,7 +284,7 @@ function descreverVariacaoMetrica(
   return mensagemMantido;
 }
 
-function obterPassoArredondado(valor) {
+export function obterPassoArredondado(valor) {
   if (!Number.isFinite(valor) || valor <= 0) return 10;
 
   const grandeza = 10 ** Math.floor(Math.log10(valor));
@@ -298,7 +298,7 @@ function obterPassoArredondado(valor) {
   return 10 * grandeza;
 }
 
-function criarEscalaEixoY(maiorValor, quantidadeTicks = 6) {
+export function criarEscalaEixoY(maiorValor, quantidadeTicks = 6) {
   if (!Number.isFinite(maiorValor) || maiorValor <= 0) {
     return {
       limiteSuperior: 300,
@@ -317,7 +317,7 @@ function criarEscalaEixoY(maiorValor, quantidadeTicks = 6) {
   };
 }
 
-function obterIntervaloPorPeriodo(periodo, referencia = new Date()) {
+export function obterIntervaloPorPeriodo(periodo, referencia = new Date()) {
   const ano = referencia.getUTCFullYear();
   const mes = referencia.getUTCMonth();
   const dia = referencia.getUTCDate();
@@ -352,7 +352,7 @@ function obterIntervaloPorPeriodo(periodo, referencia = new Date()) {
   return null;
 }
 
-function obterIntervaloMesAnterior(referencia = new Date()) {
+export function obterIntervaloMesAnterior(referencia = new Date()) {
   const ano = referencia.getUTCFullYear();
   const mes = referencia.getUTCMonth();
 
@@ -362,7 +362,7 @@ function obterIntervaloMesAnterior(referencia = new Date()) {
   };
 }
 
-function filtrarLancamentosPorIntervalo(lancamentos, intervalo) {
+export function filtrarLancamentosPorIntervalo(lancamentos, intervalo) {
   if (!intervalo) return lancamentos;
 
   return lancamentos.filter((lancamento) => {
@@ -372,7 +372,7 @@ function filtrarLancamentosPorIntervalo(lancamentos, intervalo) {
   });
 }
 
-function filtrarLancamentosPorPeriodo(lancamentos, periodo) {
+export function filtrarLancamentosPorPeriodo(lancamentos, periodo) {
   return filtrarLancamentosPorIntervalo(
     lancamentos,
     obterIntervaloPorPeriodo(periodo),
@@ -383,7 +383,7 @@ function obterDataHojeInput() {
   return formatarDataParaInput(new Date());
 }
 
-function formatarDataParaInput(data) {
+export function formatarDataParaInput(data) {
   if (!data) return "";
 
   const dataFormatada = new Date(data);
@@ -394,7 +394,7 @@ function formatarDataParaInput(data) {
   return `${ano}-${mes}-${dia}`;
 }
 
-function converterInputParaData(dataInput) {
+export function converterInputParaData(dataInput) {
   if (!dataInput) return undefined;
 
   const [ano, mes, dia] = dataInput.split("-").map(Number);
@@ -404,7 +404,7 @@ function converterInputParaData(dataInput) {
   return new Date(ano, mes - 1, dia);
 }
 
-function criarFormularioLancamentoInicial(idConta = "") {
+export function criarFormularioLancamentoInicial(idConta = "") {
   return {
     tipo: "DESPESA",
     idConta,
@@ -416,7 +416,7 @@ function criarFormularioLancamentoInicial(idConta = "") {
   };
 }
 
-function obterContaInicialLancamento(contaSelecionada, contas) {
+export function obterContaInicialLancamento(contaSelecionada, contas) {
   if (contaSelecionada === OPCAO_CONTA_VAZIA) return "";
 
   return contaSelecionada || contas[0]?.id || "";
