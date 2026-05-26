@@ -41,12 +41,19 @@ jobs:
 
       - name: Build backend
         working-directory: backend
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
         run: |
           npx prisma generate
           find src -name "*.js" -not -path "*/tests/*" -print0 | xargs -0 -n1 node --check
 
       - name: Test backend with coverage
         working-directory: backend
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+          JWT_SECRET: test-secret
         run: npm run test:coverage
 
       - name: Install frontend dependencies
