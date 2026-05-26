@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import bcrypt from "bcrypt";
 
-vi.mock("../database/prisma.js", () => ({
+vi.mock("../src/database/prisma.js", () => ({
   default: {
     usuario: {
       findUnique: vi.fn(),
@@ -16,9 +16,9 @@ vi.mock("jsonwebtoken", () => ({
   },
 }));
 
-import prisma from "../database/prisma.js";
+import prisma from "../src/database/prisma.js";
 import jwt from "jsonwebtoken";
-import AuthService from "../services/authServices.js";
+import AuthService from "../src/services/authServices.js";
 
 describe("AuthService", () => {
   beforeEach(() => {

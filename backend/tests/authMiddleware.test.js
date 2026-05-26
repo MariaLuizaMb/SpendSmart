@@ -7,7 +7,7 @@ vi.mock("jsonwebtoken", () => ({
 }));
 
 import jwt from "jsonwebtoken";
-import authMiddleware from "../middlewares/authMiddleware.js";
+import authMiddleware from "../src/middlewares/authMiddleware.js";
 
 function criarResponseMock() {
   const res = {};

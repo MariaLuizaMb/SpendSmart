@@ -33,12 +33,12 @@ const { prismaMock } = vi.hoisted(() => {
   return { prismaMock };
 });
 
-vi.mock("../database/prisma.js", () => ({
+vi.mock("../src/database/prisma.js", () => ({
   default: prismaMock,
 }));
 
-import LaunchService from "../services/launchService.js";
-import CategoryService from "../services/categoryService.js";
+import LaunchService from "../src/services/launchService.js";
+import CategoryService from "../src/services/categoryService.js";
 
 describe("US02 - Gestão de gastos", () => {
   const usuarioId = "usuario-1";
