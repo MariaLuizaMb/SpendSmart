@@ -148,6 +148,12 @@ describe("Cadastro", () => {
 
     resolverCadastro({ id: "1" });
     await screen.findByText("Usuário cadastrado com sucesso.");
+    await waitFor(
+      () => {
+        expect(mockNavigate).toHaveBeenCalledWith("/");
+      },
+      { timeout: 2000 },
+    );
   });
 
   it("deve exibir mensagem de erro quando a API rejeitar o cadastro", async () => {

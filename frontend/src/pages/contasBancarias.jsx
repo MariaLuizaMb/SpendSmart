@@ -78,13 +78,13 @@ const formularioInicial = {
   descricao: "",
 };
 
-function ordenarContas(contas) {
+export function ordenarContas(contas) {
   return [...contas].sort((contaA, contaB) =>
     contaA.nome.localeCompare(contaB.nome, "pt-BR"),
   );
 }
 
-function formatarMoeda(valor) {
+export function formatarMoeda(valor) {
   return Number(valor || 0)
     .toLocaleString("pt-BR", {
       style: "currency",
@@ -95,14 +95,14 @@ function formatarMoeda(valor) {
     .replace(/\u00a0/g, " ");
 }
 
-function formatarNumeroParaInputMoeda(valor) {
+export function formatarNumeroParaInputMoeda(valor) {
   return Number(valor || 0).toLocaleString("pt-BR", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
 }
 
-function formatarValorMonetarioInput(valor) {
+export function formatarValorMonetarioInput(valor) {
   const digitos = String(valor || "").replace(/\D/g, "");
 
   if (!digitos) return "";
@@ -113,7 +113,7 @@ function formatarValorMonetarioInput(valor) {
   });
 }
 
-function converterValorMonetarioParaNumero(valor) {
+export function converterValorMonetarioParaNumero(valor) {
   if (!valor) return 0;
 
   const valorNormalizado = String(valor)
@@ -124,7 +124,7 @@ function converterValorMonetarioParaNumero(valor) {
   return Number(valorNormalizado);
 }
 
-function obterNomeConta(modeloCartao, nomePersonalizado) {
+export function obterNomeConta(modeloCartao, nomePersonalizado) {
   if (modeloCartao === MODELOS_CARTAO.DEFAULT) {
     return nomePersonalizado.trim();
   }
@@ -134,11 +134,11 @@ function obterNomeConta(modeloCartao, nomePersonalizado) {
   );
 }
 
-function formatarTipoConta(tipo) {
+export function formatarTipoConta(tipo) {
   return tiposConta.find((opcao) => opcao.value === tipo)?.label || "Conta";
 }
 
-function criarFormularioPorConta(conta) {
+export function criarFormularioPorConta(conta) {
   if (!conta) return formularioInicial;
 
   return {
@@ -152,14 +152,14 @@ function criarFormularioPorConta(conta) {
   };
 }
 
-function normalizarContaParaFormulario(conta) {
+export function normalizarContaParaFormulario(conta) {
   return {
     ...conta,
     saldoAtual: conta?.saldoAtual ?? conta?.saldoInicial ?? 0,
   };
 }
 
-function formatarData(data) {
+export function formatarData(data) {
   if (!data) return "Nenhuma movimentação";
 
   return new Date(data).toLocaleDateString("pt-BR", {

@@ -93,14 +93,14 @@ const nomesMeses = [
   "Dezembro",
 ];
 
-function formatarMoeda(valor) {
+export function formatarMoeda(valor) {
   return Number(valor || 0).toLocaleString("pt-BR", {
     style: "currency",
     currency: "BRL",
   });
 }
 
-function formatarValorMonetarioInput(valor) {
+export function formatarValorMonetarioInput(valor) {
   const digitos = String(valor || "").replace(/\D/g, "");
 
   if (!digitos) return "";
@@ -111,7 +111,7 @@ function formatarValorMonetarioInput(valor) {
   });
 }
 
-function converterValorMonetarioParaNumero(valor) {
+export function converterValorMonetarioParaNumero(valor) {
   if (!valor) return 0;
 
   const valorNormalizado = String(valor)
@@ -122,7 +122,7 @@ function converterValorMonetarioParaNumero(valor) {
   return Number(valorNormalizado);
 }
 
-function formatarData(data) {
+export function formatarData(data) {
   if (!data) return "00/00/0000";
 
   return new Date(data).toLocaleDateString("pt-BR", {
@@ -130,13 +130,13 @@ function formatarData(data) {
   });
 }
 
-function formatarDataParaBusca(data) {
+export function formatarDataParaBusca(data) {
   if (!data) return "";
 
   return formatarDataParaInput(data);
 }
 
-function formatarDataHora(data) {
+export function formatarDataHora(data) {
   if (!data) return "Não informado";
 
   return new Date(data).toLocaleString("pt-BR", {
@@ -145,7 +145,7 @@ function formatarDataHora(data) {
   });
 }
 
-function formatarDataParaInput(data) {
+export function formatarDataParaInput(data) {
   if (!data) return "";
 
   const dataFormatada = new Date(data);
@@ -156,7 +156,7 @@ function formatarDataParaInput(data) {
   return `${ano}-${mes}-${dia}`;
 }
 
-function converterInputParaData(dataInput) {
+export function converterInputParaData(dataInput) {
   if (!dataInput) return undefined;
 
   const [ano, mes, dia] = dataInput.split("-").map(Number);
@@ -166,7 +166,7 @@ function converterInputParaData(dataInput) {
   return new Date(ano, mes - 1, dia);
 }
 
-function formatarTipo(tipo) {
+export function formatarTipo(tipo) {
   const tipoNormalizado = String(tipo || "").toUpperCase();
 
   return (
@@ -178,11 +178,11 @@ function formatarTipo(tipo) {
   );
 }
 
-function obterNomeCategoria(lancamento) {
+export function obterNomeCategoria(lancamento) {
   return lancamento.categoria?.nome || lancamento.nomeCategoria || "Categoria";
 }
 
-function obterNomeConta(lancamento) {
+export function obterNomeConta(lancamento) {
   if (lancamento.conta?.nome) {
     return lancamento.conta.ativa === false
       ? `${lancamento.conta.nome} (desativada)`
@@ -192,11 +192,11 @@ function obterNomeConta(lancamento) {
   return lancamento.nomeConta || "Sem conta";
 }
 
-function lancamentoTemContaDesativada(lancamento) {
+export function lancamentoTemContaDesativada(lancamento) {
   return Boolean(lancamento.conta && lancamento.conta.ativa === false);
 }
 
-function obterPrefixoCodigoTransacao(tipo) {
+export function obterPrefixoCodigoTransacao(tipo) {
   const tipoNormalizado = String(tipo || "").toUpperCase();
 
   if (tipoNormalizado === "RECEITA") return "R";
@@ -205,7 +205,7 @@ function obterPrefixoCodigoTransacao(tipo) {
   return "T";
 }
 
-function criarMapaCodigosTransacao(lancamentos) {
+export function criarMapaCodigosTransacao(lancamentos) {
   const contadores = {
     RECEITA: 0,
     DESPESA: 0,
@@ -238,24 +238,24 @@ function criarMapaCodigosTransacao(lancamentos) {
   return mapaCodigos;
 }
 
-function obterCodigoTransacao(lancamento, mapaCodigos) {
+export function obterCodigoTransacao(lancamento, mapaCodigos) {
   return (
     mapaCodigos.get(lancamento.id) ||
     `${obterPrefixoCodigoTransacao(lancamento.tipo)}00`
   );
 }
 
-function obterTimestamp(lancamento) {
+export function obterTimestamp(lancamento) {
   const data = new Date(lancamento.dataTransacao).getTime();
 
   return Number.isFinite(data) ? data : 0;
 }
 
-function obterValor(lancamento) {
+export function obterValor(lancamento) {
   return Number(lancamento.valor || 0);
 }
 
-function criarFormularioDetalhes(lancamento) {
+export function criarFormularioDetalhes(lancamento) {
   return {
     tipo: lancamento?.tipo || "DESPESA",
     idCategoria: lancamento?.idCategoria || lancamento?.categoria?.id || "",
@@ -299,7 +299,7 @@ function CampoSomenteLeitura({ label, children }) {
   );
 }
 
-function criarFormularioOrcamentoInicial() {
+export function criarFormularioOrcamentoInicial() {
   const hoje = new Date();
 
   return {
@@ -593,7 +593,7 @@ function NovoOrcamentoDialog({ aberto, onAbertoChange, onOrcamentoCriado }) {
   );
 }
 
-function ordenarLancamentos(lancamentos, ordenacao) {
+export function ordenarLancamentos(lancamentos, ordenacao) {
   return [...lancamentos].sort((a, b) => {
     if (ordenacao === "antigas") {
       return obterTimestamp(a) - obterTimestamp(b);
