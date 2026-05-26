@@ -5,3 +5,4 @@ psycopg[binary]
 python-dotenv
 pydantic
 scikit-learn
+coverage

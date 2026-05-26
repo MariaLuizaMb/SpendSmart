@@ -12,6 +12,12 @@
 <p align="center">
   <img src="https://img.shields.io/badge/status-em%20desenvolvimento-blue" alt="Status do Projeto"/>
   <img src="https://img.shields.io/badge/Sprint-1-green" alt="Sprint Status"/>
+  <a href="https://github.com/MariaLuizaMb/SpendSmart/actions/workflows/ci.yml">
+    <img src="https://github.com/MariaLuizaMb/SpendSmart/actions/workflows/ci.yml/badge.svg" alt="Actions Status"/>
+  </a>
+  <a href="https://sonarcloud.io/summary/new_code?id=MariaLuizaMb_SpendSmart">
+    <img src="https://sonarcloud.io/api/project_badges/measure?project=MariaLuizaMb_SpendSmart&metric=alert_status" alt="Quality Gate Status"/>
+  </a>
 </p>
 
 ---

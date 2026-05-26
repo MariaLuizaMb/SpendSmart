@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-vi.mock("../database/prisma.js", () => ({
+vi.mock("../src/database/prisma.js", () => ({
   default: {
     conta: {
       findMany: vi.fn(),
@@ -18,8 +18,8 @@ vi.mock("../database/prisma.js", () => ({
   },
 }));
 
-import prisma from "../database/prisma.js";
-import BankAccountService from "../services/bankAccountService.js";
+import prisma from "../src/database/prisma.js";
+import BankAccountService from "../src/services/bankAccountService.js";
 
 describe("BankAccountService", () => {
   beforeEach(() => {

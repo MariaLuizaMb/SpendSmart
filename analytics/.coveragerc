@@ -1,0 +1,12 @@
+[run]
+source = app
+omit =
+    app/__pycache__/*
+    app/*/__pycache__/*
+
+[report]
+show_missing = True
+skip_empty = True
+
+[xml]
+output = coverage.xml

@@ -20,11 +20,11 @@ const { prismaMock } = vi.hoisted(() => {
   return { prismaMock };
 });
 
-vi.mock("../database/prisma.js", () => ({
+vi.mock("../src/database/prisma.js", () => ({
   default: prismaMock,
 }));
 
-import OrcamentoService from "../services/orcamentoService.js";
+import OrcamentoService from "../src/services/orcamentoService.js";
 
 describe("OrcamentoService", () => {
   const usuarioId = "usuario-1";
