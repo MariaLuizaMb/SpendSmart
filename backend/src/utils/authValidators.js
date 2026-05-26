@@ -3,6 +3,9 @@ import {
   InternalServerError,
 } from "../errors/appError.js";
 
+const EMAIL_MIN_LENGTH = 6;
+const EMAIL_MAX_LENGTH = 254;
+
 export function validarJwtSecret() {
   if (!process.env.JWT_SECRET || process.env.JWT_SECRET.trim() === "") {
     throw new InternalServerError(
@@ -20,15 +23,39 @@ export function validarEmail(email) {
 
   const emailLimpo = email.trim().toLowerCase();
 
-  const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  if (!regexEmail.test(emailLimpo)) {
+  if (!emailTemFormatoValido(emailLimpo)) {
     throw new ValidationError(
       "Informe um email válido, como nome@dominio.com.",
     );
   }
 
   return emailLimpo;
+}
+
+export function emailTemFormatoValido(email) {
+  if (typeof email !== "string") return false;
+  if (email.length < EMAIL_MIN_LENGTH || email.length > EMAIL_MAX_LENGTH) {
+    return false;
+  }
+
+  for (const caractere of email) {
+    if (caractere.trim() === "") return false;
+  }
+
+  const indiceArroba = email.indexOf("@");
+
+  if (indiceArroba <= 0 || indiceArroba !== email.lastIndexOf("@")) {
+    return false;
+  }
+
+  const parteLocal = email.slice(0, indiceArroba);
+  const dominio = email.slice(indiceArroba + 1);
+
+  if (!parteLocal || !dominio) return false;
+  if (!dominio.includes(".")) return false;
+  if (dominio.startsWith(".") || dominio.endsWith(".")) return false;
+
+  return true;
 }
 
 export function validarSenha(senha) {
