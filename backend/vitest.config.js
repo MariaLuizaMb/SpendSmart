@@ -6,5 +6,16 @@ export default defineConfig({
     globals: true,
     include: ["src/**/*.test.js"],
     clearMocks: true,
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "lcov"],
+      reportsDirectory: "coverage",
+      include: ["src/**/*.js"],
+      exclude: [
+        "src/server.js",
+        "src/scripts/**",
+        "src/tests/**",
+      ],
+    },
   },
 });
