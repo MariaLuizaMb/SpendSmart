@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import Cadastro from "../pages/Cadastro";
+import Cadastro from "../src/pages/Cadastro";
 import { cadastrarUsuario } from "@/services/api";
 
 const mockNavigate = vi.fn();
