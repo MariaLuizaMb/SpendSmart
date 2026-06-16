@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   CalendarDays,
   CheckCircle2,
@@ -1201,6 +1202,8 @@ function DetalhesLancamentoDialog({
 
 export default function Transacoes() {
   const usuario = obterUsuario();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const categoriaIdFiltro = searchParams.get("categoriaId") || "";
 
   const [lancamentos, setLancamentos] = useState([]);
   const [contas, setContas] = useState([]);
@@ -1219,8 +1222,11 @@ export default function Transacoes() {
   const [mensagemSucesso, setMensagemSucesso] = useState("");
 
   const haFiltrosAtivos = useMemo(
-    () => filtroConta !== OPCAO_TODAS_CONTAS || Boolean(filtro.trim()),
-    [filtro, filtroConta],
+    () =>
+      filtroConta !== OPCAO_TODAS_CONTAS ||
+      Boolean(filtro.trim()) ||
+      Boolean(categoriaIdFiltro),
+    [categoriaIdFiltro, filtro, filtroConta],
   );
 
   const contaParaNovoLancamento = useMemo(() => {
@@ -1253,6 +1259,7 @@ export default function Transacoes() {
     try {
       const lancamentosResultado = await listarLancamentos({
         semConta: filtroConta === OPCAO_CONTA_VAZIA ? true : undefined,
+        idCategoria: categoriaIdFiltro || undefined,
       });
 
       setLancamentos(lancamentosResultado);
@@ -1273,7 +1280,7 @@ export default function Transacoes() {
     } finally {
       setCarregando(false);
     }
-  }, [filtroConta]);
+  }, [categoriaIdFiltro, filtroConta]);
 
   useEffect(() => {
     void Promise.resolve().then(carregarMetadados);
@@ -1348,6 +1355,12 @@ export default function Transacoes() {
   function limparFiltrosLancamentos() {
     setFiltro("");
     setFiltroConta(OPCAO_TODAS_CONTAS);
+    setSearchParams((parametrosAtuais) => {
+      const proximosParametros = new URLSearchParams(parametrosAtuais);
+      proximosParametros.delete("categoriaId");
+
+      return proximosParametros;
+    });
   }
 
   function alternarTodosSelecionados() {

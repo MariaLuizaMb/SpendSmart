@@ -64,6 +64,23 @@ export async function cadastrarCategoria(dados) {
   return resultado.data || resultado;
 }
 
+export async function editarCategoria(id, dados) {
+  const resultado = await request(`/categorias/editar/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(dados),
+  });
+
+  return resultado.data || resultado;
+}
+
+export async function removerCategoria(id) {
+  const resultado = await request(`/categorias/remover/${id}`, {
+    method: "DELETE",
+  });
+
+  return resultado.data || resultado;
+}
+
 export async function cadastrarLancamento(dados) {
   const resultado = await request("/lancamentos/cadastrar", {
     method: "POST",
@@ -99,6 +116,29 @@ export async function listarOrcamentos({ mes, ano, idCategoria } = {}) {
 
   const query = params.toString();
   const resultado = await request(`/orcamentos${query ? `?${query}` : ""}`);
+
+  return resultado.data || resultado;
+}
+
+export async function buscarOrcamento(id) {
+  const resultado = await request(`/orcamentos/${id}`);
+
+  return resultado.data || resultado;
+}
+
+export async function editarOrcamento(id, dados) {
+  const resultado = await request(`/orcamentos/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(dados),
+  });
+
+  return resultado.data || resultado;
+}
+
+export async function removerOrcamento(id) {
+  const resultado = await request(`/orcamentos/${id}`, {
+    method: "DELETE",
+  });
 
   return resultado.data || resultado;
 }

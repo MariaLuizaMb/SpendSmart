@@ -426,7 +426,7 @@ export function HomeSidebar({ usuario, paginaAtiva = "home" }) {
   const navigate = useNavigate();
   const { open, setOpen, isMobile, setOpenMobile } = useSidebar();
   const [settingsAberto, setSettingsAberto] = useState(
-    paginaAtiva === "contas-bancarias",
+    ["contas-bancarias", "categorias"].includes(paginaAtiva),
   );
 
   function handleLogoClick() {
@@ -562,8 +562,13 @@ export function HomeSidebar({ usuario, paginaAtiva = "home" }) {
                     </SidebarMenuSubItem>
 
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton>
-                        <span>Categorias de Gastos</span>
+                      <SidebarMenuSubButton
+                        asChild
+                        isActive={paginaAtiva === "categorias"}
+                      >
+                        <Link to="/categorias">
+                          <span>Categorias de Gastos</span>
+                        </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   </SidebarMenuSub>
