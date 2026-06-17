@@ -26,6 +26,7 @@ import {
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { obterUsuario, removerAuth } from "@/lib/auth";
+import logoSpendSmart from "@/assets/img/logo.svg";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -456,7 +457,7 @@ function formatarDataNotificacao(data) {
   }).format(new Date(data));
 }
 
-function NotificationsMenu() {
+export function NotificationsMenu({ variant = "sidebarItem", className = "" }) {
   const [aberto, setAberto] = useState(false);
   const [notificacoes, setNotificacoes] = useState([]);
   const [carregando, setCarregando] = useState(false);
@@ -514,21 +515,42 @@ function NotificationsMenu() {
     );
   }
 
+  const indicadorNaoLidas = naoLidas.length > 0 && (
+    <span className="absolute -right-1 -top-1 size-2 rounded-full bg-rose-500 ring-2 ring-white" />
+  );
+
+  const trigger =
+    variant === "sidebarItem" ? (
+      <SidebarMenuButton tooltip="Notificações" className="h-9">
+        <span className="relative flex size-4 shrink-0 items-center justify-center">
+          <Bell />
+          {indicadorNaoLidas}
+        </span>
+        <span>Notificações</span>
+      </SidebarMenuButton>
+    ) : (
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon-sm"
+        className={`relative size-9 shrink-0 rounded-xl bg-white text-zinc-700 shadow-sm ring-1 ring-zinc-200 hover:bg-zinc-50 hover:text-zinc-950 ${className}`}
+        aria-label="Notificações"
+        title="Notificações"
+      >
+        <Bell className="size-4" />
+        {indicadorNaoLidas}
+      </Button>
+    );
+
   return (
     <DropdownMenu open={aberto} onOpenChange={handleOpenChange}>
-      <DropdownMenuTrigger asChild>
-        <SidebarMenuButton tooltip="Notificações" className="h-9">
-          <span className="relative flex size-4 shrink-0 items-center justify-center">
-            <Bell />
-            {naoLidas.length > 0 && (
-              <span className="absolute -right-1 -top-1 size-2 rounded-full bg-rose-500 ring-2 ring-sidebar" />
-            )}
-          </span>
-          <span>Notificações</span>
-        </SidebarMenuButton>
-      </DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
 
-      <DropdownMenuContent side="right" align="end" className="w-80 p-0">
+      <DropdownMenuContent
+        side={variant === "header" ? "bottom" : "right"}
+        align="end"
+        className="w-80 p-0"
+      >
         <div className="flex items-center justify-between gap-3 px-3 py-2">
           <div className="min-w-0">
             <p className="text-sm font-semibold text-zinc-900">
@@ -670,8 +692,13 @@ export function HomeSidebar({ usuario, paginaAtiva = "home" }) {
             className="flex min-w-0 items-center gap-3 rounded-md text-left group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:justify-center"
             aria-label={open ? "Ir para a home" : "Abrir menu lateral"}
           >
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-zinc-950 text-white">
-              <WalletCards size={20} />
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-zinc-200">
+              <img
+                src={logoSpendSmart}
+                alt=""
+                aria-hidden="true"
+                className="h-7 w-7"
+              />
             </div>
 
             <div className="min-w-0 group-data-[collapsible=icon]:hidden">
@@ -685,6 +712,10 @@ export function HomeSidebar({ usuario, paginaAtiva = "home" }) {
           </button>
 
           <SidebarTrigger className="size-8 shrink-0 group-data-[collapsible=icon]:hidden" />
+          <NotificationsMenu
+            variant="sidebarIcon"
+            className="size-8 group-data-[collapsible=icon]:hidden"
+          />
         </div>
       </SidebarHeader>
 
@@ -780,10 +811,6 @@ export function HomeSidebar({ usuario, paginaAtiva = "home" }) {
 
       <SidebarFooter className="p-4">
         <SidebarMenu>
-          <SidebarMenuItem>
-            <NotificationsMenu />
-          </SidebarMenuItem>
-
           <SidebarMenuItem className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
             <SidebarMenuButton
               size="lg"
@@ -2028,18 +2055,25 @@ export default function Home() {
           data-ui="home-area-principal"
           className="grid h-screen min-h-0 min-w-0 grid-rows-[auto_minmax(0,1fr)] gap-5 overflow-y-auto bg-[#E9E9E9] p-4 sm:py-4 sm:pl-2 sm:pr-4 lg:overflow-hidden"
         >
-          <header data-ui="home-header" className="flex shrink-0 items-start">
-            <SidebarTrigger className="mt-1 size-9 shrink-0 md:hidden" />
+          <header
+            data-ui="home-header"
+            className="flex shrink-0 items-start justify-between gap-3"
+          >
+            <div className="flex min-w-0 items-start gap-3">
+              <SidebarTrigger className="mt-1 size-9 shrink-0 md:hidden" />
 
-            <div data-ui="home-header-textos">
-              <h1 className="text-2xl font-bold leading-tight text-zinc-950 sm:text-3xl">
-                Bem Vindo ao SpendSmart
-              </h1>
-              <p className="mt-2 text-sm text-zinc-950">
-                Olá, {usuario?.nome || "[Nome do Usuário]"}, Bem vindo(a) de
-                volta!
-              </p>
+              <div data-ui="home-header-textos">
+                <h1 className="text-2xl font-bold leading-tight text-zinc-950 sm:text-3xl">
+                  Bem Vindo ao SpendSmart
+                </h1>
+                <p className="mt-2 text-sm text-zinc-950">
+                  Olá, {usuario?.nome || "[Nome do Usuário]"}, Bem vindo(a) de
+                  volta!
+                </p>
+              </div>
             </div>
+
+            <NotificationsMenu variant="header" />
           </header>
 
           <main

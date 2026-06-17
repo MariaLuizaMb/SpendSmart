@@ -44,7 +44,7 @@ import {
 } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { obterUsuario } from "@/lib/auth";
-import { HomeSidebar } from "@/pages/Home";
+import { HomeSidebar, NotificationsMenu } from "@/pages/Home";
 import {
   cadastrarCategoria,
   editarCategoria,
@@ -423,10 +423,13 @@ export default function Categorias() {
               </div>
             </div>
 
-            <ManagementSwitcher
-              value={visaoAtiva}
-              onValueChange={alterarVisao}
-            />
+            <div className="flex items-center gap-2">
+              <NotificationsMenu variant="header" />
+              <ManagementSwitcher
+                value={visaoAtiva}
+                onValueChange={alterarVisao}
+              />
+            </div>
           </header>
 
           <main

@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import { HomeSidebar } from "@/pages/Home";
+import { HomeSidebar, NotificationsMenu } from "@/pages/Home";
 import {
   obterToken,
   obterUsuario,
@@ -283,18 +283,22 @@ export default function Perfil() {
         <HomeSidebar usuario={usuario} paginaAtiva="perfil" />
 
         <SidebarInset className="flex h-screen min-h-0 min-w-0 flex-col gap-5 overflow-y-auto bg-[#E9E9E9] p-4 sm:py-4 sm:pl-2 sm:pr-4">
-        <header className="flex shrink-0 items-start gap-3">
-          <SidebarTrigger className="mt-1 size-9 shrink-0 md:hidden" />
+        <header className="flex shrink-0 items-start justify-between gap-3">
+          <div className="flex min-w-0 items-start gap-3">
+            <SidebarTrigger className="mt-1 size-9 shrink-0 md:hidden" />
 
-          <div>
-            <h1 className="text-2xl font-bold leading-tight text-zinc-950 sm:text-3xl">
-              Perfil
-            </h1>
-            <p className="mt-2 max-w-3xl text-sm text-zinc-700">
-              Gerencie suas informações pessoais, segurança da conta e dados
-              vinculados ao seu perfil.
-            </p>
+            <div>
+              <h1 className="text-2xl font-bold leading-tight text-zinc-950 sm:text-3xl">
+                Perfil
+              </h1>
+              <p className="mt-2 max-w-3xl text-sm text-zinc-700">
+                Gerencie suas informações pessoais, segurança da conta e dados
+                vinculados ao seu perfil.
+              </p>
+            </div>
           </div>
+
+          <NotificationsMenu variant="header" />
         </header>
 
         <main className="space-y-5">

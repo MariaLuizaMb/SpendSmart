@@ -9,6 +9,7 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
+    "seed:demo": "node src/scripts/seedDemoData.js",
     "worker:financial": "node src/jobs/workers/financialAnalysisWorker.js",
     "worker:budget-alerts": "node src/jobs/workers/budgetAlertWorker.js"
   },

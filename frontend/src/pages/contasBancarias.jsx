@@ -5,7 +5,7 @@ import {
   WalletCards,
 } from "lucide-react";
 
-import { HomeSidebar } from "@/pages/Home";
+import { HomeSidebar, NotificationsMenu } from "@/pages/Home";
 import ContaCard from "@/components/ui/cardConta";
 import {
   AlertDialog,
@@ -1039,17 +1039,21 @@ export default function ContasBancarias() {
               </p>
             </div>
 
-            <Card className="hidden w-44 gap-1 rounded-xl border-0 bg-white px-4 py-3 shadow-md ring-1 ring-zinc-200 sm:flex">
-              <p className="text-xs font-bold leading-none text-zinc-950">
-                Saldo Total
-              </p>
-              <p className="text-xs leading-none text-zinc-500">
-                Saldo total de todas as contas
-              </p>
-              <p className="text-base font-bold leading-6 text-zinc-950">
-                {formatarMoeda(saldoTotal)}
-              </p>
-            </Card>
+            <div className="flex shrink-0 items-start gap-3">
+              <NotificationsMenu variant="header" />
+
+              <Card className="hidden w-64 gap-1 rounded-xl border-0 bg-white px-5 py-3 shadow-md ring-1 ring-zinc-200 sm:flex">
+                <p className="text-xs font-bold leading-none text-zinc-950">
+                  Saldo Total
+                </p>
+                <p className="whitespace-nowrap text-xs leading-none text-zinc-500">
+                  Saldo total de todas as contas
+                </p>
+                <p className="text-base font-bold leading-6 text-zinc-950">
+                  {formatarMoeda(saldoTotal)}
+                </p>
+              </Card>
+            </div>
           </header>
 
           <main className="min-h-0">

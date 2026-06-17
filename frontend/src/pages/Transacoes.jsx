@@ -8,7 +8,11 @@ import {
   Trash2,
 } from "lucide-react";
 
-import { NovoLancamentoDialog, HomeSidebar } from "@/pages/Home";
+import {
+  NovoLancamentoDialog,
+  HomeSidebar,
+  NotificationsMenu,
+} from "@/pages/Home";
 import { obterUsuario } from "@/lib/auth";
 import {
   AlertDialog,
@@ -1496,18 +1500,22 @@ export default function Transacoes() {
           data-ui="transacoes-area-principal"
           className="grid h-screen min-h-0 min-w-0 grid-rows-[auto_minmax(0,1fr)] gap-5 overflow-y-auto bg-[#E9E9E9] p-4 sm:py-4 sm:pl-2 sm:pr-4 lg:overflow-hidden"
         >
-          <header className="flex shrink-0 items-start">
-            <SidebarTrigger className="mt-1 size-9 shrink-0 md:hidden" />
+          <header className="flex shrink-0 items-start justify-between gap-3">
+            <div className="flex min-w-0 items-start gap-3">
+              <SidebarTrigger className="mt-1 size-9 shrink-0 md:hidden" />
 
-            <div>
-              <h1 className="text-2xl font-bold leading-tight text-zinc-950 sm:text-3xl">
-                Transações
-              </h1>
+              <div>
+                <h1 className="text-2xl font-bold leading-tight text-zinc-950 sm:text-3xl">
+                  Transações
+                </h1>
 
-              <p className="mt-2 text-sm text-zinc-950">
-                Visualize seu histórico de transações completo.
-              </p>
+                <p className="mt-2 text-sm text-zinc-950">
+                  Visualize seu histórico de transações completo.
+                </p>
+              </div>
             </div>
+
+            <NotificationsMenu variant="header" />
           </header>
 
           <main className="min-h-0">

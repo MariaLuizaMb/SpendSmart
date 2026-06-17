@@ -23,7 +23,11 @@ import {
   paraNumero,
   resumoTemDados,
 } from "@/components/dashboard/dashboard-utils";
-import { NovoLancamentoDialog, HomeSidebar } from "@/pages/Home";
+import {
+  NovoLancamentoDialog,
+  HomeSidebar,
+  NotificationsMenu,
+} from "@/pages/Home";
 import { obterUsuario } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -407,6 +411,8 @@ export default function Dashboard() {
             </div>
 
             <div className="flex w-full items-center gap-2 sm:w-auto">
+              <NotificationsMenu variant="header" />
+
               {avisoDados && (
                 <Tooltip>
                   <TooltipTrigger asChild>
