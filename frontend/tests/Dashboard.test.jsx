@@ -164,14 +164,16 @@ describe("Dashboard page", () => {
   });
 
   it("deve carregar análise, lançamentos e contas do período atual", async () => {
+    const hoje = new Date();
+
     renderDashboard();
 
     expect(screen.getByRole("heading", { name: "Dashboard" })).toBeInTheDocument();
 
     await waitFor(() => {
       expect(buscarAnalisePreditiva).toHaveBeenCalledWith({
-        mes: "5",
-        ano: "2026",
+        mes: String(hoje.getMonth() + 1),
+        ano: String(hoje.getFullYear()),
       });
       expect(listarLancamentos).toHaveBeenCalledWith({ limite: 80 });
       expect(listarContas).toHaveBeenCalled();

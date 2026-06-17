@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  ExternalLink,
   FolderKanban,
   Layers3,
-  Plus,
   ShieldCheck,
   Tag,
 } from "lucide-react";
@@ -13,7 +11,6 @@ import CategoryFilters, {
   FILTRO_ORIGEM_SISTEMA,
   FILTRO_ORIGEM_TODAS,
   FILTRO_ORIGEM_USUARIO,
-  FILTRO_TIPO_TODAS,
   FILTRO_USO_COM_LANCAMENTOS,
   FILTRO_USO_NAO_RECENTE,
   FILTRO_USO_RECENTE,
@@ -154,7 +151,6 @@ export default function Categorias() {
   const [categorias, setCategorias] = useState([]);
   const [busca, setBusca] = useState("");
   const [filtroOrigem, setFiltroOrigem] = useState(FILTRO_ORIGEM_TODAS);
-  const [filtroTipo, setFiltroTipo] = useState(FILTRO_TIPO_TODAS);
   const [filtroUso, setFiltroUso] = useState(FILTRO_USO_TODAS);
   const [selecionados, setSelecionados] = useState(() => new Set());
   const [carregando, setCarregando] = useState(true);
@@ -234,9 +230,6 @@ export default function Categorias() {
 
       if (filtroOrigem === FILTRO_ORIGEM_USUARIO && ehSistema) return false;
       if (filtroOrigem === FILTRO_ORIGEM_SISTEMA && !ehSistema) return false;
-      if (filtroTipo !== FILTRO_TIPO_TODAS && categoria.tipo !== filtroTipo) {
-        return false;
-      }
       if (filtroUso === FILTRO_USO_COM_LANCAMENTOS && !possuiLancamentos) {
         return false;
       }
@@ -250,7 +243,7 @@ export default function Categorias() {
 
       return true;
     });
-  }, [busca, categorias, filtroOrigem, filtroTipo, filtroUso]);
+  }, [busca, categorias, filtroOrigem, filtroUso]);
 
   const resumo = useMemo(
     () => ({
@@ -281,7 +274,6 @@ export default function Categorias() {
   const haFiltrosAtivos =
     Boolean(busca.trim()) ||
     filtroOrigem !== FILTRO_ORIGEM_TODAS ||
-    filtroTipo !== FILTRO_TIPO_TODAS ||
     filtroUso !== FILTRO_USO_TODAS;
 
   const todosSelecionados =
@@ -332,7 +324,6 @@ export default function Categorias() {
   function limparFiltros() {
     setBusca("");
     setFiltroOrigem(FILTRO_ORIGEM_TODAS);
-    setFiltroTipo(FILTRO_TIPO_TODAS);
     setFiltroUso(FILTRO_USO_TODAS);
   }
 
@@ -438,7 +429,13 @@ export default function Categorias() {
             />
           </header>
 
-          <main className="flex min-h-0 flex-1 flex-col gap-5">
+          <main
+            className={
+              visaoAtiva === VISAO_ORCAMENTOS
+                ? "space-y-5"
+                : "grid min-h-0 flex-1 grid-rows-[auto_minmax(0,1fr)] gap-5"
+            }
+          >
             {visaoAtiva === VISAO_ORCAMENTOS ? (
               <BudgetsView />
             ) : (
@@ -447,34 +444,38 @@ export default function Categorias() {
                   <CategorySummaryCard
                     titulo="Total de Categorias"
                     valor={resumo.total}
-                    descricao="Categorias disponíveis para organizar lançamentos."
+                    descricao="Categorias disponíveis para organizar melhor seus lançamentos."
                     icon={Layers3}
+                    variante="blue"
                     carregando={carregando}
                   />
                   <CategorySummaryCard
                     titulo="Criadas por Você"
                     valor={resumo.usuario}
-                    descricao="Categorias personalizadas vinculadas ao seu usuário."
+                    descricao="Categorias personalizadas criadas e vinculadas à sua conta."
                     icon={FolderKanban}
+                    variante="emerald"
                     carregando={carregando}
                   />
                   <CategorySummaryCard
                     titulo="Categorias do Sistema"
                     valor={resumo.sistema}
-                    descricao="Categorias padrão liberadas pelo SpendSmart."
+                    descricao="Categorias padrão do SpendSmart disponíveis para lançamentos."
                     icon={ShieldCheck}
+                    variante="amber"
                     carregando={carregando}
                   />
                   <CategorySummaryCard
                     titulo="Sem Lançamentos"
                     valor={resumo.semLancamentos}
-                    descricao="Categorias ainda sem histórico de lançamentos."
+                    descricao="Categorias sem histórico de lançamentos associados no sistema."
                     icon={Tag}
+                    variante="red"
                     carregando={carregando}
                   />
                 </section>
 
-                <Card className="flex min-h-[520px] flex-1 flex-col gap-0 rounded-2xl border-0 bg-white shadow-none ring-0">
+                <Card className="flex h-full min-h-0 flex-col gap-0 rounded-2xl border-0 bg-white shadow-none ring-0">
                   <CardHeader className="gap-3 px-4 pb-3 pt-4">
                     <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
                       <CardTitle className="text-base font-bold text-zinc-950">
@@ -484,11 +485,9 @@ export default function Categorias() {
                       <CategoryFilters
                         busca={busca}
                         origem={filtroOrigem}
-                        tipo={filtroTipo}
                         uso={filtroUso}
                         onBuscaChange={setBusca}
                         onOrigemChange={setFiltroOrigem}
-                        onTipoChange={setFiltroTipo}
                         onUsoChange={setFiltroUso}
                       />
                     </div>
@@ -545,7 +544,6 @@ export default function Categorias() {
                           }
                           className="border-zinc-200 bg-white text-xs text-zinc-950 hover:bg-zinc-50"
                         >
-                          <ExternalLink size={14} />
                           Ver lançamentos associados
                         </Button>
                       )}
@@ -555,7 +553,6 @@ export default function Categorias() {
                         onClick={abrirCriacao}
                         className="bg-zinc-950 text-xs text-white hover:bg-zinc-800"
                       >
-                        <Plus size={14} />
                         Nova Categoria
                       </Button>
                     </div>

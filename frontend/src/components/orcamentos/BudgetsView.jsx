@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle,
-  Eye,
   PiggyBank,
-  Plus,
   TrendingDown,
   Wallet,
 } from "lucide-react";
@@ -15,8 +13,6 @@ import BudgetFilters, {
   FILTRO_PERIODO_MES_ATUAL,
   FILTRO_PERIODO_TODOS,
   FILTRO_PERIODO_ULTIMOS_3_MESES,
-  FILTRO_STATUS_TODOS,
-  FILTRO_TIPO_TODOS,
 } from "@/components/orcamentos/BudgetFilters";
 import BudgetFormDialog from "@/components/orcamentos/BudgetFormDialog";
 import BudgetInsightsCard from "@/components/orcamentos/BudgetInsightsCard";
@@ -27,6 +23,8 @@ import {
   STATUS_ORCAMENTO,
   calcularUsoOrcamento,
   formatarMoeda,
+  formatarPeriodo,
+  obterLabelStatus,
   obterMesAnoAtual,
   obterNomeOrcamento,
   obterTipoOrcamento,
@@ -132,8 +130,6 @@ export default function BudgetsView() {
   const [erro, setErro] = useState("");
   const [mensagemSucesso, setMensagemSucesso] = useState("");
   const [busca, setBusca] = useState("");
-  const [filtroStatus, setFiltroStatus] = useState(FILTRO_STATUS_TODOS);
-  const [filtroTipo, setFiltroTipo] = useState(FILTRO_TIPO_TODOS);
   const [filtroMovimentacao, setFiltroMovimentacao] = useState(
     FILTRO_MOVIMENTACAO_TODOS,
   );
@@ -250,14 +246,23 @@ export default function BudgetsView() {
 
     return orcamentosEnriquecidos.filter((orcamento) => {
       const nome = obterNomeOrcamento(orcamento).toLocaleLowerCase("pt-BR");
-      const tipo = obterTipoOrcamento(orcamento).toUpperCase();
+      const tipo = obterTipoOrcamento(orcamento);
+      const status = obterLabelStatus(orcamento.status);
+      const periodo = formatarPeriodo(orcamento);
+      const termosBusca = [
+        nome,
+        tipo,
+        status,
+        orcamento.status,
+        periodo,
+        `${orcamento.mes}/${orcamento.ano}`,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLocaleLowerCase("pt-BR");
       const possuiMovimentacao = (orcamento.lancamentosAssociados || []).length > 0;
 
-      if (termo && !nome.includes(termo)) return false;
-      if (filtroStatus !== FILTRO_STATUS_TODOS && orcamento.status !== filtroStatus) {
-        return false;
-      }
-      if (filtroTipo !== FILTRO_TIPO_TODOS && tipo !== filtroTipo) return false;
+      if (termo && !termosBusca.includes(termo)) return false;
       if (filtroMovimentacao === "com" && !possuiMovimentacao) return false;
       if (filtroMovimentacao === "sem" && possuiMovimentacao) return false;
       if (!estaNoFiltroPeriodo(orcamento, filtroPeriodo)) return false;
@@ -268,8 +273,6 @@ export default function BudgetsView() {
     busca,
     filtroMovimentacao,
     filtroPeriodo,
-    filtroStatus,
-    filtroTipo,
     orcamentosEnriquecidos,
   ]);
 
@@ -303,15 +306,11 @@ export default function BudgetsView() {
   }, [orcamentosEnriquecidos, selecionadosVisiveis]);
   const haFiltrosAtivos =
     Boolean(busca.trim()) ||
-    filtroStatus !== FILTRO_STATUS_TODOS ||
-    filtroTipo !== FILTRO_TIPO_TODOS ||
     filtroMovimentacao !== FILTRO_MOVIMENTACAO_TODOS ||
     filtroPeriodo !== FILTRO_PERIODO_MES_ATUAL;
 
   function limparFiltros() {
     setBusca("");
-    setFiltroStatus(FILTRO_STATUS_TODOS);
-    setFiltroTipo(FILTRO_TIPO_TODOS);
     setFiltroMovimentacao(FILTRO_MOVIMENTACAO_TODOS);
     setFiltroPeriodo(FILTRO_PERIODO_MES_ATUAL);
   }
@@ -428,8 +427,8 @@ export default function BudgetsView() {
   }
 
   return (
-    <>
-      <section className="grid shrink-0 gap-4 xl:grid-cols-[minmax(0,380px)_minmax(420px,1fr)] xl:items-stretch">
+    <div className="space-y-5">
+      <section className="grid gap-4 xl:grid-cols-[minmax(0,380px)_minmax(420px,1fr)] xl:items-stretch">
         <BudgetUsageCard
           orcamentos={opcoesGrafico}
           orcamentoSelecionado={orcamentoGrafico}
@@ -437,7 +436,7 @@ export default function BudgetsView() {
           carregando={carregando}
         />
 
-        <div className="grid gap-4 sm:grid-cols-2 xl:h-full xl:grid-cols-2 xl:grid-rows-2">
+        <div className="grid auto-rows-fr gap-4 sm:grid-cols-2 xl:h-full xl:grid-cols-2 xl:grid-rows-[minmax(0,1fr)_minmax(0,1fr)]">
           <BudgetSummaryCard
             titulo="Orçamento Total"
             valor={formatarMoeda(resumo.total)}
@@ -478,8 +477,8 @@ export default function BudgetsView() {
         orcamentos={orcamentosMesAtual}
       />
 
-      <Card className="flex min-h-[560px] flex-1 flex-col gap-0 rounded-2xl border-0 bg-white shadow-none ring-0">
-        <CardHeader className="gap-3 px-4 pb-3 pt-4">
+      <Card className="gap-0 rounded-2xl border-0 bg-white py-0 shadow-none ring-0">
+        <CardHeader className="gap-3 px-4 pb-3 pt-5">
           <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
             <CardTitle className="text-base font-bold text-zinc-950">
               Orçamentos criados
@@ -487,15 +486,13 @@ export default function BudgetsView() {
 
             <BudgetFilters
               busca={busca}
-              status={filtroStatus}
-              tipo={filtroTipo}
               movimentacao={filtroMovimentacao}
               periodo={filtroPeriodo}
               onBuscaChange={setBusca}
-              onStatusChange={setFiltroStatus}
-              onTipoChange={setFiltroTipo}
               onMovimentacaoChange={setFiltroMovimentacao}
               onPeriodoChange={setFiltroPeriodo}
+              onLimparFiltros={limparFiltros}
+              limparFiltrosDesabilitado={!haFiltrosAtivos}
             />
           </div>
 
@@ -506,7 +503,7 @@ export default function BudgetsView() {
           )}
         </CardHeader>
 
-        <CardContent className="min-h-0 flex-1 px-4 pb-0">
+        <CardContent className="px-4 pb-0">
           <BudgetsTable
             orcamentos={orcamentosFiltrados}
             carregando={carregando}
@@ -516,7 +513,6 @@ export default function BudgetsView() {
             todosSelecionados={todosSelecionados}
             onSelecionarTodos={alternarTodosSelecionados}
             onSelecionarOrcamento={alternarOrcamentoSelecionado}
-            onVerDetalhes={abrirDetalhes}
             onEditar={abrirEdicao}
             onRemover={excluirOrcamento}
             orcamentoRemovendo={orcamentoRemovendo}
@@ -534,21 +530,10 @@ export default function BudgetsView() {
             <Button
               type="button"
               variant="outline"
-              onClick={limparFiltros}
-              disabled={!haFiltrosAtivos}
-              className="border-zinc-200 bg-white text-xs text-zinc-950 hover:bg-zinc-50"
-            >
-              Limpar filtros
-            </Button>
-
-            <Button
-              type="button"
-              variant="outline"
               onClick={() => abrirDetalhes(orcamentoSelecionadoUnico)}
               disabled={!orcamentoSelecionadoUnico}
               className="border-zinc-200 bg-white text-xs text-zinc-950 hover:bg-zinc-50"
             >
-              <Eye size={14} />
               Ver detalhes
             </Button>
 
@@ -557,7 +542,6 @@ export default function BudgetsView() {
               onClick={abrirCriacao}
               className="bg-zinc-950 text-xs text-white hover:bg-zinc-800"
             >
-              <Plus size={14} />
               Novo Orçamento
             </Button>
           </div>
@@ -588,6 +572,6 @@ export default function BudgetsView() {
           if (!aberto) setOrcamentoDetalhes(null);
         }}
       />
-    </>
+    </div>
   );
 }

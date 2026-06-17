@@ -8,6 +8,7 @@ import {
 } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
+  Bell,
   CalendarDays,
   CheckCircle2,
   ChevronDown,
@@ -18,7 +19,6 @@ import {
   LoaderCircle,
   LogOut,
   PiggyBank,
-  Plus,
   Settings,
   TrendingUp,
   WalletCards,
@@ -50,6 +50,12 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   Item,
@@ -97,7 +103,10 @@ import {
   listarCategorias,
   listarContas,
   listarLancamentos,
+  listarNotificacoes,
   listarOrcamentos,
+  marcarNotificacaoComoLida,
+  marcarTodasNotificacoesComoLidas,
 } from "@/services/api";
 
 const OPCAO_CATEGORIA_PERSONALIZADA = "__nova_categoria__";
@@ -221,7 +230,10 @@ export function calcularVariacaoPercentual(valorAtual, valorAnterior) {
   return ((valorAtual - valorAnterior) / valorAnterior) * 100;
 }
 
-export function calcularVariacaoPercentualPorDiferenca(valorAtual, valorAnterior) {
+export function calcularVariacaoPercentualPorDiferenca(
+  valorAtual,
+  valorAnterior,
+) {
   if (!valorAnterior) {
     if (valorAtual > 0) return 100;
     if (valorAtual < 0) return -100;
@@ -422,6 +434,193 @@ export function obterContaInicialLancamento(contaSelecionada, contas) {
   return contaSelecionada || contas[0]?.id || "";
 }
 
+function obterIniciaisUsuario(nome = "") {
+  const partes = String(nome).trim().split(/\s+/).filter(Boolean).slice(0, 2);
+
+  if (!partes.length) return "US";
+
+  return partes
+    .map((parte) => parte[0])
+    .join("")
+    .toUpperCase();
+}
+
+function formatarDataNotificacao(data) {
+  if (!data) return "";
+
+  return new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(data));
+}
+
+function NotificationsMenu() {
+  const [aberto, setAberto] = useState(false);
+  const [notificacoes, setNotificacoes] = useState([]);
+  const [carregando, setCarregando] = useState(false);
+  const [erro, setErro] = useState("");
+
+  const naoLidas = notificacoes.filter((notificacao) => !notificacao.lidaEm);
+
+  const carregarNotificacoes = useCallback(async () => {
+    setCarregando(true);
+    setErro("");
+
+    try {
+      const dados = await listarNotificacoes(10);
+      setNotificacoes(Array.isArray(dados) ? dados : []);
+    } catch (error) {
+      setErro(error.message || "Não foi possível carregar notificações.");
+    } finally {
+      setCarregando(false);
+    }
+  }, []);
+
+  function handleOpenChange(open) {
+    setAberto(open);
+
+    if (open) {
+      carregarNotificacoes();
+    }
+  }
+
+  async function handleMarcarComoLida(id) {
+    await marcarNotificacaoComoLida(id);
+    setNotificacoes((atuais) =>
+      atuais.map((notificacao) =>
+        notificacao.id === id
+          ? {
+              ...notificacao,
+              status: "read",
+              lidaEm: notificacao.lidaEm || new Date().toISOString(),
+            }
+          : notificacao,
+      ),
+    );
+  }
+
+  async function handleMarcarTodasComoLidas() {
+    await marcarTodasNotificacoesComoLidas();
+    const agora = new Date().toISOString();
+
+    setNotificacoes((atuais) =>
+      atuais.map((notificacao) => ({
+        ...notificacao,
+        status: "read",
+        lidaEm: notificacao.lidaEm || agora,
+      })),
+    );
+  }
+
+  return (
+    <DropdownMenu open={aberto} onOpenChange={handleOpenChange}>
+      <DropdownMenuTrigger asChild>
+        <SidebarMenuButton tooltip="Notificações" className="h-9">
+          <span className="relative flex size-4 shrink-0 items-center justify-center">
+            <Bell />
+            {naoLidas.length > 0 && (
+              <span className="absolute -right-1 -top-1 size-2 rounded-full bg-rose-500 ring-2 ring-sidebar" />
+            )}
+          </span>
+          <span>Notificações</span>
+        </SidebarMenuButton>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent side="right" align="end" className="w-80 p-0">
+        <div className="flex items-center justify-between gap-3 px-3 py-2">
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-zinc-900">
+              Notificações
+            </p>
+            <p className="text-xs text-zinc-500">
+              {naoLidas.length
+                ? `${naoLidas.length} não lida${naoLidas.length > 1 ? "s" : ""}`
+                : "Tudo em dia"}
+            </p>
+          </div>
+
+          {naoLidas.length > 0 && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={handleMarcarTodasComoLidas}
+              className="h-8 shrink-0 px-2 text-xs"
+            >
+              Marcar lidas
+            </Button>
+          )}
+        </div>
+
+        <DropdownMenuSeparator className="m-0" />
+
+        <div className="max-h-80 overflow-y-auto p-2">
+          {carregando && (
+            <div className="flex items-center gap-2 px-2 py-4 text-sm text-zinc-500">
+              <LoaderCircle className="size-4 animate-spin" />
+              Carregando
+            </div>
+          )}
+
+          {!carregando && erro && (
+            <p className="px-2 py-4 text-sm text-red-600">{erro}</p>
+          )}
+
+          {!carregando && !erro && notificacoes.length === 0 && (
+            <p className="px-2 py-4 text-sm text-zinc-500">
+              Nenhuma notificação recente.
+            </p>
+          )}
+
+          {!carregando &&
+            !erro &&
+            notificacoes.map((notificacao) => (
+              <div
+                key={notificacao.id}
+                className="grid gap-2 rounded-md px-2 py-2 hover:bg-zinc-50"
+              >
+                <div className="flex items-start gap-2">
+                  <span
+                    className={`mt-1 size-2 shrink-0 rounded-full ${
+                      notificacao.lidaEm ? "bg-zinc-300" : "bg-rose-500"
+                    }`}
+                  />
+
+                  <div className="min-w-0 flex-1">
+                    <p className="line-clamp-2 text-sm font-medium text-zinc-900">
+                      {notificacao.titulo}
+                    </p>
+                    <p className="line-clamp-3 text-xs leading-5 text-zinc-600">
+                      {notificacao.mensagem}
+                    </p>
+                    <p className="mt-1 text-[11px] text-zinc-400">
+                      {formatarDataNotificacao(notificacao.criadoEm)}
+                    </p>
+                  </div>
+                </div>
+
+                {!notificacao.lidaEm && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleMarcarComoLida(notificacao.id)}
+                    className="ml-4 h-7 justify-start px-2 text-xs text-zinc-600"
+                  >
+                    <CheckCircle2 className="size-3.5" />
+                    Marcar como lida
+                  </Button>
+                )}
+              </div>
+            ))}
+        </div>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 export function HomeSidebar({ usuario, paginaAtiva = "home" }) {
   const navigate = useNavigate();
   const { open, setOpen, isMobile, setOpenMobile } = useSidebar();
@@ -581,14 +780,21 @@ export function HomeSidebar({ usuario, paginaAtiva = "home" }) {
 
       <SidebarFooter className="p-4">
         <SidebarMenu>
+          <SidebarMenuItem>
+            <NotificationsMenu />
+          </SidebarMenuItem>
+
           <SidebarMenuItem className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
             <SidebarMenuButton
               size="lg"
               tooltip={usuario?.nome || "Usuário"}
               className="h-12 flex-1 group-data-[collapsible=icon]:flex-none"
+              isActive={paginaAtiva === "perfil"}
               onClick={handlePerfilClick}
             >
-              <div className="size-9 shrink-0 rounded-xl bg-zinc-200" />
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-blue-500 to-indigo-400 text-xs font-bold text-white shadow-sm">
+                {obterIniciaisUsuario(usuario?.nome)}
+              </div>
 
               <div className="min-w-0 flex-1 group-data-[collapsible=icon]:hidden">
                 <p className="truncate text-sm font-bold leading-none">
@@ -661,44 +867,37 @@ function ListaLancamentos({
         </Select>
       </div>
 
-      <ScrollArea
-        data-ui="lista-lancamentos-conteudo-scroll"
-        className="min-h-0 flex-1"
-      >
-        <ItemGroup
-          data-ui="lista-lancamentos-grupo-itens"
-          className="flex min-h-full flex-col gap-2 pr-2"
+      {carregando ? (
+        <div
+          data-ui="lista-lancamentos-estado-carregando"
+          className="flex min-h-0 flex-1 items-center justify-center rounded-lg border border-zinc-200 p-4 text-sm text-zinc-500"
         >
-          {carregando && (
-            <div
-              data-ui="lista-lancamentos-estado-carregando"
-              className="flex min-h-[220px] flex-1 items-center justify-center rounded-lg border border-zinc-200 p-4 text-sm text-zinc-500"
-            >
-              Carregando lançamentos...
-            </div>
-          )}
-
-          {!carregando && erro && (
-            <div
-              data-ui="lista-lancamentos-estado-erro"
-              className="flex min-h-[220px] flex-1 items-center justify-center rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600"
-            >
-              {erro}
-            </div>
-          )}
-
-          {!carregando && !erro && lancamentos.length === 0 && (
-            <div
-              data-ui="lista-lancamentos-estado-vazio"
-              className="flex min-h-[220px] flex-1 items-center justify-center rounded-lg border border-dashed border-zinc-300 p-4 text-center text-sm text-zinc-500"
-            >
-              Não há movimentações para serem mostradas nesse cartão.
-            </div>
-          )}
-
-          {!carregando &&
-            !erro &&
-            lancamentos.map((lancamento) => {
+          Carregando lançamentos...
+        </div>
+      ) : erro ? (
+        <div
+          data-ui="lista-lancamentos-estado-erro"
+          className="flex min-h-0 flex-1 items-center justify-center rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600"
+        >
+          {erro}
+        </div>
+      ) : lancamentos.length === 0 ? (
+        <div
+          data-ui="lista-lancamentos-estado-vazio"
+          className="flex min-h-0 flex-1 items-center justify-center rounded-lg border border-dashed border-zinc-300 p-4 text-center text-sm text-zinc-500"
+        >
+          Não há movimentações para serem mostradas nesse cartão.
+        </div>
+      ) : (
+        <ScrollArea
+          data-ui="lista-lancamentos-conteudo-scroll"
+          className="min-h-0 flex-1"
+        >
+          <ItemGroup
+            data-ui="lista-lancamentos-grupo-itens"
+            className="flex min-h-full flex-col gap-2 pr-2"
+          >
+            {lancamentos.map((lancamento) => {
               const tipo = lancamento.tipo?.toUpperCase();
               const valor = obterValorLancamento(lancamento);
               const ehDespesa = tipo === "DESPESA";
@@ -742,8 +941,9 @@ function ListaLancamentos({
                 </Item>
               );
             })}
-        </ItemGroup>
-      </ScrollArea>
+          </ItemGroup>
+        </ScrollArea>
+      )}
 
       <div
         data-ui="lista-lancamentos-footer-botao"
@@ -772,33 +972,33 @@ function MetricaCard({
 }) {
   const estilosPorVariante = {
     sky: {
-      gradiente: "from-white via-white to-sky-100",
+      gradiente: "from-white via-white to-sky-50",
       bordaIcone: "border-sky-400",
-      fundoIcone: "bg-sky-100/70",
+      fundoIcone: "bg-sky-100",
       textoIcone: "text-sky-500",
     },
     indigo: {
-      gradiente: "from-white via-white to-indigo-100",
+      gradiente: "from-white via-white to-indigo-50",
       bordaIcone: "border-indigo-400",
-      fundoIcone: "bg-indigo-100/70",
+      fundoIcone: "bg-indigo-100",
       textoIcone: "text-indigo-500",
     },
     emerald: {
-      gradiente: "from-white via-white to-emerald-100",
+      gradiente: "from-white via-white to-emerald-50",
       bordaIcone: "border-emerald-400",
-      fundoIcone: "bg-emerald-100/70",
+      fundoIcone: "bg-emerald-100",
       textoIcone: "text-emerald-500",
     },
     rose: {
-      gradiente: "from-white via-white to-rose-100",
+      gradiente: "from-white via-white to-rose-50",
       bordaIcone: "border-rose-400",
-      fundoIcone: "bg-rose-100/70",
+      fundoIcone: "bg-rose-100",
       textoIcone: "text-rose-500",
     },
     orange: {
-      gradiente: "from-white via-white to-orange-100",
+      gradiente: "from-white via-white to-orange-50",
       bordaIcone: "border-orange-400",
-      fundoIcone: "bg-orange-100/70",
+      fundoIcone: "bg-orange-100",
       textoIcone: "text-orange-500",
     },
   };
@@ -808,14 +1008,14 @@ function MetricaCard({
   return (
     <Card
       data-ui={dataUi}
-      className={`h-full min-h-[136px] overflow-hidden rounded-[18px] border-0 py-3 bg-linear-to-r ${estilos.gradiente} shadow-lg ring-0 sm:min-h-[148px] sm:py-4 lg:min-h-[128px] ${className}`}
+      className={`h-full min-h-[136px] overflow-hidden rounded-2xl border-0 py-3 bg-linear-to-r ${estilos.gradiente} shadow-lg ring-0 sm:min-h-[148px] sm:py-4 lg:min-h-[128px] ${className}`}
     >
       <CardContent className="@container/metrica-card relative flex size-full min-h-0 min-w-0 flex-1 flex-col justify-center px-5 sm:px-6">
         <div
           data-ui={`${dataUi}-icone`}
-          className={`absolute right-3 top-3 flex size-8 items-center justify-center rounded-full border-2 sm:right-4 sm:top-0 sm:size-9 ${estilos.bordaIcone} ${estilos.fundoIcone} ${estilos.textoIcone}`}
+          className={`absolute right-4 top-0 flex size-10 items-center justify-center rounded-xl ${estilos.fundoIcone} ${estilos.textoIcone}`}
         >
-          {createElement(icone, { size: 18, strokeWidth: 2.1 })}
+          {createElement(icone, { size: 20, strokeWidth: 2.1 })}
         </div>
 
         <div
@@ -1364,7 +1564,7 @@ export function NovoLancamentoDialog({
                         onChange={atualizarValorLancamento}
                         placeholder="0,00"
                         disabled={salvando}
-                        className="h-10 pl-10 pr-3"
+                        className="pl-10 pr-3"
                         required
                       />
                     </div>
@@ -1422,7 +1622,7 @@ export function NovoLancamentoDialog({
                         }
                         placeholder="Ex.: Viagem, Freelance, Mercado"
                         disabled={salvando}
-                        className="h-10 px-3"
+                        className="px-3"
                         minLength={2}
                       />
                     </div>
@@ -1469,14 +1669,14 @@ export function NovoLancamentoDialog({
                           setCalendarioAberto((abertoAtual) => !abertoAtual)
                         }
                         disabled={salvando}
-                        className="h-10 w-full justify-between px-3 text-left font-normal text-zinc-700"
+                        className="w-full justify-between px-3 text-left font-normal text-zinc-700"
                       >
                         <span>{formatarData(formulario.dataTransacao)}</span>
                         <CalendarDays size={16} />
                       </Button>
 
                       {calendarioAberto && (
-                        <div className="absolute right-0 top-11 z-50 rounded-xl border border-zinc-200 bg-white p-1 shadow-lg">
+                        <div className="absolute right-0 top-9 z-50 rounded-xl border border-zinc-200 bg-white p-1 shadow-lg">
                           <Calendar
                             mode="single"
                             selected={dataSelecionada}
@@ -1610,10 +1810,7 @@ export default function Home() {
     const saldoMes = receitasMes - despesasMes;
     const saldoMesAnterior = receitasMesAnterior - despesasMesAnterior;
     const limiteOrcamentoMensal = obterLimiteOrcamentoMensal(orcamentosMes);
-    const orcamentoRestante = Math.max(
-      limiteOrcamentoMensal - despesasMes,
-      0,
-    );
+    const orcamentoRestante = Math.max(limiteOrcamentoMensal - despesasMes, 0);
     const percentualMaiorCategoriaDespesa = despesasMes
       ? Math.round((maiorCategoriaDespesa.total / despesasMes) * 100)
       : 0;
@@ -1700,8 +1897,7 @@ export default function Home() {
       setContas(resultado);
 
       setContaSelecionada(
-        (contaAtual) =>
-          contaAtual || resultado[0]?.id || OPCAO_CONTA_VAZIA,
+        (contaAtual) => contaAtual || resultado[0]?.id || OPCAO_CONTA_VAZIA,
       );
     } catch (error) {
       console.error("Erro ao carregar contas:", error.message);

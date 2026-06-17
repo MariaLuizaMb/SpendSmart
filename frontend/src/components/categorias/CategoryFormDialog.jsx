@@ -108,7 +108,7 @@ export default function CategoryFormDialog({
                     onChange={atualizarCampo}
                     placeholder="Ex.: Mercado, Salário, Freelance"
                     disabled={salvando}
-                    className="h-10 px-3"
+                    className="px-3"
                     minLength={2}
                     required
                   />

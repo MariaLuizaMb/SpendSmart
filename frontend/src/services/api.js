@@ -180,6 +180,33 @@ export async function buscarAnalisePreditiva({ mes, ano } = {}) {
   return resultado.data || resultado;
 }
 
+export async function listarNotificacoes(limite = 10) {
+  const params = new URLSearchParams();
+
+  if (limite) params.append("limite", limite);
+
+  const query = params.toString();
+  const resultado = await request(`/notifications${query ? `?${query}` : ""}`);
+
+  return resultado.data || resultado;
+}
+
+export async function marcarNotificacaoComoLida(id) {
+  const resultado = await request(`/notifications/${id}/read`, {
+    method: "PATCH",
+  });
+
+  return resultado.data || resultado;
+}
+
+export async function marcarTodasNotificacoesComoLidas() {
+  const resultado = await request("/notifications/read-all", {
+    method: "PATCH",
+  });
+
+  return resultado.data || resultado;
+}
+
 export async function cadastrarConta(dados) {
   const resultado = await request("/contas", {
     method: "POST",

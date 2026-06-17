@@ -142,7 +142,7 @@ export default function BudgetFormDialog({
                         onChange={atualizarValor}
                         placeholder="0,00"
                         disabled={salvando}
-                        className="h-10 pl-10"
+                        className="pl-10"
                         required
                       />
                     </div>
@@ -212,7 +212,7 @@ export default function BudgetFormDialog({
                       value={formulario.ano}
                       onChange={atualizarCampo}
                       disabled={salvando}
-                      className="h-10"
+                      className="h-8"
                       required
                     />
                   </div>

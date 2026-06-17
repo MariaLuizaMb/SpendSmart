@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Plus, Search } from "lucide-react";
+import { Search } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -174,7 +174,7 @@ export default function DashboardTransactionsTable({
   return (
     <Card className="rounded-2xl border-0 bg-white py-0 shadow-lg ring-0">
       <CardHeader className="gap-4 px-4 pb-3 pt-5">
-        <div className="grid gap-3 lg:grid-cols-[minmax(160px,1fr)_minmax(220px,304px)_140px] lg:items-center">
+        <div className="grid gap-3 lg:grid-cols-[minmax(160px,1fr)_minmax(220px,304px)_max-content] lg:items-center">
           <CardTitle className={dashboardTypography.cardTitle}>
             Transações
           </CardTitle>
@@ -185,12 +185,12 @@ export default function DashboardTransactionsTable({
               value={filtro}
               onChange={(event) => setFiltro(event.target.value)}
               placeholder="Pesquisar"
-              className="h-10 rounded-lg pl-9"
+              className="pl-9"
             />
           </div>
 
           <Select value={ordenacao} onValueChange={setOrdenacao}>
-            <SelectTrigger className="h-10 w-full">
+            <SelectTrigger className="w-fit min-w-max">
               <SelectValue placeholder="Ordenar" />
             </SelectTrigger>
             <SelectContent align="end">
@@ -320,7 +320,6 @@ export default function DashboardTransactionsTable({
           onClick={onNovoLancamento}
           className="border-zinc-200 bg-white text-xs text-zinc-950 hover:bg-zinc-50"
         >
-          <Plus size={14} />
           Novo Lançamento
         </Button>
       </CardFooter>

@@ -178,9 +178,68 @@ exports.Prisma.OrcamentoScalarFieldEnum = {
   atualizadoEm: 'atualizadoEm'
 };
 
+exports.Prisma.AnalyticJobScalarFieldEnum = {
+  id: 'id',
+  idUsuario: 'idUsuario',
+  tipo: 'tipo',
+  status: 'status',
+  payload: 'payload',
+  resultado: 'resultado',
+  erro: 'erro',
+  criadoEm: 'criadoEm',
+  iniciadoEm: 'iniciadoEm',
+  finalizadoEm: 'finalizadoEm'
+};
+
+exports.Prisma.InsightScalarFieldEnum = {
+  id: 'id',
+  idUsuario: 'idUsuario',
+  tipo: 'tipo',
+  titulo: 'titulo',
+  descricao: 'descricao',
+  dados: 'dados',
+  criadoEm: 'criadoEm'
+};
+
+exports.Prisma.FinancialAlertScalarFieldEnum = {
+  id: 'id',
+  idUsuario: 'idUsuario',
+  tipo: 'tipo',
+  severidade: 'severidade',
+  titulo: 'titulo',
+  mensagem: 'mensagem',
+  dados: 'dados',
+  lidoEm: 'lidoEm',
+  criadoEm: 'criadoEm'
+};
+
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  idUsuario: 'idUsuario',
+  tipo: 'tipo',
+  titulo: 'titulo',
+  mensagem: 'mensagem',
+  canal: 'canal',
+  status: 'status',
+  dados: 'dados',
+  enviadaEm: 'enviadaEm',
+  lidaEm: 'lidaEm',
+  erro: 'erro',
+  criadoEm: 'criadoEm'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -191,6 +250,12 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 exports.TipoCategoria = exports.$Enums.TipoCategoria = {
   DESPESA: 'DESPESA',
@@ -231,7 +296,11 @@ exports.Prisma.ModelName = {
   Categoria: 'Categoria',
   Lancamento: 'Lancamento',
   Conta: 'Conta',
-  Orcamento: 'Orcamento'
+  Orcamento: 'Orcamento',
+  AnalyticJob: 'AnalyticJob',
+  Insight: 'Insight',
+  FinancialAlert: 'FinancialAlert',
+  Notification: 'Notification'
 };
 
 /**

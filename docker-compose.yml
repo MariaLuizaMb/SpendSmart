@@ -1,4 +1,15 @@
 services:
+  redis:
+    image: redis:7-alpine
+    container_name: spendsmart-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   backend:
     build:
       context: ./backend
@@ -7,11 +18,16 @@ services:
       - "3000:3000"
     env_file:
       - ./backend/.env
+    environment:
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      QUEUE_PREFIX: ${QUEUE_PREFIX:-spendsmart}
+      QUEUE_DISABLED: ${QUEUE_DISABLED:-false}
     volumes:
       - ./backend:/app
       - /app/node_modules
     depends_on:
       - analytics
+      - redis
     command: sh -c "npx prisma generate && npm run dev"
 
   frontend:

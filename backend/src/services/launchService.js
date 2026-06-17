@@ -1,6 +1,8 @@
 import prisma from "../database/prisma.js";
 
 import { ValidationError } from "../errors/appError.js";
+import { enqueueBudgetAlertJob } from "../jobs/producers/budgetAlertProducer.js";
+import { enqueueFinancialAnalysisJob } from "../jobs/producers/financialAnalysisProducer.js";
 
 const TIPOS_LANCAMENTO_VALIDOS = ["DESPESA", "RECEITA"];
 const RECORRENCIAS_VALIDAS = [
@@ -10,6 +12,20 @@ const RECORRENCIAS_VALIDAS = [
   "MENSAL",
   "ANUAL",
 ];
+
+async function enqueueFinancialJobs({ idUsuario, eventType, entityId }) {
+  const payload = {
+    userId: idUsuario,
+    eventType,
+    entityType: "launch",
+    entityId,
+  };
+
+  await Promise.all([
+    enqueueFinancialAnalysisJob(payload),
+    enqueueBudgetAlertJob(payload),
+  ]);
+}
 
 function converterDataTransacao(dataTransacao) {
   if (
@@ -216,6 +232,12 @@ class LaunchService {
       },
     });
 
+    await enqueueFinancialJobs({
+      idUsuario,
+      eventType: "created",
+      entityId: lancamento.id,
+    });
+
     return lancamento;
   }
 
@@ -352,6 +374,12 @@ class LaunchService {
       },
     });
 
+    await enqueueFinancialJobs({
+      idUsuario,
+      eventType: "updated",
+      entityId: lancamentoAtualizado.id,
+    });
+
     return lancamentoAtualizado;
   }
 
@@ -373,6 +401,12 @@ class LaunchService {
     // Remover lançamento
     await prisma.lancamento.delete({
       where: { id },
+    });
+
+    await enqueueFinancialJobs({
+      idUsuario,
+      eventType: "deleted",
+      entityId: id,
     });
 
     return { id, mensagem: "Lançamento removido com sucesso." };

@@ -1,4 +1,4 @@
-import { Eye, LoaderCircle, Pencil, Trash2 } from "lucide-react";
+import { LoaderCircle, Pencil, Trash2 } from "lucide-react";
 
 import {
   AlertDialog,
@@ -17,24 +17,11 @@ import { obterNomeOrcamento } from "@/components/orcamentos/budget-utils";
 export default function BudgetActions({
   orcamento,
   removendo,
-  onVerDetalhes,
   onEditar,
   onRemover,
 }) {
   return (
     <div className="flex items-center justify-end gap-2">
-      <Button
-        type="button"
-        size="icon-sm"
-        variant="outline"
-        onClick={() => onVerDetalhes(orcamento)}
-        className="size-8 rounded-full border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50"
-        aria-label={`Ver detalhes de ${obterNomeOrcamento(orcamento)}`}
-        title="Ver detalhes"
-      >
-        <Eye size={15} />
-      </Button>
-
       <Button
         type="button"
         size="icon-sm"

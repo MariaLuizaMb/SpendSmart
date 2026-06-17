@@ -3,11 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import {
   CalendarDays,
   CheckCircle2,
-  Pencil,
   LoaderCircle,
-  PiggyBank,
-  Plus,
-  Save,
   Search,
   Trash2,
 } from "lucide-react";
@@ -342,14 +338,16 @@ function NovoOrcamentoDialog({ aberto, onAbertoChange, onOrcamentoCriado }) {
     }
   }, []);
 
-  useEffect(() => {
-    if (!aberto) return;
+  function alterarAbertura(proximoAberto) {
+    if (proximoAberto) {
+      setFormulario(criarFormularioOrcamentoInicial());
+      setErro("");
+      setSucesso("");
+      void carregarCategorias();
+    }
 
-    setFormulario(criarFormularioOrcamentoInicial());
-    setErro("");
-    setSucesso("");
-    void Promise.resolve().then(carregarCategorias);
-  }, [aberto, carregarCategorias]);
+    onAbertoChange(proximoAberto);
+  }
 
   function atualizarCampo(event) {
     const { name, value } = event.target;
@@ -426,7 +424,7 @@ function NovoOrcamentoDialog({ aberto, onAbertoChange, onOrcamentoCriado }) {
   }
 
   return (
-    <Dialog open={aberto} onOpenChange={onAbertoChange}>
+    <Dialog open={aberto} onOpenChange={alterarAbertura}>
       <DialogContent
         data-ui="modal-novo-orcamento-conteudo"
         className="max-h-[92vh] overflow-hidden p-0 sm:max-w-lg"
@@ -463,7 +461,7 @@ function NovoOrcamentoDialog({ aberto, onAbertoChange, onOrcamentoCriado }) {
                       onChange={atualizarValorOrcamento}
                       placeholder="0,00"
                       disabled={salvando}
-                      className="h-10 pl-10 pr-3"
+                      className="pl-10 pr-3"
                       required
                     />
                   </div>
@@ -503,7 +501,7 @@ function NovoOrcamentoDialog({ aberto, onAbertoChange, onOrcamentoCriado }) {
                       value={formulario.ano}
                       onChange={atualizarCampo}
                       disabled={salvando}
-                      className="h-10 px-3"
+                      className="px-3"
                       required
                     />
                   </div>
@@ -940,7 +938,7 @@ function DetalhesLancamentoDialog({
                             onChange={atualizarValorLancamento}
                             placeholder="0,00"
                             disabled={camposBloqueados}
-                            className="h-10 pl-10 pr-3"
+                            className="pl-10 pr-3"
                             required
                           />
                         </div>
@@ -1034,7 +1032,7 @@ function DetalhesLancamentoDialog({
                               setCalendarioAberto((abertoAtual) => !abertoAtual)
                             }
                             disabled={camposBloqueados}
-                            className="h-10 w-full justify-between px-3 text-left font-normal text-zinc-700"
+                            className="w-full justify-between px-3 text-left font-normal text-zinc-700"
                           >
                             <span>
                               {formatarData(formulario.dataTransacao)}
@@ -1043,7 +1041,7 @@ function DetalhesLancamentoDialog({
                           </Button>
 
                           {calendarioAberto && (
-                            <div className="absolute right-0 top-11 z-50 rounded-xl border border-zinc-200 bg-white p-1 shadow-lg">
+                            <div className="absolute right-0 top-9 z-50 rounded-xl border border-zinc-200 bg-white p-1 shadow-lg">
                               <Calendar
                                 mode="single"
                                 selected={dataSelecionada}
@@ -1515,7 +1513,7 @@ export default function Transacoes() {
           <main className="min-h-0">
             <Card className="h-full min-h-0 gap-0 rounded-2xl border-0 bg-white shadow-none ring-0">
               <CardHeader className="gap-3 px-4 pb-3 pt-4">
-                <div className="grid gap-3 lg:grid-cols-[minmax(220px,1fr)_180px_150px] lg:items-center">
+                <div className="grid gap-3 lg:grid-cols-[minmax(220px,1fr)_max-content_max-content] lg:items-center">
                   <div className="relative w-full">
                     <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-400" />
 
@@ -1523,12 +1521,12 @@ export default function Transacoes() {
                       value={filtro}
                       onChange={(event) => setFiltro(event.target.value)}
                       placeholder="Buscar na listagem"
-                      className="h-10 rounded-lg pl-9"
+                      className="pl-9"
                     />
                   </div>
 
                   <Select value={filtroConta} onValueChange={setFiltroConta}>
-                    <SelectTrigger className="h-10 w-full">
+                    <SelectTrigger className="w-fit min-w-max">
                       <SelectValue placeholder="Contas" />
                     </SelectTrigger>
 
@@ -1546,7 +1544,7 @@ export default function Transacoes() {
                   </Select>
 
                   <Select value={ordenacao} onValueChange={setOrdenacao}>
-                    <SelectTrigger className="h-10 w-full">
+                    <SelectTrigger className="w-fit min-w-max">
                       <SelectValue placeholder="Ordenar" />
                     </SelectTrigger>
 
@@ -1846,7 +1844,6 @@ export default function Transacoes() {
                     onClick={() => setModalOrcamentoAberto(true)}
                     className="border-zinc-200 bg-white text-xs text-zinc-950 hover:bg-zinc-50"
                   >
-                    <PiggyBank size={14} />
                     Definir orçamento
                   </Button>
 
@@ -1856,7 +1853,6 @@ export default function Transacoes() {
                     onClick={() => setModalLancamentoAberto(true)}
                     className="border-zinc-200 bg-white text-xs text-zinc-950 hover:bg-zinc-50"
                   >
-                    <Plus size={14} />
                     Novo Lançamento
                   </Button>
                 </div>

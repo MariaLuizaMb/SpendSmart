@@ -2,8 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   CheckCircle2,
   LoaderCircle,
-  Pencil,
-  Save,
   WalletCards,
 } from "lucide-react";
 
@@ -324,7 +322,7 @@ function DetalhesContaDialog({
                         id="modeloCartaoContaDetalhes"
                         value={conta.nome}
                         readOnly
-                        className="h-10 bg-zinc-50 px-3"
+                        className="bg-zinc-50 px-3"
                       />
                     )}
                   </div>
@@ -340,7 +338,7 @@ function DetalhesContaDialog({
                           disabled={salvando}
                           minLength={2}
                           placeholder="Ex.: Inter, Bradesco"
-                          className="h-10 bg-white px-3"
+                          className="bg-white px-3"
                         />
                       </div>
                     )}
@@ -368,8 +366,8 @@ function DetalhesContaDialog({
                         disabled={salvando}
                         className={
                           editando
-                            ? "h-10 bg-white pl-10 pr-3"
-                            : "h-10 bg-zinc-50 px-3"
+                            ? "bg-white pl-10 pr-3"
+                            : "bg-zinc-50 px-3"
                         }
                       />
                     </div>
@@ -401,7 +399,7 @@ function DetalhesContaDialog({
                         id="tipoContaDetalhes"
                         value={formatarTipoConta(formulario.tipo)}
                         readOnly
-                        className="h-10 bg-zinc-50 px-3"
+                        className="bg-zinc-50 px-3"
                       />
                     )}
                   </div>
@@ -418,7 +416,7 @@ function DetalhesContaDialog({
                           : formatarData(ultimaMovimentacao?.dataTransacao)
                       }
                       readOnly
-                      className="h-10 bg-zinc-50 px-3"
+                      className="bg-zinc-50 px-3"
                     />
                   </div>
 
@@ -475,9 +473,7 @@ function DetalhesContaDialog({
                 >
                   {salvando ? (
                     <LoaderCircle className="animate-spin" size={16} />
-                  ) : (
-                    <Save size={16} />
-                  )}
+                  ) : null}
                   {salvando ? "Salvando..." : "Salvar alterações"}
                 </Button>
               ) : (
@@ -490,7 +486,6 @@ function DetalhesContaDialog({
                   }}
                   className="bg-zinc-950 text-white hover:bg-zinc-800"
                 >
-                  <Pencil size={16} />
                   Editar informações
                 </Button>
               )}
@@ -629,7 +624,7 @@ function NovaContaDialog({ aberto, onAbertoChange, onContaCriada }) {
                         disabled={salvando}
                         minLength={2}
                         placeholder="Ex.: Inter, Bradesco"
-                        className="h-10 bg-white px-3"
+                        className="bg-white px-3"
                       />
                     </div>
                   )}
@@ -647,7 +642,7 @@ function NovaContaDialog({ aberto, onAbertoChange, onContaCriada }) {
                       onChange={atualizarCampo}
                       disabled={salvando}
                       placeholder="0,00"
-                      className="h-10 bg-white px-3"
+                      className="bg-white px-3"
                     />
                   </div>
 
@@ -1339,17 +1334,15 @@ export default function ContasBancarias() {
                                 type="submit"
                                 disabled={camposBloqueados}
                                 className="h-8 rounded-lg bg-zinc-950 px-4 text-sm text-white hover:bg-zinc-800"
-                              >
-                                {salvando ? (
-                                  <LoaderCircle
-                                    className="animate-spin"
-                                    size={16}
-                                  />
-                                ) : (
-                                  <CheckCircle2 size={16} />
-                                )}
-                                {salvando ? "Salvando..." : "Salvar"}
-                              </Button>
+                                >
+                                  {salvando ? (
+                                    <LoaderCircle
+                                      className="animate-spin"
+                                      size={16}
+                                    />
+                                  ) : null}
+                                  {salvando ? "Salvando..." : "Salvar"}
+                                </Button>
                             </>
                           ) : (
                             <>

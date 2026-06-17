@@ -15,7 +15,7 @@ function formatarSaldo(valor) {
 const estilosPorVariant = {
   default: {
     container:
-      "relative w-full max-w-161.5 aspect-646/397 overflow-hidden rounded-[24px] bg-center shadow-md",
+      "relative w-full max-w-161.5 aspect-646/397 overflow-hidden rounded-[20px] bg-center shadow-md",
     titulo:
       "absolute bottom-[11%] left-[10.5%] max-w-[45%] truncate text-2xl font-bold uppercase text-white sm:text-3xl",
     saldo:
@@ -27,7 +27,7 @@ const estilosPorVariant = {
   },
   home: {
     container:
-      "relative w-full aspect-646/397 overflow-hidden rounded-[10px] bg-center shadow-sm",
+      "relative w-full aspect-646/397 overflow-hidden rounded-lg bg-center shadow-sm",
     titulo:
       "absolute bottom-[12%] left-[10%] max-w-[48%] truncate text-xl font-bold uppercase text-white",
     saldo:

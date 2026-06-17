@@ -8,7 +8,9 @@
     "start": "node src/server.js",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "worker:financial": "node src/jobs/workers/financialAnalysisWorker.js",
+    "worker:budget-alerts": "node src/jobs/workers/budgetAlertWorker.js"
   },
   "repository": {
     "type": "git",
@@ -26,9 +28,11 @@
     "@prisma/adapter-neon": "^7.7.0",
     "@prisma/client": "^7.7.0",
     "bcrypt": "^6.0.0",
+    "bullmq": "^5.78.1",
     "cors": "^2.8.6",
     "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3"
+    "jsonwebtoken": "^9.0.3",
+    "nodemailer": "^7.0.13"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^4.1.7",

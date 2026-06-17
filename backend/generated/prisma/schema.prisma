@@ -47,16 +47,20 @@ enum ModeloCartao {
 }
 
 model Usuario {
-  id           String       @id @default(cuid()) // chave primária; Prisma gera um id string único automaticamente
+  id           String           @id @default(cuid()) // chave primária; Prisma gera um id string único automaticamente
   nome         String // nome do usuário
-  email        String       @unique // email do usuário; não pode repetir
+  email        String           @unique // email do usuário; não pode repetir
   senhaHash    String // armazena a senha criptografada em hash
   categorias   Categoria[] // relação de um usuário para várias categorias
   lancamentos  Lancamento[] // relação de um usuário para vários lançamentos
   orcamentos   Orcamento[] // relação de um usuário para vários orçamentos
   contas       Conta[] // relação de um usuário para várias contas bancárias
-  criadoEm     DateTime     @default(now()) // data/hora de criação do registro
-  atualizadoEm DateTime     @updatedAt // atualiza automaticamente sempre que o registro for alterado
+  analyticJobs AnalyticJob[] // jobs analíticos gerados por eventos financeiros
+  insights     Insight[] // insights financeiros persistidos
+  alertas      FinancialAlert[] // alertas financeiros persistidos
+  notificacoes Notification[] // notificações financeiras enviadas ou exibidas no sistema
+  criadoEm     DateTime         @default(now()) // data/hora de criação do registro
+  atualizadoEm DateTime         @updatedAt // atualiza automaticamente sempre que o registro for alterado
 }
 
 model Categoria {
@@ -133,4 +137,77 @@ model Orcamento {
   @@index([idUsuario]) // índice para buscar orçamentos por usuário
   @@index([idCategoria]) // índice para buscar orçamentos por categoria
   @@index([mes, ano]) // índice útil para consultas por período
+}
+
+model AnalyticJob {
+  id           String    @id @default(cuid())
+  idUsuario    String
+  tipo         String
+  status       String
+  payload      Json
+  resultado    Json?
+  erro         String?
+  usuario      Usuario   @relation(fields: [idUsuario], references: [id], onDelete: Cascade)
+  criadoEm     DateTime  @default(now())
+  iniciadoEm   DateTime?
+  finalizadoEm DateTime?
+
+  @@index([idUsuario])
+  @@index([tipo])
+  @@index([status])
+  @@index([criadoEm])
+}
+
+model Insight {
+  id        String   @id @default(cuid())
+  idUsuario String
+  tipo      String
+  titulo    String
+  descricao String
+  dados     Json?
+  usuario   Usuario  @relation(fields: [idUsuario], references: [id], onDelete: Cascade)
+  criadoEm  DateTime @default(now())
+
+  @@index([idUsuario])
+  @@index([tipo])
+  @@index([criadoEm])
+}
+
+model FinancialAlert {
+  id         String    @id @default(cuid())
+  idUsuario  String
+  tipo       String
+  severidade String
+  titulo     String
+  mensagem   String
+  dados      Json?
+  lidoEm     DateTime?
+  usuario    Usuario   @relation(fields: [idUsuario], references: [id], onDelete: Cascade)
+  criadoEm   DateTime  @default(now())
+
+  @@index([idUsuario])
+  @@index([tipo])
+  @@index([severidade])
+  @@index([criadoEm])
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  idUsuario String
+  tipo      String
+  titulo    String
+  mensagem  String
+  canal     String
+  status    String
+  dados     Json?
+  enviadaEm DateTime?
+  lidaEm    DateTime?
+  erro      String?
+  usuario   Usuario   @relation(fields: [idUsuario], references: [id], onDelete: Cascade)
+  criadoEm  DateTime  @default(now())
+
+  @@index([idUsuario])
+  @@index([tipo])
+  @@index([status])
+  @@index([criadoEm])
 }

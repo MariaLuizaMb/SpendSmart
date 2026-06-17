@@ -10,7 +10,7 @@ import {
   obterTipoOrcamento,
 } from "@/components/orcamentos/budget-utils";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 function CheckboxTabela({ checked, onChange, label }) {
   return (
@@ -32,14 +32,13 @@ export default function BudgetsTable({
   todosSelecionados,
   onSelecionarTodos,
   onSelecionarOrcamento,
-  onVerDetalhes,
   onEditar,
   onRemover,
   orcamentoRemovendo,
 }) {
   return (
     <ScrollArea className="h-full rounded-lg border border-zinc-200">
-      <div className="min-w-[1120px]">
+      <div className="w-full overflow-hidden">
         <table className="w-full border-collapse text-left text-sm">
           <thead className="sticky top-0 z-10 bg-white">
             <tr className="border-b border-zinc-200 text-xs font-medium text-zinc-950">
@@ -125,7 +124,6 @@ export default function BudgetsTable({
                       <BudgetActions
                         orcamento={orcamento}
                         removendo={orcamentoRemovendo === orcamento.id}
-                        onVerDetalhes={onVerDetalhes}
                         onEditar={onEditar}
                         onRemover={onRemover}
                       />
@@ -137,7 +135,6 @@ export default function BudgetsTable({
         </table>
       </div>
 
-      <ScrollBar orientation="horizontal" />
     </ScrollArea>
   );
 }

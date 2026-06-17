@@ -14,7 +14,7 @@ export const VISAO_ORCAMENTOS = "orcamentos";
 export default function ManagementSwitcher({ value, onValueChange }) {
   return (
     <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger className="h-10 w-full rounded-xl bg-white shadow-sm sm:w-[220px]">
+      <SelectTrigger className="w-full rounded-xl bg-white shadow-sm sm:w-[220px]">
         <FolderKanban size={16} />
         <SelectValue placeholder="Categorias" />
       </SelectTrigger>

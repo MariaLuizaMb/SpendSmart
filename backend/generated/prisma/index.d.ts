@@ -38,6 +38,26 @@ export type Conta = $Result.DefaultSelection<Prisma.$ContaPayload>
  * 
  */
 export type Orcamento = $Result.DefaultSelection<Prisma.$OrcamentoPayload>
+/**
+ * Model AnalyticJob
+ * 
+ */
+export type AnalyticJob = $Result.DefaultSelection<Prisma.$AnalyticJobPayload>
+/**
+ * Model Insight
+ * 
+ */
+export type Insight = $Result.DefaultSelection<Prisma.$InsightPayload>
+/**
+ * Model FinancialAlert
+ * 
+ */
+export type FinancialAlert = $Result.DefaultSelection<Prisma.$FinancialAlertPayload>
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
 
 /**
  * Enums
@@ -283,6 +303,46 @@ export class PrismaClient<
     * ```
     */
   get orcamento(): Prisma.OrcamentoDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.analyticJob`: Exposes CRUD operations for the **AnalyticJob** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AnalyticJobs
+    * const analyticJobs = await prisma.analyticJob.findMany()
+    * ```
+    */
+  get analyticJob(): Prisma.AnalyticJobDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.insight`: Exposes CRUD operations for the **Insight** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Insights
+    * const insights = await prisma.insight.findMany()
+    * ```
+    */
+  get insight(): Prisma.InsightDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.financialAlert`: Exposes CRUD operations for the **FinancialAlert** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FinancialAlerts
+    * const financialAlerts = await prisma.financialAlert.findMany()
+    * ```
+    */
+  get financialAlert(): Prisma.FinancialAlertDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.notification`: Exposes CRUD operations for the **Notification** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Notifications
+    * const notifications = await prisma.notification.findMany()
+    * ```
+    */
+  get notification(): Prisma.NotificationDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -721,7 +781,11 @@ export namespace Prisma {
     Categoria: 'Categoria',
     Lancamento: 'Lancamento',
     Conta: 'Conta',
-    Orcamento: 'Orcamento'
+    Orcamento: 'Orcamento',
+    AnalyticJob: 'AnalyticJob',
+    Insight: 'Insight',
+    FinancialAlert: 'FinancialAlert',
+    Notification: 'Notification'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -737,7 +801,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "usuario" | "categoria" | "lancamento" | "conta" | "orcamento"
+      modelProps: "usuario" | "categoria" | "lancamento" | "conta" | "orcamento" | "analyticJob" | "insight" | "financialAlert" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1111,6 +1175,302 @@ export namespace Prisma {
           }
         }
       }
+      AnalyticJob: {
+        payload: Prisma.$AnalyticJobPayload<ExtArgs>
+        fields: Prisma.AnalyticJobFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AnalyticJobFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnalyticJobPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AnalyticJobFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnalyticJobPayload>
+          }
+          findFirst: {
+            args: Prisma.AnalyticJobFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnalyticJobPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AnalyticJobFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnalyticJobPayload>
+          }
+          findMany: {
+            args: Prisma.AnalyticJobFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnalyticJobPayload>[]
+          }
+          create: {
+            args: Prisma.AnalyticJobCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnalyticJobPayload>
+          }
+          createMany: {
+            args: Prisma.AnalyticJobCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AnalyticJobCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnalyticJobPayload>[]
+          }
+          delete: {
+            args: Prisma.AnalyticJobDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnalyticJobPayload>
+          }
+          update: {
+            args: Prisma.AnalyticJobUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnalyticJobPayload>
+          }
+          deleteMany: {
+            args: Prisma.AnalyticJobDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AnalyticJobUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AnalyticJobUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnalyticJobPayload>[]
+          }
+          upsert: {
+            args: Prisma.AnalyticJobUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnalyticJobPayload>
+          }
+          aggregate: {
+            args: Prisma.AnalyticJobAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAnalyticJob>
+          }
+          groupBy: {
+            args: Prisma.AnalyticJobGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AnalyticJobGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AnalyticJobCountArgs<ExtArgs>
+            result: $Utils.Optional<AnalyticJobCountAggregateOutputType> | number
+          }
+        }
+      }
+      Insight: {
+        payload: Prisma.$InsightPayload<ExtArgs>
+        fields: Prisma.InsightFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.InsightFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InsightPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.InsightFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InsightPayload>
+          }
+          findFirst: {
+            args: Prisma.InsightFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InsightPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.InsightFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InsightPayload>
+          }
+          findMany: {
+            args: Prisma.InsightFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InsightPayload>[]
+          }
+          create: {
+            args: Prisma.InsightCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InsightPayload>
+          }
+          createMany: {
+            args: Prisma.InsightCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.InsightCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InsightPayload>[]
+          }
+          delete: {
+            args: Prisma.InsightDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InsightPayload>
+          }
+          update: {
+            args: Prisma.InsightUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InsightPayload>
+          }
+          deleteMany: {
+            args: Prisma.InsightDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.InsightUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.InsightUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InsightPayload>[]
+          }
+          upsert: {
+            args: Prisma.InsightUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InsightPayload>
+          }
+          aggregate: {
+            args: Prisma.InsightAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInsight>
+          }
+          groupBy: {
+            args: Prisma.InsightGroupByArgs<ExtArgs>
+            result: $Utils.Optional<InsightGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.InsightCountArgs<ExtArgs>
+            result: $Utils.Optional<InsightCountAggregateOutputType> | number
+          }
+        }
+      }
+      FinancialAlert: {
+        payload: Prisma.$FinancialAlertPayload<ExtArgs>
+        fields: Prisma.FinancialAlertFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FinancialAlertFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialAlertPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FinancialAlertFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialAlertPayload>
+          }
+          findFirst: {
+            args: Prisma.FinancialAlertFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialAlertPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FinancialAlertFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialAlertPayload>
+          }
+          findMany: {
+            args: Prisma.FinancialAlertFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialAlertPayload>[]
+          }
+          create: {
+            args: Prisma.FinancialAlertCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialAlertPayload>
+          }
+          createMany: {
+            args: Prisma.FinancialAlertCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FinancialAlertCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialAlertPayload>[]
+          }
+          delete: {
+            args: Prisma.FinancialAlertDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialAlertPayload>
+          }
+          update: {
+            args: Prisma.FinancialAlertUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialAlertPayload>
+          }
+          deleteMany: {
+            args: Prisma.FinancialAlertDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FinancialAlertUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FinancialAlertUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialAlertPayload>[]
+          }
+          upsert: {
+            args: Prisma.FinancialAlertUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialAlertPayload>
+          }
+          aggregate: {
+            args: Prisma.FinancialAlertAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFinancialAlert>
+          }
+          groupBy: {
+            args: Prisma.FinancialAlertGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FinancialAlertGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FinancialAlertCountArgs<ExtArgs>
+            result: $Utils.Optional<FinancialAlertCountAggregateOutputType> | number
+          }
+        }
+      }
+      Notification: {
+        payload: Prisma.$NotificationPayload<ExtArgs>
+        fields: Prisma.NotificationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NotificationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NotificationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          findFirst: {
+            args: Prisma.NotificationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NotificationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          findMany: {
+            args: Prisma.NotificationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+          }
+          create: {
+            args: Prisma.NotificationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          createMany: {
+            args: Prisma.NotificationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NotificationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+          }
+          delete: {
+            args: Prisma.NotificationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          update: {
+            args: Prisma.NotificationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          deleteMany: {
+            args: Prisma.NotificationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NotificationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.NotificationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+          }
+          upsert: {
+            args: Prisma.NotificationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          aggregate: {
+            args: Prisma.NotificationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNotification>
+          }
+          groupBy: {
+            args: Prisma.NotificationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NotificationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NotificationCountArgs<ExtArgs>
+            result: $Utils.Optional<NotificationCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1224,6 +1584,10 @@ export namespace Prisma {
     lancamento?: LancamentoOmit
     conta?: ContaOmit
     orcamento?: OrcamentoOmit
+    analyticJob?: AnalyticJobOmit
+    insight?: InsightOmit
+    financialAlert?: FinancialAlertOmit
+    notification?: NotificationOmit
   }
 
   /* Types for Logging */
@@ -1308,6 +1672,10 @@ export namespace Prisma {
     lancamentos: number
     orcamentos: number
     contas: number
+    analyticJobs: number
+    insights: number
+    alertas: number
+    notificacoes: number
   }
 
   export type UsuarioCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1315,6 +1683,10 @@ export namespace Prisma {
     lancamentos?: boolean | UsuarioCountOutputTypeCountLancamentosArgs
     orcamentos?: boolean | UsuarioCountOutputTypeCountOrcamentosArgs
     contas?: boolean | UsuarioCountOutputTypeCountContasArgs
+    analyticJobs?: boolean | UsuarioCountOutputTypeCountAnalyticJobsArgs
+    insights?: boolean | UsuarioCountOutputTypeCountInsightsArgs
+    alertas?: boolean | UsuarioCountOutputTypeCountAlertasArgs
+    notificacoes?: boolean | UsuarioCountOutputTypeCountNotificacoesArgs
   }
 
   // Custom InputTypes
@@ -1354,6 +1726,34 @@ export namespace Prisma {
    */
   export type UsuarioCountOutputTypeCountContasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ContaWhereInput
+  }
+
+  /**
+   * UsuarioCountOutputType without action
+   */
+  export type UsuarioCountOutputTypeCountAnalyticJobsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AnalyticJobWhereInput
+  }
+
+  /**
+   * UsuarioCountOutputType without action
+   */
+  export type UsuarioCountOutputTypeCountInsightsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InsightWhereInput
+  }
+
+  /**
+   * UsuarioCountOutputType without action
+   */
+  export type UsuarioCountOutputTypeCountAlertasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FinancialAlertWhereInput
+  }
+
+  /**
+   * UsuarioCountOutputType without action
+   */
+  export type UsuarioCountOutputTypeCountNotificacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
   }
 
 
@@ -1608,6 +2008,10 @@ export namespace Prisma {
     lancamentos?: boolean | Usuario$lancamentosArgs<ExtArgs>
     orcamentos?: boolean | Usuario$orcamentosArgs<ExtArgs>
     contas?: boolean | Usuario$contasArgs<ExtArgs>
+    analyticJobs?: boolean | Usuario$analyticJobsArgs<ExtArgs>
+    insights?: boolean | Usuario$insightsArgs<ExtArgs>
+    alertas?: boolean | Usuario$alertasArgs<ExtArgs>
+    notificacoes?: boolean | Usuario$notificacoesArgs<ExtArgs>
     _count?: boolean | UsuarioCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["usuario"]>
 
@@ -1644,6 +2048,10 @@ export namespace Prisma {
     lancamentos?: boolean | Usuario$lancamentosArgs<ExtArgs>
     orcamentos?: boolean | Usuario$orcamentosArgs<ExtArgs>
     contas?: boolean | Usuario$contasArgs<ExtArgs>
+    analyticJobs?: boolean | Usuario$analyticJobsArgs<ExtArgs>
+    insights?: boolean | Usuario$insightsArgs<ExtArgs>
+    alertas?: boolean | Usuario$alertasArgs<ExtArgs>
+    notificacoes?: boolean | Usuario$notificacoesArgs<ExtArgs>
     _count?: boolean | UsuarioCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UsuarioIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1656,6 +2064,10 @@ export namespace Prisma {
       lancamentos: Prisma.$LancamentoPayload<ExtArgs>[]
       orcamentos: Prisma.$OrcamentoPayload<ExtArgs>[]
       contas: Prisma.$ContaPayload<ExtArgs>[]
+      analyticJobs: Prisma.$AnalyticJobPayload<ExtArgs>[]
+      insights: Prisma.$InsightPayload<ExtArgs>[]
+      alertas: Prisma.$FinancialAlertPayload<ExtArgs>[]
+      notificacoes: Prisma.$NotificationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2062,6 +2474,10 @@ export namespace Prisma {
     lancamentos<T extends Usuario$lancamentosArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$lancamentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LancamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     orcamentos<T extends Usuario$orcamentosArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$orcamentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrcamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     contas<T extends Usuario$contasArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$contasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    analyticJobs<T extends Usuario$analyticJobsArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$analyticJobsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnalyticJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    insights<T extends Usuario$insightsArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$insightsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InsightPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    alertas<T extends Usuario$alertasArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$alertasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinancialAlertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    notificacoes<T extends Usuario$notificacoesArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$notificacoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2583,6 +2999,102 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ContaScalarFieldEnum | ContaScalarFieldEnum[]
+  }
+
+  /**
+   * Usuario.analyticJobs
+   */
+  export type Usuario$analyticJobsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AnalyticJob
+     */
+    select?: AnalyticJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AnalyticJob
+     */
+    omit?: AnalyticJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnalyticJobInclude<ExtArgs> | null
+    where?: AnalyticJobWhereInput
+    orderBy?: AnalyticJobOrderByWithRelationInput | AnalyticJobOrderByWithRelationInput[]
+    cursor?: AnalyticJobWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AnalyticJobScalarFieldEnum | AnalyticJobScalarFieldEnum[]
+  }
+
+  /**
+   * Usuario.insights
+   */
+  export type Usuario$insightsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Insight
+     */
+    select?: InsightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Insight
+     */
+    omit?: InsightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InsightInclude<ExtArgs> | null
+    where?: InsightWhereInput
+    orderBy?: InsightOrderByWithRelationInput | InsightOrderByWithRelationInput[]
+    cursor?: InsightWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InsightScalarFieldEnum | InsightScalarFieldEnum[]
+  }
+
+  /**
+   * Usuario.alertas
+   */
+  export type Usuario$alertasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialAlert
+     */
+    select?: FinancialAlertSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialAlert
+     */
+    omit?: FinancialAlertOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialAlertInclude<ExtArgs> | null
+    where?: FinancialAlertWhereInput
+    orderBy?: FinancialAlertOrderByWithRelationInput | FinancialAlertOrderByWithRelationInput[]
+    cursor?: FinancialAlertWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FinancialAlertScalarFieldEnum | FinancialAlertScalarFieldEnum[]
+  }
+
+  /**
+   * Usuario.notificacoes
+   */
+  export type Usuario$notificacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    cursor?: NotificationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
   }
 
   /**
@@ -7357,6 +7869,4472 @@ export namespace Prisma {
 
 
   /**
+   * Model AnalyticJob
+   */
+
+  export type AggregateAnalyticJob = {
+    _count: AnalyticJobCountAggregateOutputType | null
+    _min: AnalyticJobMinAggregateOutputType | null
+    _max: AnalyticJobMaxAggregateOutputType | null
+  }
+
+  export type AnalyticJobMinAggregateOutputType = {
+    id: string | null
+    idUsuario: string | null
+    tipo: string | null
+    status: string | null
+    erro: string | null
+    criadoEm: Date | null
+    iniciadoEm: Date | null
+    finalizadoEm: Date | null
+  }
+
+  export type AnalyticJobMaxAggregateOutputType = {
+    id: string | null
+    idUsuario: string | null
+    tipo: string | null
+    status: string | null
+    erro: string | null
+    criadoEm: Date | null
+    iniciadoEm: Date | null
+    finalizadoEm: Date | null
+  }
+
+  export type AnalyticJobCountAggregateOutputType = {
+    id: number
+    idUsuario: number
+    tipo: number
+    status: number
+    payload: number
+    resultado: number
+    erro: number
+    criadoEm: number
+    iniciadoEm: number
+    finalizadoEm: number
+    _all: number
+  }
+
+
+  export type AnalyticJobMinAggregateInputType = {
+    id?: true
+    idUsuario?: true
+    tipo?: true
+    status?: true
+    erro?: true
+    criadoEm?: true
+    iniciadoEm?: true
+    finalizadoEm?: true
+  }
+
+  export type AnalyticJobMaxAggregateInputType = {
+    id?: true
+    idUsuario?: true
+    tipo?: true
+    status?: true
+    erro?: true
+    criadoEm?: true
+    iniciadoEm?: true
+    finalizadoEm?: true
+  }
+
+  export type AnalyticJobCountAggregateInputType = {
+    id?: true
+    idUsuario?: true
+    tipo?: true
+    status?: true
+    payload?: true
+    resultado?: true
+    erro?: true
+    criadoEm?: true
+    iniciadoEm?: true
+    finalizadoEm?: true
+    _all?: true
+  }
+
+  export type AnalyticJobAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AnalyticJob to aggregate.
+     */
+    where?: AnalyticJobWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AnalyticJobs to fetch.
+     */
+    orderBy?: AnalyticJobOrderByWithRelationInput | AnalyticJobOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AnalyticJobWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AnalyticJobs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AnalyticJobs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AnalyticJobs
+    **/
+    _count?: true | AnalyticJobCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AnalyticJobMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AnalyticJobMaxAggregateInputType
+  }
+
+  export type GetAnalyticJobAggregateType<T extends AnalyticJobAggregateArgs> = {
+        [P in keyof T & keyof AggregateAnalyticJob]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAnalyticJob[P]>
+      : GetScalarType<T[P], AggregateAnalyticJob[P]>
+  }
+
+
+
+
+  export type AnalyticJobGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AnalyticJobWhereInput
+    orderBy?: AnalyticJobOrderByWithAggregationInput | AnalyticJobOrderByWithAggregationInput[]
+    by: AnalyticJobScalarFieldEnum[] | AnalyticJobScalarFieldEnum
+    having?: AnalyticJobScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AnalyticJobCountAggregateInputType | true
+    _min?: AnalyticJobMinAggregateInputType
+    _max?: AnalyticJobMaxAggregateInputType
+  }
+
+  export type AnalyticJobGroupByOutputType = {
+    id: string
+    idUsuario: string
+    tipo: string
+    status: string
+    payload: JsonValue
+    resultado: JsonValue | null
+    erro: string | null
+    criadoEm: Date
+    iniciadoEm: Date | null
+    finalizadoEm: Date | null
+    _count: AnalyticJobCountAggregateOutputType | null
+    _min: AnalyticJobMinAggregateOutputType | null
+    _max: AnalyticJobMaxAggregateOutputType | null
+  }
+
+  type GetAnalyticJobGroupByPayload<T extends AnalyticJobGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AnalyticJobGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AnalyticJobGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AnalyticJobGroupByOutputType[P]>
+            : GetScalarType<T[P], AnalyticJobGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AnalyticJobSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    idUsuario?: boolean
+    tipo?: boolean
+    status?: boolean
+    payload?: boolean
+    resultado?: boolean
+    erro?: boolean
+    criadoEm?: boolean
+    iniciadoEm?: boolean
+    finalizadoEm?: boolean
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["analyticJob"]>
+
+  export type AnalyticJobSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    idUsuario?: boolean
+    tipo?: boolean
+    status?: boolean
+    payload?: boolean
+    resultado?: boolean
+    erro?: boolean
+    criadoEm?: boolean
+    iniciadoEm?: boolean
+    finalizadoEm?: boolean
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["analyticJob"]>
+
+  export type AnalyticJobSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    idUsuario?: boolean
+    tipo?: boolean
+    status?: boolean
+    payload?: boolean
+    resultado?: boolean
+    erro?: boolean
+    criadoEm?: boolean
+    iniciadoEm?: boolean
+    finalizadoEm?: boolean
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["analyticJob"]>
+
+  export type AnalyticJobSelectScalar = {
+    id?: boolean
+    idUsuario?: boolean
+    tipo?: boolean
+    status?: boolean
+    payload?: boolean
+    resultado?: boolean
+    erro?: boolean
+    criadoEm?: boolean
+    iniciadoEm?: boolean
+    finalizadoEm?: boolean
+  }
+
+  export type AnalyticJobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "idUsuario" | "tipo" | "status" | "payload" | "resultado" | "erro" | "criadoEm" | "iniciadoEm" | "finalizadoEm", ExtArgs["result"]["analyticJob"]>
+  export type AnalyticJobInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+  export type AnalyticJobIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+  export type AnalyticJobIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+
+  export type $AnalyticJobPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AnalyticJob"
+    objects: {
+      usuario: Prisma.$UsuarioPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      idUsuario: string
+      tipo: string
+      status: string
+      payload: Prisma.JsonValue
+      resultado: Prisma.JsonValue | null
+      erro: string | null
+      criadoEm: Date
+      iniciadoEm: Date | null
+      finalizadoEm: Date | null
+    }, ExtArgs["result"]["analyticJob"]>
+    composites: {}
+  }
+
+  type AnalyticJobGetPayload<S extends boolean | null | undefined | AnalyticJobDefaultArgs> = $Result.GetResult<Prisma.$AnalyticJobPayload, S>
+
+  type AnalyticJobCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AnalyticJobFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AnalyticJobCountAggregateInputType | true
+    }
+
+  export interface AnalyticJobDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AnalyticJob'], meta: { name: 'AnalyticJob' } }
+    /**
+     * Find zero or one AnalyticJob that matches the filter.
+     * @param {AnalyticJobFindUniqueArgs} args - Arguments to find a AnalyticJob
+     * @example
+     * // Get one AnalyticJob
+     * const analyticJob = await prisma.analyticJob.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AnalyticJobFindUniqueArgs>(args: SelectSubset<T, AnalyticJobFindUniqueArgs<ExtArgs>>): Prisma__AnalyticJobClient<$Result.GetResult<Prisma.$AnalyticJobPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AnalyticJob that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AnalyticJobFindUniqueOrThrowArgs} args - Arguments to find a AnalyticJob
+     * @example
+     * // Get one AnalyticJob
+     * const analyticJob = await prisma.analyticJob.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AnalyticJobFindUniqueOrThrowArgs>(args: SelectSubset<T, AnalyticJobFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AnalyticJobClient<$Result.GetResult<Prisma.$AnalyticJobPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AnalyticJob that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnalyticJobFindFirstArgs} args - Arguments to find a AnalyticJob
+     * @example
+     * // Get one AnalyticJob
+     * const analyticJob = await prisma.analyticJob.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AnalyticJobFindFirstArgs>(args?: SelectSubset<T, AnalyticJobFindFirstArgs<ExtArgs>>): Prisma__AnalyticJobClient<$Result.GetResult<Prisma.$AnalyticJobPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AnalyticJob that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnalyticJobFindFirstOrThrowArgs} args - Arguments to find a AnalyticJob
+     * @example
+     * // Get one AnalyticJob
+     * const analyticJob = await prisma.analyticJob.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AnalyticJobFindFirstOrThrowArgs>(args?: SelectSubset<T, AnalyticJobFindFirstOrThrowArgs<ExtArgs>>): Prisma__AnalyticJobClient<$Result.GetResult<Prisma.$AnalyticJobPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AnalyticJobs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnalyticJobFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AnalyticJobs
+     * const analyticJobs = await prisma.analyticJob.findMany()
+     * 
+     * // Get first 10 AnalyticJobs
+     * const analyticJobs = await prisma.analyticJob.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const analyticJobWithIdOnly = await prisma.analyticJob.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AnalyticJobFindManyArgs>(args?: SelectSubset<T, AnalyticJobFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnalyticJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AnalyticJob.
+     * @param {AnalyticJobCreateArgs} args - Arguments to create a AnalyticJob.
+     * @example
+     * // Create one AnalyticJob
+     * const AnalyticJob = await prisma.analyticJob.create({
+     *   data: {
+     *     // ... data to create a AnalyticJob
+     *   }
+     * })
+     * 
+     */
+    create<T extends AnalyticJobCreateArgs>(args: SelectSubset<T, AnalyticJobCreateArgs<ExtArgs>>): Prisma__AnalyticJobClient<$Result.GetResult<Prisma.$AnalyticJobPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AnalyticJobs.
+     * @param {AnalyticJobCreateManyArgs} args - Arguments to create many AnalyticJobs.
+     * @example
+     * // Create many AnalyticJobs
+     * const analyticJob = await prisma.analyticJob.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AnalyticJobCreateManyArgs>(args?: SelectSubset<T, AnalyticJobCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AnalyticJobs and returns the data saved in the database.
+     * @param {AnalyticJobCreateManyAndReturnArgs} args - Arguments to create many AnalyticJobs.
+     * @example
+     * // Create many AnalyticJobs
+     * const analyticJob = await prisma.analyticJob.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AnalyticJobs and only return the `id`
+     * const analyticJobWithIdOnly = await prisma.analyticJob.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AnalyticJobCreateManyAndReturnArgs>(args?: SelectSubset<T, AnalyticJobCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnalyticJobPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AnalyticJob.
+     * @param {AnalyticJobDeleteArgs} args - Arguments to delete one AnalyticJob.
+     * @example
+     * // Delete one AnalyticJob
+     * const AnalyticJob = await prisma.analyticJob.delete({
+     *   where: {
+     *     // ... filter to delete one AnalyticJob
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AnalyticJobDeleteArgs>(args: SelectSubset<T, AnalyticJobDeleteArgs<ExtArgs>>): Prisma__AnalyticJobClient<$Result.GetResult<Prisma.$AnalyticJobPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AnalyticJob.
+     * @param {AnalyticJobUpdateArgs} args - Arguments to update one AnalyticJob.
+     * @example
+     * // Update one AnalyticJob
+     * const analyticJob = await prisma.analyticJob.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AnalyticJobUpdateArgs>(args: SelectSubset<T, AnalyticJobUpdateArgs<ExtArgs>>): Prisma__AnalyticJobClient<$Result.GetResult<Prisma.$AnalyticJobPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AnalyticJobs.
+     * @param {AnalyticJobDeleteManyArgs} args - Arguments to filter AnalyticJobs to delete.
+     * @example
+     * // Delete a few AnalyticJobs
+     * const { count } = await prisma.analyticJob.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AnalyticJobDeleteManyArgs>(args?: SelectSubset<T, AnalyticJobDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AnalyticJobs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnalyticJobUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AnalyticJobs
+     * const analyticJob = await prisma.analyticJob.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AnalyticJobUpdateManyArgs>(args: SelectSubset<T, AnalyticJobUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AnalyticJobs and returns the data updated in the database.
+     * @param {AnalyticJobUpdateManyAndReturnArgs} args - Arguments to update many AnalyticJobs.
+     * @example
+     * // Update many AnalyticJobs
+     * const analyticJob = await prisma.analyticJob.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AnalyticJobs and only return the `id`
+     * const analyticJobWithIdOnly = await prisma.analyticJob.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AnalyticJobUpdateManyAndReturnArgs>(args: SelectSubset<T, AnalyticJobUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnalyticJobPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AnalyticJob.
+     * @param {AnalyticJobUpsertArgs} args - Arguments to update or create a AnalyticJob.
+     * @example
+     * // Update or create a AnalyticJob
+     * const analyticJob = await prisma.analyticJob.upsert({
+     *   create: {
+     *     // ... data to create a AnalyticJob
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AnalyticJob we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AnalyticJobUpsertArgs>(args: SelectSubset<T, AnalyticJobUpsertArgs<ExtArgs>>): Prisma__AnalyticJobClient<$Result.GetResult<Prisma.$AnalyticJobPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AnalyticJobs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnalyticJobCountArgs} args - Arguments to filter AnalyticJobs to count.
+     * @example
+     * // Count the number of AnalyticJobs
+     * const count = await prisma.analyticJob.count({
+     *   where: {
+     *     // ... the filter for the AnalyticJobs we want to count
+     *   }
+     * })
+    **/
+    count<T extends AnalyticJobCountArgs>(
+      args?: Subset<T, AnalyticJobCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AnalyticJobCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AnalyticJob.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnalyticJobAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AnalyticJobAggregateArgs>(args: Subset<T, AnalyticJobAggregateArgs>): Prisma.PrismaPromise<GetAnalyticJobAggregateType<T>>
+
+    /**
+     * Group by AnalyticJob.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnalyticJobGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AnalyticJobGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AnalyticJobGroupByArgs['orderBy'] }
+        : { orderBy?: AnalyticJobGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AnalyticJobGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAnalyticJobGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AnalyticJob model
+   */
+  readonly fields: AnalyticJobFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AnalyticJob.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AnalyticJobClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    usuario<T extends UsuarioDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UsuarioDefaultArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AnalyticJob model
+   */
+  interface AnalyticJobFieldRefs {
+    readonly id: FieldRef<"AnalyticJob", 'String'>
+    readonly idUsuario: FieldRef<"AnalyticJob", 'String'>
+    readonly tipo: FieldRef<"AnalyticJob", 'String'>
+    readonly status: FieldRef<"AnalyticJob", 'String'>
+    readonly payload: FieldRef<"AnalyticJob", 'Json'>
+    readonly resultado: FieldRef<"AnalyticJob", 'Json'>
+    readonly erro: FieldRef<"AnalyticJob", 'String'>
+    readonly criadoEm: FieldRef<"AnalyticJob", 'DateTime'>
+    readonly iniciadoEm: FieldRef<"AnalyticJob", 'DateTime'>
+    readonly finalizadoEm: FieldRef<"AnalyticJob", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AnalyticJob findUnique
+   */
+  export type AnalyticJobFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AnalyticJob
+     */
+    select?: AnalyticJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AnalyticJob
+     */
+    omit?: AnalyticJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnalyticJobInclude<ExtArgs> | null
+    /**
+     * Filter, which AnalyticJob to fetch.
+     */
+    where: AnalyticJobWhereUniqueInput
+  }
+
+  /**
+   * AnalyticJob findUniqueOrThrow
+   */
+  export type AnalyticJobFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AnalyticJob
+     */
+    select?: AnalyticJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AnalyticJob
+     */
+    omit?: AnalyticJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnalyticJobInclude<ExtArgs> | null
+    /**
+     * Filter, which AnalyticJob to fetch.
+     */
+    where: AnalyticJobWhereUniqueInput
+  }
+
+  /**
+   * AnalyticJob findFirst
+   */
+  export type AnalyticJobFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AnalyticJob
+     */
+    select?: AnalyticJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AnalyticJob
+     */
+    omit?: AnalyticJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnalyticJobInclude<ExtArgs> | null
+    /**
+     * Filter, which AnalyticJob to fetch.
+     */
+    where?: AnalyticJobWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AnalyticJobs to fetch.
+     */
+    orderBy?: AnalyticJobOrderByWithRelationInput | AnalyticJobOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AnalyticJobs.
+     */
+    cursor?: AnalyticJobWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AnalyticJobs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AnalyticJobs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AnalyticJobs.
+     */
+    distinct?: AnalyticJobScalarFieldEnum | AnalyticJobScalarFieldEnum[]
+  }
+
+  /**
+   * AnalyticJob findFirstOrThrow
+   */
+  export type AnalyticJobFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AnalyticJob
+     */
+    select?: AnalyticJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AnalyticJob
+     */
+    omit?: AnalyticJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnalyticJobInclude<ExtArgs> | null
+    /**
+     * Filter, which AnalyticJob to fetch.
+     */
+    where?: AnalyticJobWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AnalyticJobs to fetch.
+     */
+    orderBy?: AnalyticJobOrderByWithRelationInput | AnalyticJobOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AnalyticJobs.
+     */
+    cursor?: AnalyticJobWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AnalyticJobs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AnalyticJobs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AnalyticJobs.
+     */
+    distinct?: AnalyticJobScalarFieldEnum | AnalyticJobScalarFieldEnum[]
+  }
+
+  /**
+   * AnalyticJob findMany
+   */
+  export type AnalyticJobFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AnalyticJob
+     */
+    select?: AnalyticJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AnalyticJob
+     */
+    omit?: AnalyticJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnalyticJobInclude<ExtArgs> | null
+    /**
+     * Filter, which AnalyticJobs to fetch.
+     */
+    where?: AnalyticJobWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AnalyticJobs to fetch.
+     */
+    orderBy?: AnalyticJobOrderByWithRelationInput | AnalyticJobOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AnalyticJobs.
+     */
+    cursor?: AnalyticJobWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AnalyticJobs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AnalyticJobs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AnalyticJobs.
+     */
+    distinct?: AnalyticJobScalarFieldEnum | AnalyticJobScalarFieldEnum[]
+  }
+
+  /**
+   * AnalyticJob create
+   */
+  export type AnalyticJobCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AnalyticJob
+     */
+    select?: AnalyticJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AnalyticJob
+     */
+    omit?: AnalyticJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnalyticJobInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AnalyticJob.
+     */
+    data: XOR<AnalyticJobCreateInput, AnalyticJobUncheckedCreateInput>
+  }
+
+  /**
+   * AnalyticJob createMany
+   */
+  export type AnalyticJobCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AnalyticJobs.
+     */
+    data: AnalyticJobCreateManyInput | AnalyticJobCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AnalyticJob createManyAndReturn
+   */
+  export type AnalyticJobCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AnalyticJob
+     */
+    select?: AnalyticJobSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AnalyticJob
+     */
+    omit?: AnalyticJobOmit<ExtArgs> | null
+    /**
+     * The data used to create many AnalyticJobs.
+     */
+    data: AnalyticJobCreateManyInput | AnalyticJobCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnalyticJobIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AnalyticJob update
+   */
+  export type AnalyticJobUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AnalyticJob
+     */
+    select?: AnalyticJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AnalyticJob
+     */
+    omit?: AnalyticJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnalyticJobInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AnalyticJob.
+     */
+    data: XOR<AnalyticJobUpdateInput, AnalyticJobUncheckedUpdateInput>
+    /**
+     * Choose, which AnalyticJob to update.
+     */
+    where: AnalyticJobWhereUniqueInput
+  }
+
+  /**
+   * AnalyticJob updateMany
+   */
+  export type AnalyticJobUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AnalyticJobs.
+     */
+    data: XOR<AnalyticJobUpdateManyMutationInput, AnalyticJobUncheckedUpdateManyInput>
+    /**
+     * Filter which AnalyticJobs to update
+     */
+    where?: AnalyticJobWhereInput
+    /**
+     * Limit how many AnalyticJobs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AnalyticJob updateManyAndReturn
+   */
+  export type AnalyticJobUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AnalyticJob
+     */
+    select?: AnalyticJobSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AnalyticJob
+     */
+    omit?: AnalyticJobOmit<ExtArgs> | null
+    /**
+     * The data used to update AnalyticJobs.
+     */
+    data: XOR<AnalyticJobUpdateManyMutationInput, AnalyticJobUncheckedUpdateManyInput>
+    /**
+     * Filter which AnalyticJobs to update
+     */
+    where?: AnalyticJobWhereInput
+    /**
+     * Limit how many AnalyticJobs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnalyticJobIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AnalyticJob upsert
+   */
+  export type AnalyticJobUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AnalyticJob
+     */
+    select?: AnalyticJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AnalyticJob
+     */
+    omit?: AnalyticJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnalyticJobInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AnalyticJob to update in case it exists.
+     */
+    where: AnalyticJobWhereUniqueInput
+    /**
+     * In case the AnalyticJob found by the `where` argument doesn't exist, create a new AnalyticJob with this data.
+     */
+    create: XOR<AnalyticJobCreateInput, AnalyticJobUncheckedCreateInput>
+    /**
+     * In case the AnalyticJob was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AnalyticJobUpdateInput, AnalyticJobUncheckedUpdateInput>
+  }
+
+  /**
+   * AnalyticJob delete
+   */
+  export type AnalyticJobDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AnalyticJob
+     */
+    select?: AnalyticJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AnalyticJob
+     */
+    omit?: AnalyticJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnalyticJobInclude<ExtArgs> | null
+    /**
+     * Filter which AnalyticJob to delete.
+     */
+    where: AnalyticJobWhereUniqueInput
+  }
+
+  /**
+   * AnalyticJob deleteMany
+   */
+  export type AnalyticJobDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AnalyticJobs to delete
+     */
+    where?: AnalyticJobWhereInput
+    /**
+     * Limit how many AnalyticJobs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AnalyticJob without action
+   */
+  export type AnalyticJobDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AnalyticJob
+     */
+    select?: AnalyticJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AnalyticJob
+     */
+    omit?: AnalyticJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnalyticJobInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Insight
+   */
+
+  export type AggregateInsight = {
+    _count: InsightCountAggregateOutputType | null
+    _min: InsightMinAggregateOutputType | null
+    _max: InsightMaxAggregateOutputType | null
+  }
+
+  export type InsightMinAggregateOutputType = {
+    id: string | null
+    idUsuario: string | null
+    tipo: string | null
+    titulo: string | null
+    descricao: string | null
+    criadoEm: Date | null
+  }
+
+  export type InsightMaxAggregateOutputType = {
+    id: string | null
+    idUsuario: string | null
+    tipo: string | null
+    titulo: string | null
+    descricao: string | null
+    criadoEm: Date | null
+  }
+
+  export type InsightCountAggregateOutputType = {
+    id: number
+    idUsuario: number
+    tipo: number
+    titulo: number
+    descricao: number
+    dados: number
+    criadoEm: number
+    _all: number
+  }
+
+
+  export type InsightMinAggregateInputType = {
+    id?: true
+    idUsuario?: true
+    tipo?: true
+    titulo?: true
+    descricao?: true
+    criadoEm?: true
+  }
+
+  export type InsightMaxAggregateInputType = {
+    id?: true
+    idUsuario?: true
+    tipo?: true
+    titulo?: true
+    descricao?: true
+    criadoEm?: true
+  }
+
+  export type InsightCountAggregateInputType = {
+    id?: true
+    idUsuario?: true
+    tipo?: true
+    titulo?: true
+    descricao?: true
+    dados?: true
+    criadoEm?: true
+    _all?: true
+  }
+
+  export type InsightAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Insight to aggregate.
+     */
+    where?: InsightWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Insights to fetch.
+     */
+    orderBy?: InsightOrderByWithRelationInput | InsightOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: InsightWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Insights from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Insights.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Insights
+    **/
+    _count?: true | InsightCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: InsightMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: InsightMaxAggregateInputType
+  }
+
+  export type GetInsightAggregateType<T extends InsightAggregateArgs> = {
+        [P in keyof T & keyof AggregateInsight]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateInsight[P]>
+      : GetScalarType<T[P], AggregateInsight[P]>
+  }
+
+
+
+
+  export type InsightGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InsightWhereInput
+    orderBy?: InsightOrderByWithAggregationInput | InsightOrderByWithAggregationInput[]
+    by: InsightScalarFieldEnum[] | InsightScalarFieldEnum
+    having?: InsightScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: InsightCountAggregateInputType | true
+    _min?: InsightMinAggregateInputType
+    _max?: InsightMaxAggregateInputType
+  }
+
+  export type InsightGroupByOutputType = {
+    id: string
+    idUsuario: string
+    tipo: string
+    titulo: string
+    descricao: string
+    dados: JsonValue | null
+    criadoEm: Date
+    _count: InsightCountAggregateOutputType | null
+    _min: InsightMinAggregateOutputType | null
+    _max: InsightMaxAggregateOutputType | null
+  }
+
+  type GetInsightGroupByPayload<T extends InsightGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<InsightGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof InsightGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], InsightGroupByOutputType[P]>
+            : GetScalarType<T[P], InsightGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type InsightSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    idUsuario?: boolean
+    tipo?: boolean
+    titulo?: boolean
+    descricao?: boolean
+    dados?: boolean
+    criadoEm?: boolean
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["insight"]>
+
+  export type InsightSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    idUsuario?: boolean
+    tipo?: boolean
+    titulo?: boolean
+    descricao?: boolean
+    dados?: boolean
+    criadoEm?: boolean
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["insight"]>
+
+  export type InsightSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    idUsuario?: boolean
+    tipo?: boolean
+    titulo?: boolean
+    descricao?: boolean
+    dados?: boolean
+    criadoEm?: boolean
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["insight"]>
+
+  export type InsightSelectScalar = {
+    id?: boolean
+    idUsuario?: boolean
+    tipo?: boolean
+    titulo?: boolean
+    descricao?: boolean
+    dados?: boolean
+    criadoEm?: boolean
+  }
+
+  export type InsightOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "idUsuario" | "tipo" | "titulo" | "descricao" | "dados" | "criadoEm", ExtArgs["result"]["insight"]>
+  export type InsightInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+  export type InsightIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+  export type InsightIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+
+  export type $InsightPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Insight"
+    objects: {
+      usuario: Prisma.$UsuarioPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      idUsuario: string
+      tipo: string
+      titulo: string
+      descricao: string
+      dados: Prisma.JsonValue | null
+      criadoEm: Date
+    }, ExtArgs["result"]["insight"]>
+    composites: {}
+  }
+
+  type InsightGetPayload<S extends boolean | null | undefined | InsightDefaultArgs> = $Result.GetResult<Prisma.$InsightPayload, S>
+
+  type InsightCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<InsightFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: InsightCountAggregateInputType | true
+    }
+
+  export interface InsightDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Insight'], meta: { name: 'Insight' } }
+    /**
+     * Find zero or one Insight that matches the filter.
+     * @param {InsightFindUniqueArgs} args - Arguments to find a Insight
+     * @example
+     * // Get one Insight
+     * const insight = await prisma.insight.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends InsightFindUniqueArgs>(args: SelectSubset<T, InsightFindUniqueArgs<ExtArgs>>): Prisma__InsightClient<$Result.GetResult<Prisma.$InsightPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Insight that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {InsightFindUniqueOrThrowArgs} args - Arguments to find a Insight
+     * @example
+     * // Get one Insight
+     * const insight = await prisma.insight.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends InsightFindUniqueOrThrowArgs>(args: SelectSubset<T, InsightFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InsightClient<$Result.GetResult<Prisma.$InsightPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Insight that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InsightFindFirstArgs} args - Arguments to find a Insight
+     * @example
+     * // Get one Insight
+     * const insight = await prisma.insight.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends InsightFindFirstArgs>(args?: SelectSubset<T, InsightFindFirstArgs<ExtArgs>>): Prisma__InsightClient<$Result.GetResult<Prisma.$InsightPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Insight that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InsightFindFirstOrThrowArgs} args - Arguments to find a Insight
+     * @example
+     * // Get one Insight
+     * const insight = await prisma.insight.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends InsightFindFirstOrThrowArgs>(args?: SelectSubset<T, InsightFindFirstOrThrowArgs<ExtArgs>>): Prisma__InsightClient<$Result.GetResult<Prisma.$InsightPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Insights that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InsightFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Insights
+     * const insights = await prisma.insight.findMany()
+     * 
+     * // Get first 10 Insights
+     * const insights = await prisma.insight.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const insightWithIdOnly = await prisma.insight.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends InsightFindManyArgs>(args?: SelectSubset<T, InsightFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InsightPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Insight.
+     * @param {InsightCreateArgs} args - Arguments to create a Insight.
+     * @example
+     * // Create one Insight
+     * const Insight = await prisma.insight.create({
+     *   data: {
+     *     // ... data to create a Insight
+     *   }
+     * })
+     * 
+     */
+    create<T extends InsightCreateArgs>(args: SelectSubset<T, InsightCreateArgs<ExtArgs>>): Prisma__InsightClient<$Result.GetResult<Prisma.$InsightPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Insights.
+     * @param {InsightCreateManyArgs} args - Arguments to create many Insights.
+     * @example
+     * // Create many Insights
+     * const insight = await prisma.insight.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends InsightCreateManyArgs>(args?: SelectSubset<T, InsightCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Insights and returns the data saved in the database.
+     * @param {InsightCreateManyAndReturnArgs} args - Arguments to create many Insights.
+     * @example
+     * // Create many Insights
+     * const insight = await prisma.insight.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Insights and only return the `id`
+     * const insightWithIdOnly = await prisma.insight.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends InsightCreateManyAndReturnArgs>(args?: SelectSubset<T, InsightCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InsightPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Insight.
+     * @param {InsightDeleteArgs} args - Arguments to delete one Insight.
+     * @example
+     * // Delete one Insight
+     * const Insight = await prisma.insight.delete({
+     *   where: {
+     *     // ... filter to delete one Insight
+     *   }
+     * })
+     * 
+     */
+    delete<T extends InsightDeleteArgs>(args: SelectSubset<T, InsightDeleteArgs<ExtArgs>>): Prisma__InsightClient<$Result.GetResult<Prisma.$InsightPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Insight.
+     * @param {InsightUpdateArgs} args - Arguments to update one Insight.
+     * @example
+     * // Update one Insight
+     * const insight = await prisma.insight.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends InsightUpdateArgs>(args: SelectSubset<T, InsightUpdateArgs<ExtArgs>>): Prisma__InsightClient<$Result.GetResult<Prisma.$InsightPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Insights.
+     * @param {InsightDeleteManyArgs} args - Arguments to filter Insights to delete.
+     * @example
+     * // Delete a few Insights
+     * const { count } = await prisma.insight.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends InsightDeleteManyArgs>(args?: SelectSubset<T, InsightDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Insights.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InsightUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Insights
+     * const insight = await prisma.insight.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends InsightUpdateManyArgs>(args: SelectSubset<T, InsightUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Insights and returns the data updated in the database.
+     * @param {InsightUpdateManyAndReturnArgs} args - Arguments to update many Insights.
+     * @example
+     * // Update many Insights
+     * const insight = await prisma.insight.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Insights and only return the `id`
+     * const insightWithIdOnly = await prisma.insight.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends InsightUpdateManyAndReturnArgs>(args: SelectSubset<T, InsightUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InsightPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Insight.
+     * @param {InsightUpsertArgs} args - Arguments to update or create a Insight.
+     * @example
+     * // Update or create a Insight
+     * const insight = await prisma.insight.upsert({
+     *   create: {
+     *     // ... data to create a Insight
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Insight we want to update
+     *   }
+     * })
+     */
+    upsert<T extends InsightUpsertArgs>(args: SelectSubset<T, InsightUpsertArgs<ExtArgs>>): Prisma__InsightClient<$Result.GetResult<Prisma.$InsightPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Insights.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InsightCountArgs} args - Arguments to filter Insights to count.
+     * @example
+     * // Count the number of Insights
+     * const count = await prisma.insight.count({
+     *   where: {
+     *     // ... the filter for the Insights we want to count
+     *   }
+     * })
+    **/
+    count<T extends InsightCountArgs>(
+      args?: Subset<T, InsightCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], InsightCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Insight.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InsightAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends InsightAggregateArgs>(args: Subset<T, InsightAggregateArgs>): Prisma.PrismaPromise<GetInsightAggregateType<T>>
+
+    /**
+     * Group by Insight.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InsightGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends InsightGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: InsightGroupByArgs['orderBy'] }
+        : { orderBy?: InsightGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, InsightGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInsightGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Insight model
+   */
+  readonly fields: InsightFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Insight.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__InsightClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    usuario<T extends UsuarioDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UsuarioDefaultArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Insight model
+   */
+  interface InsightFieldRefs {
+    readonly id: FieldRef<"Insight", 'String'>
+    readonly idUsuario: FieldRef<"Insight", 'String'>
+    readonly tipo: FieldRef<"Insight", 'String'>
+    readonly titulo: FieldRef<"Insight", 'String'>
+    readonly descricao: FieldRef<"Insight", 'String'>
+    readonly dados: FieldRef<"Insight", 'Json'>
+    readonly criadoEm: FieldRef<"Insight", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Insight findUnique
+   */
+  export type InsightFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Insight
+     */
+    select?: InsightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Insight
+     */
+    omit?: InsightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InsightInclude<ExtArgs> | null
+    /**
+     * Filter, which Insight to fetch.
+     */
+    where: InsightWhereUniqueInput
+  }
+
+  /**
+   * Insight findUniqueOrThrow
+   */
+  export type InsightFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Insight
+     */
+    select?: InsightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Insight
+     */
+    omit?: InsightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InsightInclude<ExtArgs> | null
+    /**
+     * Filter, which Insight to fetch.
+     */
+    where: InsightWhereUniqueInput
+  }
+
+  /**
+   * Insight findFirst
+   */
+  export type InsightFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Insight
+     */
+    select?: InsightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Insight
+     */
+    omit?: InsightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InsightInclude<ExtArgs> | null
+    /**
+     * Filter, which Insight to fetch.
+     */
+    where?: InsightWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Insights to fetch.
+     */
+    orderBy?: InsightOrderByWithRelationInput | InsightOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Insights.
+     */
+    cursor?: InsightWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Insights from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Insights.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Insights.
+     */
+    distinct?: InsightScalarFieldEnum | InsightScalarFieldEnum[]
+  }
+
+  /**
+   * Insight findFirstOrThrow
+   */
+  export type InsightFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Insight
+     */
+    select?: InsightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Insight
+     */
+    omit?: InsightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InsightInclude<ExtArgs> | null
+    /**
+     * Filter, which Insight to fetch.
+     */
+    where?: InsightWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Insights to fetch.
+     */
+    orderBy?: InsightOrderByWithRelationInput | InsightOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Insights.
+     */
+    cursor?: InsightWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Insights from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Insights.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Insights.
+     */
+    distinct?: InsightScalarFieldEnum | InsightScalarFieldEnum[]
+  }
+
+  /**
+   * Insight findMany
+   */
+  export type InsightFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Insight
+     */
+    select?: InsightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Insight
+     */
+    omit?: InsightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InsightInclude<ExtArgs> | null
+    /**
+     * Filter, which Insights to fetch.
+     */
+    where?: InsightWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Insights to fetch.
+     */
+    orderBy?: InsightOrderByWithRelationInput | InsightOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Insights.
+     */
+    cursor?: InsightWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Insights from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Insights.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Insights.
+     */
+    distinct?: InsightScalarFieldEnum | InsightScalarFieldEnum[]
+  }
+
+  /**
+   * Insight create
+   */
+  export type InsightCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Insight
+     */
+    select?: InsightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Insight
+     */
+    omit?: InsightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InsightInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Insight.
+     */
+    data: XOR<InsightCreateInput, InsightUncheckedCreateInput>
+  }
+
+  /**
+   * Insight createMany
+   */
+  export type InsightCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Insights.
+     */
+    data: InsightCreateManyInput | InsightCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Insight createManyAndReturn
+   */
+  export type InsightCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Insight
+     */
+    select?: InsightSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Insight
+     */
+    omit?: InsightOmit<ExtArgs> | null
+    /**
+     * The data used to create many Insights.
+     */
+    data: InsightCreateManyInput | InsightCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InsightIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Insight update
+   */
+  export type InsightUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Insight
+     */
+    select?: InsightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Insight
+     */
+    omit?: InsightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InsightInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Insight.
+     */
+    data: XOR<InsightUpdateInput, InsightUncheckedUpdateInput>
+    /**
+     * Choose, which Insight to update.
+     */
+    where: InsightWhereUniqueInput
+  }
+
+  /**
+   * Insight updateMany
+   */
+  export type InsightUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Insights.
+     */
+    data: XOR<InsightUpdateManyMutationInput, InsightUncheckedUpdateManyInput>
+    /**
+     * Filter which Insights to update
+     */
+    where?: InsightWhereInput
+    /**
+     * Limit how many Insights to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Insight updateManyAndReturn
+   */
+  export type InsightUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Insight
+     */
+    select?: InsightSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Insight
+     */
+    omit?: InsightOmit<ExtArgs> | null
+    /**
+     * The data used to update Insights.
+     */
+    data: XOR<InsightUpdateManyMutationInput, InsightUncheckedUpdateManyInput>
+    /**
+     * Filter which Insights to update
+     */
+    where?: InsightWhereInput
+    /**
+     * Limit how many Insights to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InsightIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Insight upsert
+   */
+  export type InsightUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Insight
+     */
+    select?: InsightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Insight
+     */
+    omit?: InsightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InsightInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Insight to update in case it exists.
+     */
+    where: InsightWhereUniqueInput
+    /**
+     * In case the Insight found by the `where` argument doesn't exist, create a new Insight with this data.
+     */
+    create: XOR<InsightCreateInput, InsightUncheckedCreateInput>
+    /**
+     * In case the Insight was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<InsightUpdateInput, InsightUncheckedUpdateInput>
+  }
+
+  /**
+   * Insight delete
+   */
+  export type InsightDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Insight
+     */
+    select?: InsightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Insight
+     */
+    omit?: InsightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InsightInclude<ExtArgs> | null
+    /**
+     * Filter which Insight to delete.
+     */
+    where: InsightWhereUniqueInput
+  }
+
+  /**
+   * Insight deleteMany
+   */
+  export type InsightDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Insights to delete
+     */
+    where?: InsightWhereInput
+    /**
+     * Limit how many Insights to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Insight without action
+   */
+  export type InsightDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Insight
+     */
+    select?: InsightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Insight
+     */
+    omit?: InsightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InsightInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FinancialAlert
+   */
+
+  export type AggregateFinancialAlert = {
+    _count: FinancialAlertCountAggregateOutputType | null
+    _min: FinancialAlertMinAggregateOutputType | null
+    _max: FinancialAlertMaxAggregateOutputType | null
+  }
+
+  export type FinancialAlertMinAggregateOutputType = {
+    id: string | null
+    idUsuario: string | null
+    tipo: string | null
+    severidade: string | null
+    titulo: string | null
+    mensagem: string | null
+    lidoEm: Date | null
+    criadoEm: Date | null
+  }
+
+  export type FinancialAlertMaxAggregateOutputType = {
+    id: string | null
+    idUsuario: string | null
+    tipo: string | null
+    severidade: string | null
+    titulo: string | null
+    mensagem: string | null
+    lidoEm: Date | null
+    criadoEm: Date | null
+  }
+
+  export type FinancialAlertCountAggregateOutputType = {
+    id: number
+    idUsuario: number
+    tipo: number
+    severidade: number
+    titulo: number
+    mensagem: number
+    dados: number
+    lidoEm: number
+    criadoEm: number
+    _all: number
+  }
+
+
+  export type FinancialAlertMinAggregateInputType = {
+    id?: true
+    idUsuario?: true
+    tipo?: true
+    severidade?: true
+    titulo?: true
+    mensagem?: true
+    lidoEm?: true
+    criadoEm?: true
+  }
+
+  export type FinancialAlertMaxAggregateInputType = {
+    id?: true
+    idUsuario?: true
+    tipo?: true
+    severidade?: true
+    titulo?: true
+    mensagem?: true
+    lidoEm?: true
+    criadoEm?: true
+  }
+
+  export type FinancialAlertCountAggregateInputType = {
+    id?: true
+    idUsuario?: true
+    tipo?: true
+    severidade?: true
+    titulo?: true
+    mensagem?: true
+    dados?: true
+    lidoEm?: true
+    criadoEm?: true
+    _all?: true
+  }
+
+  export type FinancialAlertAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FinancialAlert to aggregate.
+     */
+    where?: FinancialAlertWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FinancialAlerts to fetch.
+     */
+    orderBy?: FinancialAlertOrderByWithRelationInput | FinancialAlertOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FinancialAlertWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FinancialAlerts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FinancialAlerts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FinancialAlerts
+    **/
+    _count?: true | FinancialAlertCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FinancialAlertMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FinancialAlertMaxAggregateInputType
+  }
+
+  export type GetFinancialAlertAggregateType<T extends FinancialAlertAggregateArgs> = {
+        [P in keyof T & keyof AggregateFinancialAlert]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFinancialAlert[P]>
+      : GetScalarType<T[P], AggregateFinancialAlert[P]>
+  }
+
+
+
+
+  export type FinancialAlertGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FinancialAlertWhereInput
+    orderBy?: FinancialAlertOrderByWithAggregationInput | FinancialAlertOrderByWithAggregationInput[]
+    by: FinancialAlertScalarFieldEnum[] | FinancialAlertScalarFieldEnum
+    having?: FinancialAlertScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FinancialAlertCountAggregateInputType | true
+    _min?: FinancialAlertMinAggregateInputType
+    _max?: FinancialAlertMaxAggregateInputType
+  }
+
+  export type FinancialAlertGroupByOutputType = {
+    id: string
+    idUsuario: string
+    tipo: string
+    severidade: string
+    titulo: string
+    mensagem: string
+    dados: JsonValue | null
+    lidoEm: Date | null
+    criadoEm: Date
+    _count: FinancialAlertCountAggregateOutputType | null
+    _min: FinancialAlertMinAggregateOutputType | null
+    _max: FinancialAlertMaxAggregateOutputType | null
+  }
+
+  type GetFinancialAlertGroupByPayload<T extends FinancialAlertGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FinancialAlertGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FinancialAlertGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FinancialAlertGroupByOutputType[P]>
+            : GetScalarType<T[P], FinancialAlertGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FinancialAlertSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    idUsuario?: boolean
+    tipo?: boolean
+    severidade?: boolean
+    titulo?: boolean
+    mensagem?: boolean
+    dados?: boolean
+    lidoEm?: boolean
+    criadoEm?: boolean
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["financialAlert"]>
+
+  export type FinancialAlertSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    idUsuario?: boolean
+    tipo?: boolean
+    severidade?: boolean
+    titulo?: boolean
+    mensagem?: boolean
+    dados?: boolean
+    lidoEm?: boolean
+    criadoEm?: boolean
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["financialAlert"]>
+
+  export type FinancialAlertSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    idUsuario?: boolean
+    tipo?: boolean
+    severidade?: boolean
+    titulo?: boolean
+    mensagem?: boolean
+    dados?: boolean
+    lidoEm?: boolean
+    criadoEm?: boolean
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["financialAlert"]>
+
+  export type FinancialAlertSelectScalar = {
+    id?: boolean
+    idUsuario?: boolean
+    tipo?: boolean
+    severidade?: boolean
+    titulo?: boolean
+    mensagem?: boolean
+    dados?: boolean
+    lidoEm?: boolean
+    criadoEm?: boolean
+  }
+
+  export type FinancialAlertOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "idUsuario" | "tipo" | "severidade" | "titulo" | "mensagem" | "dados" | "lidoEm" | "criadoEm", ExtArgs["result"]["financialAlert"]>
+  export type FinancialAlertInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+  export type FinancialAlertIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+  export type FinancialAlertIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+
+  export type $FinancialAlertPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FinancialAlert"
+    objects: {
+      usuario: Prisma.$UsuarioPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      idUsuario: string
+      tipo: string
+      severidade: string
+      titulo: string
+      mensagem: string
+      dados: Prisma.JsonValue | null
+      lidoEm: Date | null
+      criadoEm: Date
+    }, ExtArgs["result"]["financialAlert"]>
+    composites: {}
+  }
+
+  type FinancialAlertGetPayload<S extends boolean | null | undefined | FinancialAlertDefaultArgs> = $Result.GetResult<Prisma.$FinancialAlertPayload, S>
+
+  type FinancialAlertCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FinancialAlertFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FinancialAlertCountAggregateInputType | true
+    }
+
+  export interface FinancialAlertDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FinancialAlert'], meta: { name: 'FinancialAlert' } }
+    /**
+     * Find zero or one FinancialAlert that matches the filter.
+     * @param {FinancialAlertFindUniqueArgs} args - Arguments to find a FinancialAlert
+     * @example
+     * // Get one FinancialAlert
+     * const financialAlert = await prisma.financialAlert.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FinancialAlertFindUniqueArgs>(args: SelectSubset<T, FinancialAlertFindUniqueArgs<ExtArgs>>): Prisma__FinancialAlertClient<$Result.GetResult<Prisma.$FinancialAlertPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FinancialAlert that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FinancialAlertFindUniqueOrThrowArgs} args - Arguments to find a FinancialAlert
+     * @example
+     * // Get one FinancialAlert
+     * const financialAlert = await prisma.financialAlert.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FinancialAlertFindUniqueOrThrowArgs>(args: SelectSubset<T, FinancialAlertFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FinancialAlertClient<$Result.GetResult<Prisma.$FinancialAlertPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FinancialAlert that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinancialAlertFindFirstArgs} args - Arguments to find a FinancialAlert
+     * @example
+     * // Get one FinancialAlert
+     * const financialAlert = await prisma.financialAlert.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FinancialAlertFindFirstArgs>(args?: SelectSubset<T, FinancialAlertFindFirstArgs<ExtArgs>>): Prisma__FinancialAlertClient<$Result.GetResult<Prisma.$FinancialAlertPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FinancialAlert that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinancialAlertFindFirstOrThrowArgs} args - Arguments to find a FinancialAlert
+     * @example
+     * // Get one FinancialAlert
+     * const financialAlert = await prisma.financialAlert.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FinancialAlertFindFirstOrThrowArgs>(args?: SelectSubset<T, FinancialAlertFindFirstOrThrowArgs<ExtArgs>>): Prisma__FinancialAlertClient<$Result.GetResult<Prisma.$FinancialAlertPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FinancialAlerts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinancialAlertFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FinancialAlerts
+     * const financialAlerts = await prisma.financialAlert.findMany()
+     * 
+     * // Get first 10 FinancialAlerts
+     * const financialAlerts = await prisma.financialAlert.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const financialAlertWithIdOnly = await prisma.financialAlert.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FinancialAlertFindManyArgs>(args?: SelectSubset<T, FinancialAlertFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinancialAlertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FinancialAlert.
+     * @param {FinancialAlertCreateArgs} args - Arguments to create a FinancialAlert.
+     * @example
+     * // Create one FinancialAlert
+     * const FinancialAlert = await prisma.financialAlert.create({
+     *   data: {
+     *     // ... data to create a FinancialAlert
+     *   }
+     * })
+     * 
+     */
+    create<T extends FinancialAlertCreateArgs>(args: SelectSubset<T, FinancialAlertCreateArgs<ExtArgs>>): Prisma__FinancialAlertClient<$Result.GetResult<Prisma.$FinancialAlertPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FinancialAlerts.
+     * @param {FinancialAlertCreateManyArgs} args - Arguments to create many FinancialAlerts.
+     * @example
+     * // Create many FinancialAlerts
+     * const financialAlert = await prisma.financialAlert.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FinancialAlertCreateManyArgs>(args?: SelectSubset<T, FinancialAlertCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FinancialAlerts and returns the data saved in the database.
+     * @param {FinancialAlertCreateManyAndReturnArgs} args - Arguments to create many FinancialAlerts.
+     * @example
+     * // Create many FinancialAlerts
+     * const financialAlert = await prisma.financialAlert.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FinancialAlerts and only return the `id`
+     * const financialAlertWithIdOnly = await prisma.financialAlert.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FinancialAlertCreateManyAndReturnArgs>(args?: SelectSubset<T, FinancialAlertCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinancialAlertPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FinancialAlert.
+     * @param {FinancialAlertDeleteArgs} args - Arguments to delete one FinancialAlert.
+     * @example
+     * // Delete one FinancialAlert
+     * const FinancialAlert = await prisma.financialAlert.delete({
+     *   where: {
+     *     // ... filter to delete one FinancialAlert
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FinancialAlertDeleteArgs>(args: SelectSubset<T, FinancialAlertDeleteArgs<ExtArgs>>): Prisma__FinancialAlertClient<$Result.GetResult<Prisma.$FinancialAlertPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FinancialAlert.
+     * @param {FinancialAlertUpdateArgs} args - Arguments to update one FinancialAlert.
+     * @example
+     * // Update one FinancialAlert
+     * const financialAlert = await prisma.financialAlert.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FinancialAlertUpdateArgs>(args: SelectSubset<T, FinancialAlertUpdateArgs<ExtArgs>>): Prisma__FinancialAlertClient<$Result.GetResult<Prisma.$FinancialAlertPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FinancialAlerts.
+     * @param {FinancialAlertDeleteManyArgs} args - Arguments to filter FinancialAlerts to delete.
+     * @example
+     * // Delete a few FinancialAlerts
+     * const { count } = await prisma.financialAlert.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FinancialAlertDeleteManyArgs>(args?: SelectSubset<T, FinancialAlertDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FinancialAlerts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinancialAlertUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FinancialAlerts
+     * const financialAlert = await prisma.financialAlert.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FinancialAlertUpdateManyArgs>(args: SelectSubset<T, FinancialAlertUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FinancialAlerts and returns the data updated in the database.
+     * @param {FinancialAlertUpdateManyAndReturnArgs} args - Arguments to update many FinancialAlerts.
+     * @example
+     * // Update many FinancialAlerts
+     * const financialAlert = await prisma.financialAlert.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FinancialAlerts and only return the `id`
+     * const financialAlertWithIdOnly = await prisma.financialAlert.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FinancialAlertUpdateManyAndReturnArgs>(args: SelectSubset<T, FinancialAlertUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinancialAlertPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FinancialAlert.
+     * @param {FinancialAlertUpsertArgs} args - Arguments to update or create a FinancialAlert.
+     * @example
+     * // Update or create a FinancialAlert
+     * const financialAlert = await prisma.financialAlert.upsert({
+     *   create: {
+     *     // ... data to create a FinancialAlert
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FinancialAlert we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FinancialAlertUpsertArgs>(args: SelectSubset<T, FinancialAlertUpsertArgs<ExtArgs>>): Prisma__FinancialAlertClient<$Result.GetResult<Prisma.$FinancialAlertPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FinancialAlerts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinancialAlertCountArgs} args - Arguments to filter FinancialAlerts to count.
+     * @example
+     * // Count the number of FinancialAlerts
+     * const count = await prisma.financialAlert.count({
+     *   where: {
+     *     // ... the filter for the FinancialAlerts we want to count
+     *   }
+     * })
+    **/
+    count<T extends FinancialAlertCountArgs>(
+      args?: Subset<T, FinancialAlertCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FinancialAlertCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FinancialAlert.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinancialAlertAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FinancialAlertAggregateArgs>(args: Subset<T, FinancialAlertAggregateArgs>): Prisma.PrismaPromise<GetFinancialAlertAggregateType<T>>
+
+    /**
+     * Group by FinancialAlert.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinancialAlertGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FinancialAlertGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FinancialAlertGroupByArgs['orderBy'] }
+        : { orderBy?: FinancialAlertGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FinancialAlertGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFinancialAlertGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FinancialAlert model
+   */
+  readonly fields: FinancialAlertFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FinancialAlert.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FinancialAlertClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    usuario<T extends UsuarioDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UsuarioDefaultArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FinancialAlert model
+   */
+  interface FinancialAlertFieldRefs {
+    readonly id: FieldRef<"FinancialAlert", 'String'>
+    readonly idUsuario: FieldRef<"FinancialAlert", 'String'>
+    readonly tipo: FieldRef<"FinancialAlert", 'String'>
+    readonly severidade: FieldRef<"FinancialAlert", 'String'>
+    readonly titulo: FieldRef<"FinancialAlert", 'String'>
+    readonly mensagem: FieldRef<"FinancialAlert", 'String'>
+    readonly dados: FieldRef<"FinancialAlert", 'Json'>
+    readonly lidoEm: FieldRef<"FinancialAlert", 'DateTime'>
+    readonly criadoEm: FieldRef<"FinancialAlert", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FinancialAlert findUnique
+   */
+  export type FinancialAlertFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialAlert
+     */
+    select?: FinancialAlertSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialAlert
+     */
+    omit?: FinancialAlertOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialAlertInclude<ExtArgs> | null
+    /**
+     * Filter, which FinancialAlert to fetch.
+     */
+    where: FinancialAlertWhereUniqueInput
+  }
+
+  /**
+   * FinancialAlert findUniqueOrThrow
+   */
+  export type FinancialAlertFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialAlert
+     */
+    select?: FinancialAlertSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialAlert
+     */
+    omit?: FinancialAlertOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialAlertInclude<ExtArgs> | null
+    /**
+     * Filter, which FinancialAlert to fetch.
+     */
+    where: FinancialAlertWhereUniqueInput
+  }
+
+  /**
+   * FinancialAlert findFirst
+   */
+  export type FinancialAlertFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialAlert
+     */
+    select?: FinancialAlertSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialAlert
+     */
+    omit?: FinancialAlertOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialAlertInclude<ExtArgs> | null
+    /**
+     * Filter, which FinancialAlert to fetch.
+     */
+    where?: FinancialAlertWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FinancialAlerts to fetch.
+     */
+    orderBy?: FinancialAlertOrderByWithRelationInput | FinancialAlertOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FinancialAlerts.
+     */
+    cursor?: FinancialAlertWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FinancialAlerts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FinancialAlerts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FinancialAlerts.
+     */
+    distinct?: FinancialAlertScalarFieldEnum | FinancialAlertScalarFieldEnum[]
+  }
+
+  /**
+   * FinancialAlert findFirstOrThrow
+   */
+  export type FinancialAlertFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialAlert
+     */
+    select?: FinancialAlertSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialAlert
+     */
+    omit?: FinancialAlertOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialAlertInclude<ExtArgs> | null
+    /**
+     * Filter, which FinancialAlert to fetch.
+     */
+    where?: FinancialAlertWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FinancialAlerts to fetch.
+     */
+    orderBy?: FinancialAlertOrderByWithRelationInput | FinancialAlertOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FinancialAlerts.
+     */
+    cursor?: FinancialAlertWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FinancialAlerts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FinancialAlerts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FinancialAlerts.
+     */
+    distinct?: FinancialAlertScalarFieldEnum | FinancialAlertScalarFieldEnum[]
+  }
+
+  /**
+   * FinancialAlert findMany
+   */
+  export type FinancialAlertFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialAlert
+     */
+    select?: FinancialAlertSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialAlert
+     */
+    omit?: FinancialAlertOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialAlertInclude<ExtArgs> | null
+    /**
+     * Filter, which FinancialAlerts to fetch.
+     */
+    where?: FinancialAlertWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FinancialAlerts to fetch.
+     */
+    orderBy?: FinancialAlertOrderByWithRelationInput | FinancialAlertOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FinancialAlerts.
+     */
+    cursor?: FinancialAlertWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FinancialAlerts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FinancialAlerts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FinancialAlerts.
+     */
+    distinct?: FinancialAlertScalarFieldEnum | FinancialAlertScalarFieldEnum[]
+  }
+
+  /**
+   * FinancialAlert create
+   */
+  export type FinancialAlertCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialAlert
+     */
+    select?: FinancialAlertSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialAlert
+     */
+    omit?: FinancialAlertOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialAlertInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FinancialAlert.
+     */
+    data: XOR<FinancialAlertCreateInput, FinancialAlertUncheckedCreateInput>
+  }
+
+  /**
+   * FinancialAlert createMany
+   */
+  export type FinancialAlertCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FinancialAlerts.
+     */
+    data: FinancialAlertCreateManyInput | FinancialAlertCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FinancialAlert createManyAndReturn
+   */
+  export type FinancialAlertCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialAlert
+     */
+    select?: FinancialAlertSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialAlert
+     */
+    omit?: FinancialAlertOmit<ExtArgs> | null
+    /**
+     * The data used to create many FinancialAlerts.
+     */
+    data: FinancialAlertCreateManyInput | FinancialAlertCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialAlertIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FinancialAlert update
+   */
+  export type FinancialAlertUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialAlert
+     */
+    select?: FinancialAlertSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialAlert
+     */
+    omit?: FinancialAlertOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialAlertInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FinancialAlert.
+     */
+    data: XOR<FinancialAlertUpdateInput, FinancialAlertUncheckedUpdateInput>
+    /**
+     * Choose, which FinancialAlert to update.
+     */
+    where: FinancialAlertWhereUniqueInput
+  }
+
+  /**
+   * FinancialAlert updateMany
+   */
+  export type FinancialAlertUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FinancialAlerts.
+     */
+    data: XOR<FinancialAlertUpdateManyMutationInput, FinancialAlertUncheckedUpdateManyInput>
+    /**
+     * Filter which FinancialAlerts to update
+     */
+    where?: FinancialAlertWhereInput
+    /**
+     * Limit how many FinancialAlerts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FinancialAlert updateManyAndReturn
+   */
+  export type FinancialAlertUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialAlert
+     */
+    select?: FinancialAlertSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialAlert
+     */
+    omit?: FinancialAlertOmit<ExtArgs> | null
+    /**
+     * The data used to update FinancialAlerts.
+     */
+    data: XOR<FinancialAlertUpdateManyMutationInput, FinancialAlertUncheckedUpdateManyInput>
+    /**
+     * Filter which FinancialAlerts to update
+     */
+    where?: FinancialAlertWhereInput
+    /**
+     * Limit how many FinancialAlerts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialAlertIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FinancialAlert upsert
+   */
+  export type FinancialAlertUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialAlert
+     */
+    select?: FinancialAlertSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialAlert
+     */
+    omit?: FinancialAlertOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialAlertInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FinancialAlert to update in case it exists.
+     */
+    where: FinancialAlertWhereUniqueInput
+    /**
+     * In case the FinancialAlert found by the `where` argument doesn't exist, create a new FinancialAlert with this data.
+     */
+    create: XOR<FinancialAlertCreateInput, FinancialAlertUncheckedCreateInput>
+    /**
+     * In case the FinancialAlert was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FinancialAlertUpdateInput, FinancialAlertUncheckedUpdateInput>
+  }
+
+  /**
+   * FinancialAlert delete
+   */
+  export type FinancialAlertDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialAlert
+     */
+    select?: FinancialAlertSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialAlert
+     */
+    omit?: FinancialAlertOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialAlertInclude<ExtArgs> | null
+    /**
+     * Filter which FinancialAlert to delete.
+     */
+    where: FinancialAlertWhereUniqueInput
+  }
+
+  /**
+   * FinancialAlert deleteMany
+   */
+  export type FinancialAlertDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FinancialAlerts to delete
+     */
+    where?: FinancialAlertWhereInput
+    /**
+     * Limit how many FinancialAlerts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FinancialAlert without action
+   */
+  export type FinancialAlertDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialAlert
+     */
+    select?: FinancialAlertSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialAlert
+     */
+    omit?: FinancialAlertOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialAlertInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Notification
+   */
+
+  export type AggregateNotification = {
+    _count: NotificationCountAggregateOutputType | null
+    _min: NotificationMinAggregateOutputType | null
+    _max: NotificationMaxAggregateOutputType | null
+  }
+
+  export type NotificationMinAggregateOutputType = {
+    id: string | null
+    idUsuario: string | null
+    tipo: string | null
+    titulo: string | null
+    mensagem: string | null
+    canal: string | null
+    status: string | null
+    enviadaEm: Date | null
+    lidaEm: Date | null
+    erro: string | null
+    criadoEm: Date | null
+  }
+
+  export type NotificationMaxAggregateOutputType = {
+    id: string | null
+    idUsuario: string | null
+    tipo: string | null
+    titulo: string | null
+    mensagem: string | null
+    canal: string | null
+    status: string | null
+    enviadaEm: Date | null
+    lidaEm: Date | null
+    erro: string | null
+    criadoEm: Date | null
+  }
+
+  export type NotificationCountAggregateOutputType = {
+    id: number
+    idUsuario: number
+    tipo: number
+    titulo: number
+    mensagem: number
+    canal: number
+    status: number
+    dados: number
+    enviadaEm: number
+    lidaEm: number
+    erro: number
+    criadoEm: number
+    _all: number
+  }
+
+
+  export type NotificationMinAggregateInputType = {
+    id?: true
+    idUsuario?: true
+    tipo?: true
+    titulo?: true
+    mensagem?: true
+    canal?: true
+    status?: true
+    enviadaEm?: true
+    lidaEm?: true
+    erro?: true
+    criadoEm?: true
+  }
+
+  export type NotificationMaxAggregateInputType = {
+    id?: true
+    idUsuario?: true
+    tipo?: true
+    titulo?: true
+    mensagem?: true
+    canal?: true
+    status?: true
+    enviadaEm?: true
+    lidaEm?: true
+    erro?: true
+    criadoEm?: true
+  }
+
+  export type NotificationCountAggregateInputType = {
+    id?: true
+    idUsuario?: true
+    tipo?: true
+    titulo?: true
+    mensagem?: true
+    canal?: true
+    status?: true
+    dados?: true
+    enviadaEm?: true
+    lidaEm?: true
+    erro?: true
+    criadoEm?: true
+    _all?: true
+  }
+
+  export type NotificationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Notification to aggregate.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Notifications
+    **/
+    _count?: true | NotificationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NotificationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NotificationMaxAggregateInputType
+  }
+
+  export type GetNotificationAggregateType<T extends NotificationAggregateArgs> = {
+        [P in keyof T & keyof AggregateNotification]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNotification[P]>
+      : GetScalarType<T[P], AggregateNotification[P]>
+  }
+
+
+
+
+  export type NotificationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithAggregationInput | NotificationOrderByWithAggregationInput[]
+    by: NotificationScalarFieldEnum[] | NotificationScalarFieldEnum
+    having?: NotificationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NotificationCountAggregateInputType | true
+    _min?: NotificationMinAggregateInputType
+    _max?: NotificationMaxAggregateInputType
+  }
+
+  export type NotificationGroupByOutputType = {
+    id: string
+    idUsuario: string
+    tipo: string
+    titulo: string
+    mensagem: string
+    canal: string
+    status: string
+    dados: JsonValue | null
+    enviadaEm: Date | null
+    lidaEm: Date | null
+    erro: string | null
+    criadoEm: Date
+    _count: NotificationCountAggregateOutputType | null
+    _min: NotificationMinAggregateOutputType | null
+    _max: NotificationMaxAggregateOutputType | null
+  }
+
+  type GetNotificationGroupByPayload<T extends NotificationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NotificationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NotificationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NotificationGroupByOutputType[P]>
+            : GetScalarType<T[P], NotificationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NotificationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    idUsuario?: boolean
+    tipo?: boolean
+    titulo?: boolean
+    mensagem?: boolean
+    canal?: boolean
+    status?: boolean
+    dados?: boolean
+    enviadaEm?: boolean
+    lidaEm?: boolean
+    erro?: boolean
+    criadoEm?: boolean
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notification"]>
+
+  export type NotificationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    idUsuario?: boolean
+    tipo?: boolean
+    titulo?: boolean
+    mensagem?: boolean
+    canal?: boolean
+    status?: boolean
+    dados?: boolean
+    enviadaEm?: boolean
+    lidaEm?: boolean
+    erro?: boolean
+    criadoEm?: boolean
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notification"]>
+
+  export type NotificationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    idUsuario?: boolean
+    tipo?: boolean
+    titulo?: boolean
+    mensagem?: boolean
+    canal?: boolean
+    status?: boolean
+    dados?: boolean
+    enviadaEm?: boolean
+    lidaEm?: boolean
+    erro?: boolean
+    criadoEm?: boolean
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notification"]>
+
+  export type NotificationSelectScalar = {
+    id?: boolean
+    idUsuario?: boolean
+    tipo?: boolean
+    titulo?: boolean
+    mensagem?: boolean
+    canal?: boolean
+    status?: boolean
+    dados?: boolean
+    enviadaEm?: boolean
+    lidaEm?: boolean
+    erro?: boolean
+    criadoEm?: boolean
+  }
+
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "idUsuario" | "tipo" | "titulo" | "mensagem" | "canal" | "status" | "dados" | "enviadaEm" | "lidaEm" | "erro" | "criadoEm", ExtArgs["result"]["notification"]>
+  export type NotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+  export type NotificationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+  export type NotificationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+
+  export type $NotificationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Notification"
+    objects: {
+      usuario: Prisma.$UsuarioPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      idUsuario: string
+      tipo: string
+      titulo: string
+      mensagem: string
+      canal: string
+      status: string
+      dados: Prisma.JsonValue | null
+      enviadaEm: Date | null
+      lidaEm: Date | null
+      erro: string | null
+      criadoEm: Date
+    }, ExtArgs["result"]["notification"]>
+    composites: {}
+  }
+
+  type NotificationGetPayload<S extends boolean | null | undefined | NotificationDefaultArgs> = $Result.GetResult<Prisma.$NotificationPayload, S>
+
+  type NotificationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NotificationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NotificationCountAggregateInputType | true
+    }
+
+  export interface NotificationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Notification'], meta: { name: 'Notification' } }
+    /**
+     * Find zero or one Notification that matches the filter.
+     * @param {NotificationFindUniqueArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NotificationFindUniqueArgs>(args: SelectSubset<T, NotificationFindUniqueArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Notification that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NotificationFindUniqueOrThrowArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NotificationFindUniqueOrThrowArgs>(args: SelectSubset<T, NotificationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Notification that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindFirstArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NotificationFindFirstArgs>(args?: SelectSubset<T, NotificationFindFirstArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Notification that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindFirstOrThrowArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NotificationFindFirstOrThrowArgs>(args?: SelectSubset<T, NotificationFindFirstOrThrowArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Notifications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Notifications
+     * const notifications = await prisma.notification.findMany()
+     * 
+     * // Get first 10 Notifications
+     * const notifications = await prisma.notification.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const notificationWithIdOnly = await prisma.notification.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NotificationFindManyArgs>(args?: SelectSubset<T, NotificationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Notification.
+     * @param {NotificationCreateArgs} args - Arguments to create a Notification.
+     * @example
+     * // Create one Notification
+     * const Notification = await prisma.notification.create({
+     *   data: {
+     *     // ... data to create a Notification
+     *   }
+     * })
+     * 
+     */
+    create<T extends NotificationCreateArgs>(args: SelectSubset<T, NotificationCreateArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Notifications.
+     * @param {NotificationCreateManyArgs} args - Arguments to create many Notifications.
+     * @example
+     * // Create many Notifications
+     * const notification = await prisma.notification.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NotificationCreateManyArgs>(args?: SelectSubset<T, NotificationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Notifications and returns the data saved in the database.
+     * @param {NotificationCreateManyAndReturnArgs} args - Arguments to create many Notifications.
+     * @example
+     * // Create many Notifications
+     * const notification = await prisma.notification.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Notifications and only return the `id`
+     * const notificationWithIdOnly = await prisma.notification.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NotificationCreateManyAndReturnArgs>(args?: SelectSubset<T, NotificationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Notification.
+     * @param {NotificationDeleteArgs} args - Arguments to delete one Notification.
+     * @example
+     * // Delete one Notification
+     * const Notification = await prisma.notification.delete({
+     *   where: {
+     *     // ... filter to delete one Notification
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NotificationDeleteArgs>(args: SelectSubset<T, NotificationDeleteArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Notification.
+     * @param {NotificationUpdateArgs} args - Arguments to update one Notification.
+     * @example
+     * // Update one Notification
+     * const notification = await prisma.notification.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NotificationUpdateArgs>(args: SelectSubset<T, NotificationUpdateArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Notifications.
+     * @param {NotificationDeleteManyArgs} args - Arguments to filter Notifications to delete.
+     * @example
+     * // Delete a few Notifications
+     * const { count } = await prisma.notification.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NotificationDeleteManyArgs>(args?: SelectSubset<T, NotificationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Notifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Notifications
+     * const notification = await prisma.notification.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NotificationUpdateManyArgs>(args: SelectSubset<T, NotificationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Notifications and returns the data updated in the database.
+     * @param {NotificationUpdateManyAndReturnArgs} args - Arguments to update many Notifications.
+     * @example
+     * // Update many Notifications
+     * const notification = await prisma.notification.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Notifications and only return the `id`
+     * const notificationWithIdOnly = await prisma.notification.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends NotificationUpdateManyAndReturnArgs>(args: SelectSubset<T, NotificationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Notification.
+     * @param {NotificationUpsertArgs} args - Arguments to update or create a Notification.
+     * @example
+     * // Update or create a Notification
+     * const notification = await prisma.notification.upsert({
+     *   create: {
+     *     // ... data to create a Notification
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Notification we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NotificationUpsertArgs>(args: SelectSubset<T, NotificationUpsertArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Notifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationCountArgs} args - Arguments to filter Notifications to count.
+     * @example
+     * // Count the number of Notifications
+     * const count = await prisma.notification.count({
+     *   where: {
+     *     // ... the filter for the Notifications we want to count
+     *   }
+     * })
+    **/
+    count<T extends NotificationCountArgs>(
+      args?: Subset<T, NotificationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NotificationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Notification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NotificationAggregateArgs>(args: Subset<T, NotificationAggregateArgs>): Prisma.PrismaPromise<GetNotificationAggregateType<T>>
+
+    /**
+     * Group by Notification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NotificationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NotificationGroupByArgs['orderBy'] }
+        : { orderBy?: NotificationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NotificationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNotificationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Notification model
+   */
+  readonly fields: NotificationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Notification.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NotificationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    usuario<T extends UsuarioDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UsuarioDefaultArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Notification model
+   */
+  interface NotificationFieldRefs {
+    readonly id: FieldRef<"Notification", 'String'>
+    readonly idUsuario: FieldRef<"Notification", 'String'>
+    readonly tipo: FieldRef<"Notification", 'String'>
+    readonly titulo: FieldRef<"Notification", 'String'>
+    readonly mensagem: FieldRef<"Notification", 'String'>
+    readonly canal: FieldRef<"Notification", 'String'>
+    readonly status: FieldRef<"Notification", 'String'>
+    readonly dados: FieldRef<"Notification", 'Json'>
+    readonly enviadaEm: FieldRef<"Notification", 'DateTime'>
+    readonly lidaEm: FieldRef<"Notification", 'DateTime'>
+    readonly erro: FieldRef<"Notification", 'String'>
+    readonly criadoEm: FieldRef<"Notification", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Notification findUnique
+   */
+  export type NotificationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification findUniqueOrThrow
+   */
+  export type NotificationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification findFirst
+   */
+  export type NotificationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification findFirstOrThrow
+   */
+  export type NotificationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification findMany
+   */
+  export type NotificationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notifications to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification create
+   */
+  export type NotificationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Notification.
+     */
+    data: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>
+  }
+
+  /**
+   * Notification createMany
+   */
+  export type NotificationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Notifications.
+     */
+    data: NotificationCreateManyInput | NotificationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Notification createManyAndReturn
+   */
+  export type NotificationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * The data used to create many Notifications.
+     */
+    data: NotificationCreateManyInput | NotificationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Notification update
+   */
+  export type NotificationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Notification.
+     */
+    data: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>
+    /**
+     * Choose, which Notification to update.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification updateMany
+   */
+  export type NotificationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Notifications.
+     */
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyInput>
+    /**
+     * Filter which Notifications to update
+     */
+    where?: NotificationWhereInput
+    /**
+     * Limit how many Notifications to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Notification updateManyAndReturn
+   */
+  export type NotificationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * The data used to update Notifications.
+     */
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyInput>
+    /**
+     * Filter which Notifications to update
+     */
+    where?: NotificationWhereInput
+    /**
+     * Limit how many Notifications to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Notification upsert
+   */
+  export type NotificationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Notification to update in case it exists.
+     */
+    where: NotificationWhereUniqueInput
+    /**
+     * In case the Notification found by the `where` argument doesn't exist, create a new Notification with this data.
+     */
+    create: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>
+    /**
+     * In case the Notification was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>
+  }
+
+  /**
+   * Notification delete
+   */
+  export type NotificationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter which Notification to delete.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification deleteMany
+   */
+  export type NotificationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Notifications to delete
+     */
+    where?: NotificationWhereInput
+    /**
+     * Limit how many Notifications to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Notification without action
+   */
+  export type NotificationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -7443,12 +12421,89 @@ export namespace Prisma {
   export type OrcamentoScalarFieldEnum = (typeof OrcamentoScalarFieldEnum)[keyof typeof OrcamentoScalarFieldEnum]
 
 
+  export const AnalyticJobScalarFieldEnum: {
+    id: 'id',
+    idUsuario: 'idUsuario',
+    tipo: 'tipo',
+    status: 'status',
+    payload: 'payload',
+    resultado: 'resultado',
+    erro: 'erro',
+    criadoEm: 'criadoEm',
+    iniciadoEm: 'iniciadoEm',
+    finalizadoEm: 'finalizadoEm'
+  };
+
+  export type AnalyticJobScalarFieldEnum = (typeof AnalyticJobScalarFieldEnum)[keyof typeof AnalyticJobScalarFieldEnum]
+
+
+  export const InsightScalarFieldEnum: {
+    id: 'id',
+    idUsuario: 'idUsuario',
+    tipo: 'tipo',
+    titulo: 'titulo',
+    descricao: 'descricao',
+    dados: 'dados',
+    criadoEm: 'criadoEm'
+  };
+
+  export type InsightScalarFieldEnum = (typeof InsightScalarFieldEnum)[keyof typeof InsightScalarFieldEnum]
+
+
+  export const FinancialAlertScalarFieldEnum: {
+    id: 'id',
+    idUsuario: 'idUsuario',
+    tipo: 'tipo',
+    severidade: 'severidade',
+    titulo: 'titulo',
+    mensagem: 'mensagem',
+    dados: 'dados',
+    lidoEm: 'lidoEm',
+    criadoEm: 'criadoEm'
+  };
+
+  export type FinancialAlertScalarFieldEnum = (typeof FinancialAlertScalarFieldEnum)[keyof typeof FinancialAlertScalarFieldEnum]
+
+
+  export const NotificationScalarFieldEnum: {
+    id: 'id',
+    idUsuario: 'idUsuario',
+    tipo: 'tipo',
+    titulo: 'titulo',
+    mensagem: 'mensagem',
+    canal: 'canal',
+    status: 'status',
+    dados: 'dados',
+    enviadaEm: 'enviadaEm',
+    lidaEm: 'lidaEm',
+    erro: 'erro',
+    criadoEm: 'criadoEm'
+  };
+
+  export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
   export const QueryMode: {
@@ -7465,6 +12520,15 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   /**
@@ -7606,6 +12670,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -7636,6 +12714,10 @@ export namespace Prisma {
     lancamentos?: LancamentoListRelationFilter
     orcamentos?: OrcamentoListRelationFilter
     contas?: ContaListRelationFilter
+    analyticJobs?: AnalyticJobListRelationFilter
+    insights?: InsightListRelationFilter
+    alertas?: FinancialAlertListRelationFilter
+    notificacoes?: NotificationListRelationFilter
   }
 
   export type UsuarioOrderByWithRelationInput = {
@@ -7649,6 +12731,10 @@ export namespace Prisma {
     lancamentos?: LancamentoOrderByRelationAggregateInput
     orcamentos?: OrcamentoOrderByRelationAggregateInput
     contas?: ContaOrderByRelationAggregateInput
+    analyticJobs?: AnalyticJobOrderByRelationAggregateInput
+    insights?: InsightOrderByRelationAggregateInput
+    alertas?: FinancialAlertOrderByRelationAggregateInput
+    notificacoes?: NotificationOrderByRelationAggregateInput
   }
 
   export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
@@ -7665,6 +12751,10 @@ export namespace Prisma {
     lancamentos?: LancamentoListRelationFilter
     orcamentos?: OrcamentoListRelationFilter
     contas?: ContaListRelationFilter
+    analyticJobs?: AnalyticJobListRelationFilter
+    insights?: InsightListRelationFilter
+    alertas?: FinancialAlertListRelationFilter
+    notificacoes?: NotificationListRelationFilter
   }, "id" | "email">
 
   export type UsuarioOrderByWithAggregationInput = {
@@ -8021,6 +13111,316 @@ export namespace Prisma {
     atualizadoEm?: DateTimeWithAggregatesFilter<"Orcamento"> | Date | string
   }
 
+  export type AnalyticJobWhereInput = {
+    AND?: AnalyticJobWhereInput | AnalyticJobWhereInput[]
+    OR?: AnalyticJobWhereInput[]
+    NOT?: AnalyticJobWhereInput | AnalyticJobWhereInput[]
+    id?: StringFilter<"AnalyticJob"> | string
+    idUsuario?: StringFilter<"AnalyticJob"> | string
+    tipo?: StringFilter<"AnalyticJob"> | string
+    status?: StringFilter<"AnalyticJob"> | string
+    payload?: JsonFilter<"AnalyticJob">
+    resultado?: JsonNullableFilter<"AnalyticJob">
+    erro?: StringNullableFilter<"AnalyticJob"> | string | null
+    criadoEm?: DateTimeFilter<"AnalyticJob"> | Date | string
+    iniciadoEm?: DateTimeNullableFilter<"AnalyticJob"> | Date | string | null
+    finalizadoEm?: DateTimeNullableFilter<"AnalyticJob"> | Date | string | null
+    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+  }
+
+  export type AnalyticJobOrderByWithRelationInput = {
+    id?: SortOrder
+    idUsuario?: SortOrder
+    tipo?: SortOrder
+    status?: SortOrder
+    payload?: SortOrder
+    resultado?: SortOrderInput | SortOrder
+    erro?: SortOrderInput | SortOrder
+    criadoEm?: SortOrder
+    iniciadoEm?: SortOrderInput | SortOrder
+    finalizadoEm?: SortOrderInput | SortOrder
+    usuario?: UsuarioOrderByWithRelationInput
+  }
+
+  export type AnalyticJobWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AnalyticJobWhereInput | AnalyticJobWhereInput[]
+    OR?: AnalyticJobWhereInput[]
+    NOT?: AnalyticJobWhereInput | AnalyticJobWhereInput[]
+    idUsuario?: StringFilter<"AnalyticJob"> | string
+    tipo?: StringFilter<"AnalyticJob"> | string
+    status?: StringFilter<"AnalyticJob"> | string
+    payload?: JsonFilter<"AnalyticJob">
+    resultado?: JsonNullableFilter<"AnalyticJob">
+    erro?: StringNullableFilter<"AnalyticJob"> | string | null
+    criadoEm?: DateTimeFilter<"AnalyticJob"> | Date | string
+    iniciadoEm?: DateTimeNullableFilter<"AnalyticJob"> | Date | string | null
+    finalizadoEm?: DateTimeNullableFilter<"AnalyticJob"> | Date | string | null
+    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+  }, "id">
+
+  export type AnalyticJobOrderByWithAggregationInput = {
+    id?: SortOrder
+    idUsuario?: SortOrder
+    tipo?: SortOrder
+    status?: SortOrder
+    payload?: SortOrder
+    resultado?: SortOrderInput | SortOrder
+    erro?: SortOrderInput | SortOrder
+    criadoEm?: SortOrder
+    iniciadoEm?: SortOrderInput | SortOrder
+    finalizadoEm?: SortOrderInput | SortOrder
+    _count?: AnalyticJobCountOrderByAggregateInput
+    _max?: AnalyticJobMaxOrderByAggregateInput
+    _min?: AnalyticJobMinOrderByAggregateInput
+  }
+
+  export type AnalyticJobScalarWhereWithAggregatesInput = {
+    AND?: AnalyticJobScalarWhereWithAggregatesInput | AnalyticJobScalarWhereWithAggregatesInput[]
+    OR?: AnalyticJobScalarWhereWithAggregatesInput[]
+    NOT?: AnalyticJobScalarWhereWithAggregatesInput | AnalyticJobScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AnalyticJob"> | string
+    idUsuario?: StringWithAggregatesFilter<"AnalyticJob"> | string
+    tipo?: StringWithAggregatesFilter<"AnalyticJob"> | string
+    status?: StringWithAggregatesFilter<"AnalyticJob"> | string
+    payload?: JsonWithAggregatesFilter<"AnalyticJob">
+    resultado?: JsonNullableWithAggregatesFilter<"AnalyticJob">
+    erro?: StringNullableWithAggregatesFilter<"AnalyticJob"> | string | null
+    criadoEm?: DateTimeWithAggregatesFilter<"AnalyticJob"> | Date | string
+    iniciadoEm?: DateTimeNullableWithAggregatesFilter<"AnalyticJob"> | Date | string | null
+    finalizadoEm?: DateTimeNullableWithAggregatesFilter<"AnalyticJob"> | Date | string | null
+  }
+
+  export type InsightWhereInput = {
+    AND?: InsightWhereInput | InsightWhereInput[]
+    OR?: InsightWhereInput[]
+    NOT?: InsightWhereInput | InsightWhereInput[]
+    id?: StringFilter<"Insight"> | string
+    idUsuario?: StringFilter<"Insight"> | string
+    tipo?: StringFilter<"Insight"> | string
+    titulo?: StringFilter<"Insight"> | string
+    descricao?: StringFilter<"Insight"> | string
+    dados?: JsonNullableFilter<"Insight">
+    criadoEm?: DateTimeFilter<"Insight"> | Date | string
+    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+  }
+
+  export type InsightOrderByWithRelationInput = {
+    id?: SortOrder
+    idUsuario?: SortOrder
+    tipo?: SortOrder
+    titulo?: SortOrder
+    descricao?: SortOrder
+    dados?: SortOrderInput | SortOrder
+    criadoEm?: SortOrder
+    usuario?: UsuarioOrderByWithRelationInput
+  }
+
+  export type InsightWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: InsightWhereInput | InsightWhereInput[]
+    OR?: InsightWhereInput[]
+    NOT?: InsightWhereInput | InsightWhereInput[]
+    idUsuario?: StringFilter<"Insight"> | string
+    tipo?: StringFilter<"Insight"> | string
+    titulo?: StringFilter<"Insight"> | string
+    descricao?: StringFilter<"Insight"> | string
+    dados?: JsonNullableFilter<"Insight">
+    criadoEm?: DateTimeFilter<"Insight"> | Date | string
+    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+  }, "id">
+
+  export type InsightOrderByWithAggregationInput = {
+    id?: SortOrder
+    idUsuario?: SortOrder
+    tipo?: SortOrder
+    titulo?: SortOrder
+    descricao?: SortOrder
+    dados?: SortOrderInput | SortOrder
+    criadoEm?: SortOrder
+    _count?: InsightCountOrderByAggregateInput
+    _max?: InsightMaxOrderByAggregateInput
+    _min?: InsightMinOrderByAggregateInput
+  }
+
+  export type InsightScalarWhereWithAggregatesInput = {
+    AND?: InsightScalarWhereWithAggregatesInput | InsightScalarWhereWithAggregatesInput[]
+    OR?: InsightScalarWhereWithAggregatesInput[]
+    NOT?: InsightScalarWhereWithAggregatesInput | InsightScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Insight"> | string
+    idUsuario?: StringWithAggregatesFilter<"Insight"> | string
+    tipo?: StringWithAggregatesFilter<"Insight"> | string
+    titulo?: StringWithAggregatesFilter<"Insight"> | string
+    descricao?: StringWithAggregatesFilter<"Insight"> | string
+    dados?: JsonNullableWithAggregatesFilter<"Insight">
+    criadoEm?: DateTimeWithAggregatesFilter<"Insight"> | Date | string
+  }
+
+  export type FinancialAlertWhereInput = {
+    AND?: FinancialAlertWhereInput | FinancialAlertWhereInput[]
+    OR?: FinancialAlertWhereInput[]
+    NOT?: FinancialAlertWhereInput | FinancialAlertWhereInput[]
+    id?: StringFilter<"FinancialAlert"> | string
+    idUsuario?: StringFilter<"FinancialAlert"> | string
+    tipo?: StringFilter<"FinancialAlert"> | string
+    severidade?: StringFilter<"FinancialAlert"> | string
+    titulo?: StringFilter<"FinancialAlert"> | string
+    mensagem?: StringFilter<"FinancialAlert"> | string
+    dados?: JsonNullableFilter<"FinancialAlert">
+    lidoEm?: DateTimeNullableFilter<"FinancialAlert"> | Date | string | null
+    criadoEm?: DateTimeFilter<"FinancialAlert"> | Date | string
+    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+  }
+
+  export type FinancialAlertOrderByWithRelationInput = {
+    id?: SortOrder
+    idUsuario?: SortOrder
+    tipo?: SortOrder
+    severidade?: SortOrder
+    titulo?: SortOrder
+    mensagem?: SortOrder
+    dados?: SortOrderInput | SortOrder
+    lidoEm?: SortOrderInput | SortOrder
+    criadoEm?: SortOrder
+    usuario?: UsuarioOrderByWithRelationInput
+  }
+
+  export type FinancialAlertWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FinancialAlertWhereInput | FinancialAlertWhereInput[]
+    OR?: FinancialAlertWhereInput[]
+    NOT?: FinancialAlertWhereInput | FinancialAlertWhereInput[]
+    idUsuario?: StringFilter<"FinancialAlert"> | string
+    tipo?: StringFilter<"FinancialAlert"> | string
+    severidade?: StringFilter<"FinancialAlert"> | string
+    titulo?: StringFilter<"FinancialAlert"> | string
+    mensagem?: StringFilter<"FinancialAlert"> | string
+    dados?: JsonNullableFilter<"FinancialAlert">
+    lidoEm?: DateTimeNullableFilter<"FinancialAlert"> | Date | string | null
+    criadoEm?: DateTimeFilter<"FinancialAlert"> | Date | string
+    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+  }, "id">
+
+  export type FinancialAlertOrderByWithAggregationInput = {
+    id?: SortOrder
+    idUsuario?: SortOrder
+    tipo?: SortOrder
+    severidade?: SortOrder
+    titulo?: SortOrder
+    mensagem?: SortOrder
+    dados?: SortOrderInput | SortOrder
+    lidoEm?: SortOrderInput | SortOrder
+    criadoEm?: SortOrder
+    _count?: FinancialAlertCountOrderByAggregateInput
+    _max?: FinancialAlertMaxOrderByAggregateInput
+    _min?: FinancialAlertMinOrderByAggregateInput
+  }
+
+  export type FinancialAlertScalarWhereWithAggregatesInput = {
+    AND?: FinancialAlertScalarWhereWithAggregatesInput | FinancialAlertScalarWhereWithAggregatesInput[]
+    OR?: FinancialAlertScalarWhereWithAggregatesInput[]
+    NOT?: FinancialAlertScalarWhereWithAggregatesInput | FinancialAlertScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FinancialAlert"> | string
+    idUsuario?: StringWithAggregatesFilter<"FinancialAlert"> | string
+    tipo?: StringWithAggregatesFilter<"FinancialAlert"> | string
+    severidade?: StringWithAggregatesFilter<"FinancialAlert"> | string
+    titulo?: StringWithAggregatesFilter<"FinancialAlert"> | string
+    mensagem?: StringWithAggregatesFilter<"FinancialAlert"> | string
+    dados?: JsonNullableWithAggregatesFilter<"FinancialAlert">
+    lidoEm?: DateTimeNullableWithAggregatesFilter<"FinancialAlert"> | Date | string | null
+    criadoEm?: DateTimeWithAggregatesFilter<"FinancialAlert"> | Date | string
+  }
+
+  export type NotificationWhereInput = {
+    AND?: NotificationWhereInput | NotificationWhereInput[]
+    OR?: NotificationWhereInput[]
+    NOT?: NotificationWhereInput | NotificationWhereInput[]
+    id?: StringFilter<"Notification"> | string
+    idUsuario?: StringFilter<"Notification"> | string
+    tipo?: StringFilter<"Notification"> | string
+    titulo?: StringFilter<"Notification"> | string
+    mensagem?: StringFilter<"Notification"> | string
+    canal?: StringFilter<"Notification"> | string
+    status?: StringFilter<"Notification"> | string
+    dados?: JsonNullableFilter<"Notification">
+    enviadaEm?: DateTimeNullableFilter<"Notification"> | Date | string | null
+    lidaEm?: DateTimeNullableFilter<"Notification"> | Date | string | null
+    erro?: StringNullableFilter<"Notification"> | string | null
+    criadoEm?: DateTimeFilter<"Notification"> | Date | string
+    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+  }
+
+  export type NotificationOrderByWithRelationInput = {
+    id?: SortOrder
+    idUsuario?: SortOrder
+    tipo?: SortOrder
+    titulo?: SortOrder
+    mensagem?: SortOrder
+    canal?: SortOrder
+    status?: SortOrder
+    dados?: SortOrderInput | SortOrder
+    enviadaEm?: SortOrderInput | SortOrder
+    lidaEm?: SortOrderInput | SortOrder
+    erro?: SortOrderInput | SortOrder
+    criadoEm?: SortOrder
+    usuario?: UsuarioOrderByWithRelationInput
+  }
+
+  export type NotificationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: NotificationWhereInput | NotificationWhereInput[]
+    OR?: NotificationWhereInput[]
+    NOT?: NotificationWhereInput | NotificationWhereInput[]
+    idUsuario?: StringFilter<"Notification"> | string
+    tipo?: StringFilter<"Notification"> | string
+    titulo?: StringFilter<"Notification"> | string
+    mensagem?: StringFilter<"Notification"> | string
+    canal?: StringFilter<"Notification"> | string
+    status?: StringFilter<"Notification"> | string
+    dados?: JsonNullableFilter<"Notification">
+    enviadaEm?: DateTimeNullableFilter<"Notification"> | Date | string | null
+    lidaEm?: DateTimeNullableFilter<"Notification"> | Date | string | null
+    erro?: StringNullableFilter<"Notification"> | string | null
+    criadoEm?: DateTimeFilter<"Notification"> | Date | string
+    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+  }, "id">
+
+  export type NotificationOrderByWithAggregationInput = {
+    id?: SortOrder
+    idUsuario?: SortOrder
+    tipo?: SortOrder
+    titulo?: SortOrder
+    mensagem?: SortOrder
+    canal?: SortOrder
+    status?: SortOrder
+    dados?: SortOrderInput | SortOrder
+    enviadaEm?: SortOrderInput | SortOrder
+    lidaEm?: SortOrderInput | SortOrder
+    erro?: SortOrderInput | SortOrder
+    criadoEm?: SortOrder
+    _count?: NotificationCountOrderByAggregateInput
+    _max?: NotificationMaxOrderByAggregateInput
+    _min?: NotificationMinOrderByAggregateInput
+  }
+
+  export type NotificationScalarWhereWithAggregatesInput = {
+    AND?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
+    OR?: NotificationScalarWhereWithAggregatesInput[]
+    NOT?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Notification"> | string
+    idUsuario?: StringWithAggregatesFilter<"Notification"> | string
+    tipo?: StringWithAggregatesFilter<"Notification"> | string
+    titulo?: StringWithAggregatesFilter<"Notification"> | string
+    mensagem?: StringWithAggregatesFilter<"Notification"> | string
+    canal?: StringWithAggregatesFilter<"Notification"> | string
+    status?: StringWithAggregatesFilter<"Notification"> | string
+    dados?: JsonNullableWithAggregatesFilter<"Notification">
+    enviadaEm?: DateTimeNullableWithAggregatesFilter<"Notification"> | Date | string | null
+    lidaEm?: DateTimeNullableWithAggregatesFilter<"Notification"> | Date | string | null
+    erro?: StringNullableWithAggregatesFilter<"Notification"> | string | null
+    criadoEm?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
+  }
+
   export type UsuarioCreateInput = {
     id?: string
     nome: string
@@ -8032,6 +13432,10 @@ export namespace Prisma {
     lancamentos?: LancamentoCreateNestedManyWithoutUsuarioInput
     orcamentos?: OrcamentoCreateNestedManyWithoutUsuarioInput
     contas?: ContaCreateNestedManyWithoutUsuarioInput
+    analyticJobs?: AnalyticJobCreateNestedManyWithoutUsuarioInput
+    insights?: InsightCreateNestedManyWithoutUsuarioInput
+    alertas?: FinancialAlertCreateNestedManyWithoutUsuarioInput
+    notificacoes?: NotificationCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateInput = {
@@ -8045,6 +13449,10 @@ export namespace Prisma {
     lancamentos?: LancamentoUncheckedCreateNestedManyWithoutUsuarioInput
     orcamentos?: OrcamentoUncheckedCreateNestedManyWithoutUsuarioInput
     contas?: ContaUncheckedCreateNestedManyWithoutUsuarioInput
+    analyticJobs?: AnalyticJobUncheckedCreateNestedManyWithoutUsuarioInput
+    insights?: InsightUncheckedCreateNestedManyWithoutUsuarioInput
+    alertas?: FinancialAlertUncheckedCreateNestedManyWithoutUsuarioInput
+    notificacoes?: NotificationUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUpdateInput = {
@@ -8058,6 +13466,10 @@ export namespace Prisma {
     lancamentos?: LancamentoUpdateManyWithoutUsuarioNestedInput
     orcamentos?: OrcamentoUpdateManyWithoutUsuarioNestedInput
     contas?: ContaUpdateManyWithoutUsuarioNestedInput
+    analyticJobs?: AnalyticJobUpdateManyWithoutUsuarioNestedInput
+    insights?: InsightUpdateManyWithoutUsuarioNestedInput
+    alertas?: FinancialAlertUpdateManyWithoutUsuarioNestedInput
+    notificacoes?: NotificationUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateInput = {
@@ -8071,6 +13483,10 @@ export namespace Prisma {
     lancamentos?: LancamentoUncheckedUpdateManyWithoutUsuarioNestedInput
     orcamentos?: OrcamentoUncheckedUpdateManyWithoutUsuarioNestedInput
     contas?: ContaUncheckedUpdateManyWithoutUsuarioNestedInput
+    analyticJobs?: AnalyticJobUncheckedUpdateManyWithoutUsuarioNestedInput
+    insights?: InsightUncheckedUpdateManyWithoutUsuarioNestedInput
+    alertas?: FinancialAlertUncheckedUpdateManyWithoutUsuarioNestedInput
+    notificacoes?: NotificationUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioCreateManyInput = {
@@ -8448,6 +13864,352 @@ export namespace Prisma {
     atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type AnalyticJobCreateInput = {
+    id?: string
+    tipo: string
+    status: string
+    payload: JsonNullValueInput | InputJsonValue
+    resultado?: NullableJsonNullValueInput | InputJsonValue
+    erro?: string | null
+    criadoEm?: Date | string
+    iniciadoEm?: Date | string | null
+    finalizadoEm?: Date | string | null
+    usuario: UsuarioCreateNestedOneWithoutAnalyticJobsInput
+  }
+
+  export type AnalyticJobUncheckedCreateInput = {
+    id?: string
+    idUsuario: string
+    tipo: string
+    status: string
+    payload: JsonNullValueInput | InputJsonValue
+    resultado?: NullableJsonNullValueInput | InputJsonValue
+    erro?: string | null
+    criadoEm?: Date | string
+    iniciadoEm?: Date | string | null
+    finalizadoEm?: Date | string | null
+  }
+
+  export type AnalyticJobUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    payload?: JsonNullValueInput | InputJsonValue
+    resultado?: NullableJsonNullValueInput | InputJsonValue
+    erro?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    iniciadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalizadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    usuario?: UsuarioUpdateOneRequiredWithoutAnalyticJobsNestedInput
+  }
+
+  export type AnalyticJobUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    idUsuario?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    payload?: JsonNullValueInput | InputJsonValue
+    resultado?: NullableJsonNullValueInput | InputJsonValue
+    erro?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    iniciadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalizadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AnalyticJobCreateManyInput = {
+    id?: string
+    idUsuario: string
+    tipo: string
+    status: string
+    payload: JsonNullValueInput | InputJsonValue
+    resultado?: NullableJsonNullValueInput | InputJsonValue
+    erro?: string | null
+    criadoEm?: Date | string
+    iniciadoEm?: Date | string | null
+    finalizadoEm?: Date | string | null
+  }
+
+  export type AnalyticJobUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    payload?: JsonNullValueInput | InputJsonValue
+    resultado?: NullableJsonNullValueInput | InputJsonValue
+    erro?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    iniciadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalizadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AnalyticJobUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    idUsuario?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    payload?: JsonNullValueInput | InputJsonValue
+    resultado?: NullableJsonNullValueInput | InputJsonValue
+    erro?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    iniciadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalizadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type InsightCreateInput = {
+    id?: string
+    tipo: string
+    titulo: string
+    descricao: string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    criadoEm?: Date | string
+    usuario: UsuarioCreateNestedOneWithoutInsightsInput
+  }
+
+  export type InsightUncheckedCreateInput = {
+    id?: string
+    idUsuario: string
+    tipo: string
+    titulo: string
+    descricao: string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    criadoEm?: Date | string
+  }
+
+  export type InsightUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    usuario?: UsuarioUpdateOneRequiredWithoutInsightsNestedInput
+  }
+
+  export type InsightUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    idUsuario?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InsightCreateManyInput = {
+    id?: string
+    idUsuario: string
+    tipo: string
+    titulo: string
+    descricao: string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    criadoEm?: Date | string
+  }
+
+  export type InsightUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InsightUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    idUsuario?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FinancialAlertCreateInput = {
+    id?: string
+    tipo: string
+    severidade: string
+    titulo: string
+    mensagem: string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    lidoEm?: Date | string | null
+    criadoEm?: Date | string
+    usuario: UsuarioCreateNestedOneWithoutAlertasInput
+  }
+
+  export type FinancialAlertUncheckedCreateInput = {
+    id?: string
+    idUsuario: string
+    tipo: string
+    severidade: string
+    titulo: string
+    mensagem: string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    lidoEm?: Date | string | null
+    criadoEm?: Date | string
+  }
+
+  export type FinancialAlertUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    severidade?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    lidoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    usuario?: UsuarioUpdateOneRequiredWithoutAlertasNestedInput
+  }
+
+  export type FinancialAlertUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    idUsuario?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    severidade?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    lidoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FinancialAlertCreateManyInput = {
+    id?: string
+    idUsuario: string
+    tipo: string
+    severidade: string
+    titulo: string
+    mensagem: string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    lidoEm?: Date | string | null
+    criadoEm?: Date | string
+  }
+
+  export type FinancialAlertUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    severidade?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    lidoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FinancialAlertUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    idUsuario?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    severidade?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    lidoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationCreateInput = {
+    id?: string
+    tipo: string
+    titulo: string
+    mensagem: string
+    canal: string
+    status: string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    enviadaEm?: Date | string | null
+    lidaEm?: Date | string | null
+    erro?: string | null
+    criadoEm?: Date | string
+    usuario: UsuarioCreateNestedOneWithoutNotificacoesInput
+  }
+
+  export type NotificationUncheckedCreateInput = {
+    id?: string
+    idUsuario: string
+    tipo: string
+    titulo: string
+    mensagem: string
+    canal: string
+    status: string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    enviadaEm?: Date | string | null
+    lidaEm?: Date | string | null
+    erro?: string | null
+    criadoEm?: Date | string
+  }
+
+  export type NotificationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    canal?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    enviadaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lidaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    erro?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    usuario?: UsuarioUpdateOneRequiredWithoutNotificacoesNestedInput
+  }
+
+  export type NotificationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    idUsuario?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    canal?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    enviadaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lidaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    erro?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationCreateManyInput = {
+    id?: string
+    idUsuario: string
+    tipo: string
+    titulo: string
+    mensagem: string
+    canal: string
+    status: string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    enviadaEm?: Date | string | null
+    lidaEm?: Date | string | null
+    erro?: string | null
+    criadoEm?: Date | string
+  }
+
+  export type NotificationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    canal?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    enviadaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lidaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    erro?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    idUsuario?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    canal?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    enviadaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lidaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    erro?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -8498,6 +14260,30 @@ export namespace Prisma {
     none?: ContaWhereInput
   }
 
+  export type AnalyticJobListRelationFilter = {
+    every?: AnalyticJobWhereInput
+    some?: AnalyticJobWhereInput
+    none?: AnalyticJobWhereInput
+  }
+
+  export type InsightListRelationFilter = {
+    every?: InsightWhereInput
+    some?: InsightWhereInput
+    none?: InsightWhereInput
+  }
+
+  export type FinancialAlertListRelationFilter = {
+    every?: FinancialAlertWhereInput
+    some?: FinancialAlertWhereInput
+    none?: FinancialAlertWhereInput
+  }
+
+  export type NotificationListRelationFilter = {
+    every?: NotificationWhereInput
+    some?: NotificationWhereInput
+    none?: NotificationWhereInput
+  }
+
   export type CategoriaOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -8511,6 +14297,22 @@ export namespace Prisma {
   }
 
   export type ContaOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AnalyticJobOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type InsightOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FinancialAlertOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type NotificationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -8967,6 +14769,269 @@ export namespace Prisma {
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
   }
+  export type JsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type AnalyticJobCountOrderByAggregateInput = {
+    id?: SortOrder
+    idUsuario?: SortOrder
+    tipo?: SortOrder
+    status?: SortOrder
+    payload?: SortOrder
+    resultado?: SortOrder
+    erro?: SortOrder
+    criadoEm?: SortOrder
+    iniciadoEm?: SortOrder
+    finalizadoEm?: SortOrder
+  }
+
+  export type AnalyticJobMaxOrderByAggregateInput = {
+    id?: SortOrder
+    idUsuario?: SortOrder
+    tipo?: SortOrder
+    status?: SortOrder
+    erro?: SortOrder
+    criadoEm?: SortOrder
+    iniciadoEm?: SortOrder
+    finalizadoEm?: SortOrder
+  }
+
+  export type AnalyticJobMinOrderByAggregateInput = {
+    id?: SortOrder
+    idUsuario?: SortOrder
+    tipo?: SortOrder
+    status?: SortOrder
+    erro?: SortOrder
+    criadoEm?: SortOrder
+    iniciadoEm?: SortOrder
+    finalizadoEm?: SortOrder
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type InsightCountOrderByAggregateInput = {
+    id?: SortOrder
+    idUsuario?: SortOrder
+    tipo?: SortOrder
+    titulo?: SortOrder
+    descricao?: SortOrder
+    dados?: SortOrder
+    criadoEm?: SortOrder
+  }
+
+  export type InsightMaxOrderByAggregateInput = {
+    id?: SortOrder
+    idUsuario?: SortOrder
+    tipo?: SortOrder
+    titulo?: SortOrder
+    descricao?: SortOrder
+    criadoEm?: SortOrder
+  }
+
+  export type InsightMinOrderByAggregateInput = {
+    id?: SortOrder
+    idUsuario?: SortOrder
+    tipo?: SortOrder
+    titulo?: SortOrder
+    descricao?: SortOrder
+    criadoEm?: SortOrder
+  }
+
+  export type FinancialAlertCountOrderByAggregateInput = {
+    id?: SortOrder
+    idUsuario?: SortOrder
+    tipo?: SortOrder
+    severidade?: SortOrder
+    titulo?: SortOrder
+    mensagem?: SortOrder
+    dados?: SortOrder
+    lidoEm?: SortOrder
+    criadoEm?: SortOrder
+  }
+
+  export type FinancialAlertMaxOrderByAggregateInput = {
+    id?: SortOrder
+    idUsuario?: SortOrder
+    tipo?: SortOrder
+    severidade?: SortOrder
+    titulo?: SortOrder
+    mensagem?: SortOrder
+    lidoEm?: SortOrder
+    criadoEm?: SortOrder
+  }
+
+  export type FinancialAlertMinOrderByAggregateInput = {
+    id?: SortOrder
+    idUsuario?: SortOrder
+    tipo?: SortOrder
+    severidade?: SortOrder
+    titulo?: SortOrder
+    mensagem?: SortOrder
+    lidoEm?: SortOrder
+    criadoEm?: SortOrder
+  }
+
+  export type NotificationCountOrderByAggregateInput = {
+    id?: SortOrder
+    idUsuario?: SortOrder
+    tipo?: SortOrder
+    titulo?: SortOrder
+    mensagem?: SortOrder
+    canal?: SortOrder
+    status?: SortOrder
+    dados?: SortOrder
+    enviadaEm?: SortOrder
+    lidaEm?: SortOrder
+    erro?: SortOrder
+    criadoEm?: SortOrder
+  }
+
+  export type NotificationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    idUsuario?: SortOrder
+    tipo?: SortOrder
+    titulo?: SortOrder
+    mensagem?: SortOrder
+    canal?: SortOrder
+    status?: SortOrder
+    enviadaEm?: SortOrder
+    lidaEm?: SortOrder
+    erro?: SortOrder
+    criadoEm?: SortOrder
+  }
+
+  export type NotificationMinOrderByAggregateInput = {
+    id?: SortOrder
+    idUsuario?: SortOrder
+    tipo?: SortOrder
+    titulo?: SortOrder
+    mensagem?: SortOrder
+    canal?: SortOrder
+    status?: SortOrder
+    enviadaEm?: SortOrder
+    lidaEm?: SortOrder
+    erro?: SortOrder
+    criadoEm?: SortOrder
+  }
 
   export type CategoriaCreateNestedManyWithoutUsuarioInput = {
     create?: XOR<CategoriaCreateWithoutUsuarioInput, CategoriaUncheckedCreateWithoutUsuarioInput> | CategoriaCreateWithoutUsuarioInput[] | CategoriaUncheckedCreateWithoutUsuarioInput[]
@@ -8996,6 +15061,34 @@ export namespace Prisma {
     connect?: ContaWhereUniqueInput | ContaWhereUniqueInput[]
   }
 
+  export type AnalyticJobCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<AnalyticJobCreateWithoutUsuarioInput, AnalyticJobUncheckedCreateWithoutUsuarioInput> | AnalyticJobCreateWithoutUsuarioInput[] | AnalyticJobUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: AnalyticJobCreateOrConnectWithoutUsuarioInput | AnalyticJobCreateOrConnectWithoutUsuarioInput[]
+    createMany?: AnalyticJobCreateManyUsuarioInputEnvelope
+    connect?: AnalyticJobWhereUniqueInput | AnalyticJobWhereUniqueInput[]
+  }
+
+  export type InsightCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<InsightCreateWithoutUsuarioInput, InsightUncheckedCreateWithoutUsuarioInput> | InsightCreateWithoutUsuarioInput[] | InsightUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: InsightCreateOrConnectWithoutUsuarioInput | InsightCreateOrConnectWithoutUsuarioInput[]
+    createMany?: InsightCreateManyUsuarioInputEnvelope
+    connect?: InsightWhereUniqueInput | InsightWhereUniqueInput[]
+  }
+
+  export type FinancialAlertCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<FinancialAlertCreateWithoutUsuarioInput, FinancialAlertUncheckedCreateWithoutUsuarioInput> | FinancialAlertCreateWithoutUsuarioInput[] | FinancialAlertUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: FinancialAlertCreateOrConnectWithoutUsuarioInput | FinancialAlertCreateOrConnectWithoutUsuarioInput[]
+    createMany?: FinancialAlertCreateManyUsuarioInputEnvelope
+    connect?: FinancialAlertWhereUniqueInput | FinancialAlertWhereUniqueInput[]
+  }
+
+  export type NotificationCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<NotificationCreateWithoutUsuarioInput, NotificationUncheckedCreateWithoutUsuarioInput> | NotificationCreateWithoutUsuarioInput[] | NotificationUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUsuarioInput | NotificationCreateOrConnectWithoutUsuarioInput[]
+    createMany?: NotificationCreateManyUsuarioInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
   export type CategoriaUncheckedCreateNestedManyWithoutUsuarioInput = {
     create?: XOR<CategoriaCreateWithoutUsuarioInput, CategoriaUncheckedCreateWithoutUsuarioInput> | CategoriaCreateWithoutUsuarioInput[] | CategoriaUncheckedCreateWithoutUsuarioInput[]
     connectOrCreate?: CategoriaCreateOrConnectWithoutUsuarioInput | CategoriaCreateOrConnectWithoutUsuarioInput[]
@@ -9022,6 +15115,34 @@ export namespace Prisma {
     connectOrCreate?: ContaCreateOrConnectWithoutUsuarioInput | ContaCreateOrConnectWithoutUsuarioInput[]
     createMany?: ContaCreateManyUsuarioInputEnvelope
     connect?: ContaWhereUniqueInput | ContaWhereUniqueInput[]
+  }
+
+  export type AnalyticJobUncheckedCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<AnalyticJobCreateWithoutUsuarioInput, AnalyticJobUncheckedCreateWithoutUsuarioInput> | AnalyticJobCreateWithoutUsuarioInput[] | AnalyticJobUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: AnalyticJobCreateOrConnectWithoutUsuarioInput | AnalyticJobCreateOrConnectWithoutUsuarioInput[]
+    createMany?: AnalyticJobCreateManyUsuarioInputEnvelope
+    connect?: AnalyticJobWhereUniqueInput | AnalyticJobWhereUniqueInput[]
+  }
+
+  export type InsightUncheckedCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<InsightCreateWithoutUsuarioInput, InsightUncheckedCreateWithoutUsuarioInput> | InsightCreateWithoutUsuarioInput[] | InsightUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: InsightCreateOrConnectWithoutUsuarioInput | InsightCreateOrConnectWithoutUsuarioInput[]
+    createMany?: InsightCreateManyUsuarioInputEnvelope
+    connect?: InsightWhereUniqueInput | InsightWhereUniqueInput[]
+  }
+
+  export type FinancialAlertUncheckedCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<FinancialAlertCreateWithoutUsuarioInput, FinancialAlertUncheckedCreateWithoutUsuarioInput> | FinancialAlertCreateWithoutUsuarioInput[] | FinancialAlertUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: FinancialAlertCreateOrConnectWithoutUsuarioInput | FinancialAlertCreateOrConnectWithoutUsuarioInput[]
+    createMany?: FinancialAlertCreateManyUsuarioInputEnvelope
+    connect?: FinancialAlertWhereUniqueInput | FinancialAlertWhereUniqueInput[]
+  }
+
+  export type NotificationUncheckedCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<NotificationCreateWithoutUsuarioInput, NotificationUncheckedCreateWithoutUsuarioInput> | NotificationCreateWithoutUsuarioInput[] | NotificationUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUsuarioInput | NotificationCreateOrConnectWithoutUsuarioInput[]
+    createMany?: NotificationCreateManyUsuarioInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -9088,6 +15209,62 @@ export namespace Prisma {
     deleteMany?: ContaScalarWhereInput | ContaScalarWhereInput[]
   }
 
+  export type AnalyticJobUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<AnalyticJobCreateWithoutUsuarioInput, AnalyticJobUncheckedCreateWithoutUsuarioInput> | AnalyticJobCreateWithoutUsuarioInput[] | AnalyticJobUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: AnalyticJobCreateOrConnectWithoutUsuarioInput | AnalyticJobCreateOrConnectWithoutUsuarioInput[]
+    upsert?: AnalyticJobUpsertWithWhereUniqueWithoutUsuarioInput | AnalyticJobUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: AnalyticJobCreateManyUsuarioInputEnvelope
+    set?: AnalyticJobWhereUniqueInput | AnalyticJobWhereUniqueInput[]
+    disconnect?: AnalyticJobWhereUniqueInput | AnalyticJobWhereUniqueInput[]
+    delete?: AnalyticJobWhereUniqueInput | AnalyticJobWhereUniqueInput[]
+    connect?: AnalyticJobWhereUniqueInput | AnalyticJobWhereUniqueInput[]
+    update?: AnalyticJobUpdateWithWhereUniqueWithoutUsuarioInput | AnalyticJobUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: AnalyticJobUpdateManyWithWhereWithoutUsuarioInput | AnalyticJobUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: AnalyticJobScalarWhereInput | AnalyticJobScalarWhereInput[]
+  }
+
+  export type InsightUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<InsightCreateWithoutUsuarioInput, InsightUncheckedCreateWithoutUsuarioInput> | InsightCreateWithoutUsuarioInput[] | InsightUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: InsightCreateOrConnectWithoutUsuarioInput | InsightCreateOrConnectWithoutUsuarioInput[]
+    upsert?: InsightUpsertWithWhereUniqueWithoutUsuarioInput | InsightUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: InsightCreateManyUsuarioInputEnvelope
+    set?: InsightWhereUniqueInput | InsightWhereUniqueInput[]
+    disconnect?: InsightWhereUniqueInput | InsightWhereUniqueInput[]
+    delete?: InsightWhereUniqueInput | InsightWhereUniqueInput[]
+    connect?: InsightWhereUniqueInput | InsightWhereUniqueInput[]
+    update?: InsightUpdateWithWhereUniqueWithoutUsuarioInput | InsightUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: InsightUpdateManyWithWhereWithoutUsuarioInput | InsightUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: InsightScalarWhereInput | InsightScalarWhereInput[]
+  }
+
+  export type FinancialAlertUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<FinancialAlertCreateWithoutUsuarioInput, FinancialAlertUncheckedCreateWithoutUsuarioInput> | FinancialAlertCreateWithoutUsuarioInput[] | FinancialAlertUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: FinancialAlertCreateOrConnectWithoutUsuarioInput | FinancialAlertCreateOrConnectWithoutUsuarioInput[]
+    upsert?: FinancialAlertUpsertWithWhereUniqueWithoutUsuarioInput | FinancialAlertUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: FinancialAlertCreateManyUsuarioInputEnvelope
+    set?: FinancialAlertWhereUniqueInput | FinancialAlertWhereUniqueInput[]
+    disconnect?: FinancialAlertWhereUniqueInput | FinancialAlertWhereUniqueInput[]
+    delete?: FinancialAlertWhereUniqueInput | FinancialAlertWhereUniqueInput[]
+    connect?: FinancialAlertWhereUniqueInput | FinancialAlertWhereUniqueInput[]
+    update?: FinancialAlertUpdateWithWhereUniqueWithoutUsuarioInput | FinancialAlertUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: FinancialAlertUpdateManyWithWhereWithoutUsuarioInput | FinancialAlertUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: FinancialAlertScalarWhereInput | FinancialAlertScalarWhereInput[]
+  }
+
+  export type NotificationUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<NotificationCreateWithoutUsuarioInput, NotificationUncheckedCreateWithoutUsuarioInput> | NotificationCreateWithoutUsuarioInput[] | NotificationUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUsuarioInput | NotificationCreateOrConnectWithoutUsuarioInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutUsuarioInput | NotificationUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: NotificationCreateManyUsuarioInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutUsuarioInput | NotificationUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutUsuarioInput | NotificationUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
   export type CategoriaUncheckedUpdateManyWithoutUsuarioNestedInput = {
     create?: XOR<CategoriaCreateWithoutUsuarioInput, CategoriaUncheckedCreateWithoutUsuarioInput> | CategoriaCreateWithoutUsuarioInput[] | CategoriaUncheckedCreateWithoutUsuarioInput[]
     connectOrCreate?: CategoriaCreateOrConnectWithoutUsuarioInput | CategoriaCreateOrConnectWithoutUsuarioInput[]
@@ -9142,6 +15319,62 @@ export namespace Prisma {
     update?: ContaUpdateWithWhereUniqueWithoutUsuarioInput | ContaUpdateWithWhereUniqueWithoutUsuarioInput[]
     updateMany?: ContaUpdateManyWithWhereWithoutUsuarioInput | ContaUpdateManyWithWhereWithoutUsuarioInput[]
     deleteMany?: ContaScalarWhereInput | ContaScalarWhereInput[]
+  }
+
+  export type AnalyticJobUncheckedUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<AnalyticJobCreateWithoutUsuarioInput, AnalyticJobUncheckedCreateWithoutUsuarioInput> | AnalyticJobCreateWithoutUsuarioInput[] | AnalyticJobUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: AnalyticJobCreateOrConnectWithoutUsuarioInput | AnalyticJobCreateOrConnectWithoutUsuarioInput[]
+    upsert?: AnalyticJobUpsertWithWhereUniqueWithoutUsuarioInput | AnalyticJobUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: AnalyticJobCreateManyUsuarioInputEnvelope
+    set?: AnalyticJobWhereUniqueInput | AnalyticJobWhereUniqueInput[]
+    disconnect?: AnalyticJobWhereUniqueInput | AnalyticJobWhereUniqueInput[]
+    delete?: AnalyticJobWhereUniqueInput | AnalyticJobWhereUniqueInput[]
+    connect?: AnalyticJobWhereUniqueInput | AnalyticJobWhereUniqueInput[]
+    update?: AnalyticJobUpdateWithWhereUniqueWithoutUsuarioInput | AnalyticJobUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: AnalyticJobUpdateManyWithWhereWithoutUsuarioInput | AnalyticJobUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: AnalyticJobScalarWhereInput | AnalyticJobScalarWhereInput[]
+  }
+
+  export type InsightUncheckedUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<InsightCreateWithoutUsuarioInput, InsightUncheckedCreateWithoutUsuarioInput> | InsightCreateWithoutUsuarioInput[] | InsightUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: InsightCreateOrConnectWithoutUsuarioInput | InsightCreateOrConnectWithoutUsuarioInput[]
+    upsert?: InsightUpsertWithWhereUniqueWithoutUsuarioInput | InsightUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: InsightCreateManyUsuarioInputEnvelope
+    set?: InsightWhereUniqueInput | InsightWhereUniqueInput[]
+    disconnect?: InsightWhereUniqueInput | InsightWhereUniqueInput[]
+    delete?: InsightWhereUniqueInput | InsightWhereUniqueInput[]
+    connect?: InsightWhereUniqueInput | InsightWhereUniqueInput[]
+    update?: InsightUpdateWithWhereUniqueWithoutUsuarioInput | InsightUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: InsightUpdateManyWithWhereWithoutUsuarioInput | InsightUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: InsightScalarWhereInput | InsightScalarWhereInput[]
+  }
+
+  export type FinancialAlertUncheckedUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<FinancialAlertCreateWithoutUsuarioInput, FinancialAlertUncheckedCreateWithoutUsuarioInput> | FinancialAlertCreateWithoutUsuarioInput[] | FinancialAlertUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: FinancialAlertCreateOrConnectWithoutUsuarioInput | FinancialAlertCreateOrConnectWithoutUsuarioInput[]
+    upsert?: FinancialAlertUpsertWithWhereUniqueWithoutUsuarioInput | FinancialAlertUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: FinancialAlertCreateManyUsuarioInputEnvelope
+    set?: FinancialAlertWhereUniqueInput | FinancialAlertWhereUniqueInput[]
+    disconnect?: FinancialAlertWhereUniqueInput | FinancialAlertWhereUniqueInput[]
+    delete?: FinancialAlertWhereUniqueInput | FinancialAlertWhereUniqueInput[]
+    connect?: FinancialAlertWhereUniqueInput | FinancialAlertWhereUniqueInput[]
+    update?: FinancialAlertUpdateWithWhereUniqueWithoutUsuarioInput | FinancialAlertUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: FinancialAlertUpdateManyWithWhereWithoutUsuarioInput | FinancialAlertUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: FinancialAlertScalarWhereInput | FinancialAlertScalarWhereInput[]
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<NotificationCreateWithoutUsuarioInput, NotificationUncheckedCreateWithoutUsuarioInput> | NotificationCreateWithoutUsuarioInput[] | NotificationUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUsuarioInput | NotificationCreateOrConnectWithoutUsuarioInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutUsuarioInput | NotificationUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: NotificationCreateManyUsuarioInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutUsuarioInput | NotificationUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutUsuarioInput | NotificationUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
   export type UsuarioCreateNestedOneWithoutCategoriasInput = {
@@ -9418,6 +15651,66 @@ export namespace Prisma {
     update?: XOR<XOR<CategoriaUpdateToOneWithWhereWithoutOrcamentosInput, CategoriaUpdateWithoutOrcamentosInput>, CategoriaUncheckedUpdateWithoutOrcamentosInput>
   }
 
+  export type UsuarioCreateNestedOneWithoutAnalyticJobsInput = {
+    create?: XOR<UsuarioCreateWithoutAnalyticJobsInput, UsuarioUncheckedCreateWithoutAnalyticJobsInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutAnalyticJobsInput
+    connect?: UsuarioWhereUniqueInput
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type UsuarioUpdateOneRequiredWithoutAnalyticJobsNestedInput = {
+    create?: XOR<UsuarioCreateWithoutAnalyticJobsInput, UsuarioUncheckedCreateWithoutAnalyticJobsInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutAnalyticJobsInput
+    upsert?: UsuarioUpsertWithoutAnalyticJobsInput
+    connect?: UsuarioWhereUniqueInput
+    update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutAnalyticJobsInput, UsuarioUpdateWithoutAnalyticJobsInput>, UsuarioUncheckedUpdateWithoutAnalyticJobsInput>
+  }
+
+  export type UsuarioCreateNestedOneWithoutInsightsInput = {
+    create?: XOR<UsuarioCreateWithoutInsightsInput, UsuarioUncheckedCreateWithoutInsightsInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutInsightsInput
+    connect?: UsuarioWhereUniqueInput
+  }
+
+  export type UsuarioUpdateOneRequiredWithoutInsightsNestedInput = {
+    create?: XOR<UsuarioCreateWithoutInsightsInput, UsuarioUncheckedCreateWithoutInsightsInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutInsightsInput
+    upsert?: UsuarioUpsertWithoutInsightsInput
+    connect?: UsuarioWhereUniqueInput
+    update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutInsightsInput, UsuarioUpdateWithoutInsightsInput>, UsuarioUncheckedUpdateWithoutInsightsInput>
+  }
+
+  export type UsuarioCreateNestedOneWithoutAlertasInput = {
+    create?: XOR<UsuarioCreateWithoutAlertasInput, UsuarioUncheckedCreateWithoutAlertasInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutAlertasInput
+    connect?: UsuarioWhereUniqueInput
+  }
+
+  export type UsuarioUpdateOneRequiredWithoutAlertasNestedInput = {
+    create?: XOR<UsuarioCreateWithoutAlertasInput, UsuarioUncheckedCreateWithoutAlertasInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutAlertasInput
+    upsert?: UsuarioUpsertWithoutAlertasInput
+    connect?: UsuarioWhereUniqueInput
+    update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutAlertasInput, UsuarioUpdateWithoutAlertasInput>, UsuarioUncheckedUpdateWithoutAlertasInput>
+  }
+
+  export type UsuarioCreateNestedOneWithoutNotificacoesInput = {
+    create?: XOR<UsuarioCreateWithoutNotificacoesInput, UsuarioUncheckedCreateWithoutNotificacoesInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutNotificacoesInput
+    connect?: UsuarioWhereUniqueInput
+  }
+
+  export type UsuarioUpdateOneRequiredWithoutNotificacoesNestedInput = {
+    create?: XOR<UsuarioCreateWithoutNotificacoesInput, UsuarioUncheckedCreateWithoutNotificacoesInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutNotificacoesInput
+    upsert?: UsuarioUpsertWithoutNotificacoesInput
+    connect?: UsuarioWhereUniqueInput
+    update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutNotificacoesInput, UsuarioUpdateWithoutNotificacoesInput>, UsuarioUncheckedUpdateWithoutNotificacoesInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -9679,6 +15972,77 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+  export type NestedJsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type CategoriaCreateWithoutUsuarioInput = {
     id?: string
     nome: string
@@ -9815,6 +16179,138 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type AnalyticJobCreateWithoutUsuarioInput = {
+    id?: string
+    tipo: string
+    status: string
+    payload: JsonNullValueInput | InputJsonValue
+    resultado?: NullableJsonNullValueInput | InputJsonValue
+    erro?: string | null
+    criadoEm?: Date | string
+    iniciadoEm?: Date | string | null
+    finalizadoEm?: Date | string | null
+  }
+
+  export type AnalyticJobUncheckedCreateWithoutUsuarioInput = {
+    id?: string
+    tipo: string
+    status: string
+    payload: JsonNullValueInput | InputJsonValue
+    resultado?: NullableJsonNullValueInput | InputJsonValue
+    erro?: string | null
+    criadoEm?: Date | string
+    iniciadoEm?: Date | string | null
+    finalizadoEm?: Date | string | null
+  }
+
+  export type AnalyticJobCreateOrConnectWithoutUsuarioInput = {
+    where: AnalyticJobWhereUniqueInput
+    create: XOR<AnalyticJobCreateWithoutUsuarioInput, AnalyticJobUncheckedCreateWithoutUsuarioInput>
+  }
+
+  export type AnalyticJobCreateManyUsuarioInputEnvelope = {
+    data: AnalyticJobCreateManyUsuarioInput | AnalyticJobCreateManyUsuarioInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type InsightCreateWithoutUsuarioInput = {
+    id?: string
+    tipo: string
+    titulo: string
+    descricao: string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    criadoEm?: Date | string
+  }
+
+  export type InsightUncheckedCreateWithoutUsuarioInput = {
+    id?: string
+    tipo: string
+    titulo: string
+    descricao: string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    criadoEm?: Date | string
+  }
+
+  export type InsightCreateOrConnectWithoutUsuarioInput = {
+    where: InsightWhereUniqueInput
+    create: XOR<InsightCreateWithoutUsuarioInput, InsightUncheckedCreateWithoutUsuarioInput>
+  }
+
+  export type InsightCreateManyUsuarioInputEnvelope = {
+    data: InsightCreateManyUsuarioInput | InsightCreateManyUsuarioInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FinancialAlertCreateWithoutUsuarioInput = {
+    id?: string
+    tipo: string
+    severidade: string
+    titulo: string
+    mensagem: string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    lidoEm?: Date | string | null
+    criadoEm?: Date | string
+  }
+
+  export type FinancialAlertUncheckedCreateWithoutUsuarioInput = {
+    id?: string
+    tipo: string
+    severidade: string
+    titulo: string
+    mensagem: string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    lidoEm?: Date | string | null
+    criadoEm?: Date | string
+  }
+
+  export type FinancialAlertCreateOrConnectWithoutUsuarioInput = {
+    where: FinancialAlertWhereUniqueInput
+    create: XOR<FinancialAlertCreateWithoutUsuarioInput, FinancialAlertUncheckedCreateWithoutUsuarioInput>
+  }
+
+  export type FinancialAlertCreateManyUsuarioInputEnvelope = {
+    data: FinancialAlertCreateManyUsuarioInput | FinancialAlertCreateManyUsuarioInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type NotificationCreateWithoutUsuarioInput = {
+    id?: string
+    tipo: string
+    titulo: string
+    mensagem: string
+    canal: string
+    status: string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    enviadaEm?: Date | string | null
+    lidaEm?: Date | string | null
+    erro?: string | null
+    criadoEm?: Date | string
+  }
+
+  export type NotificationUncheckedCreateWithoutUsuarioInput = {
+    id?: string
+    tipo: string
+    titulo: string
+    mensagem: string
+    canal: string
+    status: string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    enviadaEm?: Date | string | null
+    lidaEm?: Date | string | null
+    erro?: string | null
+    criadoEm?: Date | string
+  }
+
+  export type NotificationCreateOrConnectWithoutUsuarioInput = {
+    where: NotificationWhereUniqueInput
+    create: XOR<NotificationCreateWithoutUsuarioInput, NotificationUncheckedCreateWithoutUsuarioInput>
+  }
+
+  export type NotificationCreateManyUsuarioInputEnvelope = {
+    data: NotificationCreateManyUsuarioInput | NotificationCreateManyUsuarioInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CategoriaUpsertWithWhereUniqueWithoutUsuarioInput = {
     where: CategoriaWhereUniqueInput
     update: XOR<CategoriaUpdateWithoutUsuarioInput, CategoriaUncheckedUpdateWithoutUsuarioInput>
@@ -9940,6 +16436,132 @@ export namespace Prisma {
     atualizadoEm?: DateTimeFilter<"Conta"> | Date | string
   }
 
+  export type AnalyticJobUpsertWithWhereUniqueWithoutUsuarioInput = {
+    where: AnalyticJobWhereUniqueInput
+    update: XOR<AnalyticJobUpdateWithoutUsuarioInput, AnalyticJobUncheckedUpdateWithoutUsuarioInput>
+    create: XOR<AnalyticJobCreateWithoutUsuarioInput, AnalyticJobUncheckedCreateWithoutUsuarioInput>
+  }
+
+  export type AnalyticJobUpdateWithWhereUniqueWithoutUsuarioInput = {
+    where: AnalyticJobWhereUniqueInput
+    data: XOR<AnalyticJobUpdateWithoutUsuarioInput, AnalyticJobUncheckedUpdateWithoutUsuarioInput>
+  }
+
+  export type AnalyticJobUpdateManyWithWhereWithoutUsuarioInput = {
+    where: AnalyticJobScalarWhereInput
+    data: XOR<AnalyticJobUpdateManyMutationInput, AnalyticJobUncheckedUpdateManyWithoutUsuarioInput>
+  }
+
+  export type AnalyticJobScalarWhereInput = {
+    AND?: AnalyticJobScalarWhereInput | AnalyticJobScalarWhereInput[]
+    OR?: AnalyticJobScalarWhereInput[]
+    NOT?: AnalyticJobScalarWhereInput | AnalyticJobScalarWhereInput[]
+    id?: StringFilter<"AnalyticJob"> | string
+    idUsuario?: StringFilter<"AnalyticJob"> | string
+    tipo?: StringFilter<"AnalyticJob"> | string
+    status?: StringFilter<"AnalyticJob"> | string
+    payload?: JsonFilter<"AnalyticJob">
+    resultado?: JsonNullableFilter<"AnalyticJob">
+    erro?: StringNullableFilter<"AnalyticJob"> | string | null
+    criadoEm?: DateTimeFilter<"AnalyticJob"> | Date | string
+    iniciadoEm?: DateTimeNullableFilter<"AnalyticJob"> | Date | string | null
+    finalizadoEm?: DateTimeNullableFilter<"AnalyticJob"> | Date | string | null
+  }
+
+  export type InsightUpsertWithWhereUniqueWithoutUsuarioInput = {
+    where: InsightWhereUniqueInput
+    update: XOR<InsightUpdateWithoutUsuarioInput, InsightUncheckedUpdateWithoutUsuarioInput>
+    create: XOR<InsightCreateWithoutUsuarioInput, InsightUncheckedCreateWithoutUsuarioInput>
+  }
+
+  export type InsightUpdateWithWhereUniqueWithoutUsuarioInput = {
+    where: InsightWhereUniqueInput
+    data: XOR<InsightUpdateWithoutUsuarioInput, InsightUncheckedUpdateWithoutUsuarioInput>
+  }
+
+  export type InsightUpdateManyWithWhereWithoutUsuarioInput = {
+    where: InsightScalarWhereInput
+    data: XOR<InsightUpdateManyMutationInput, InsightUncheckedUpdateManyWithoutUsuarioInput>
+  }
+
+  export type InsightScalarWhereInput = {
+    AND?: InsightScalarWhereInput | InsightScalarWhereInput[]
+    OR?: InsightScalarWhereInput[]
+    NOT?: InsightScalarWhereInput | InsightScalarWhereInput[]
+    id?: StringFilter<"Insight"> | string
+    idUsuario?: StringFilter<"Insight"> | string
+    tipo?: StringFilter<"Insight"> | string
+    titulo?: StringFilter<"Insight"> | string
+    descricao?: StringFilter<"Insight"> | string
+    dados?: JsonNullableFilter<"Insight">
+    criadoEm?: DateTimeFilter<"Insight"> | Date | string
+  }
+
+  export type FinancialAlertUpsertWithWhereUniqueWithoutUsuarioInput = {
+    where: FinancialAlertWhereUniqueInput
+    update: XOR<FinancialAlertUpdateWithoutUsuarioInput, FinancialAlertUncheckedUpdateWithoutUsuarioInput>
+    create: XOR<FinancialAlertCreateWithoutUsuarioInput, FinancialAlertUncheckedCreateWithoutUsuarioInput>
+  }
+
+  export type FinancialAlertUpdateWithWhereUniqueWithoutUsuarioInput = {
+    where: FinancialAlertWhereUniqueInput
+    data: XOR<FinancialAlertUpdateWithoutUsuarioInput, FinancialAlertUncheckedUpdateWithoutUsuarioInput>
+  }
+
+  export type FinancialAlertUpdateManyWithWhereWithoutUsuarioInput = {
+    where: FinancialAlertScalarWhereInput
+    data: XOR<FinancialAlertUpdateManyMutationInput, FinancialAlertUncheckedUpdateManyWithoutUsuarioInput>
+  }
+
+  export type FinancialAlertScalarWhereInput = {
+    AND?: FinancialAlertScalarWhereInput | FinancialAlertScalarWhereInput[]
+    OR?: FinancialAlertScalarWhereInput[]
+    NOT?: FinancialAlertScalarWhereInput | FinancialAlertScalarWhereInput[]
+    id?: StringFilter<"FinancialAlert"> | string
+    idUsuario?: StringFilter<"FinancialAlert"> | string
+    tipo?: StringFilter<"FinancialAlert"> | string
+    severidade?: StringFilter<"FinancialAlert"> | string
+    titulo?: StringFilter<"FinancialAlert"> | string
+    mensagem?: StringFilter<"FinancialAlert"> | string
+    dados?: JsonNullableFilter<"FinancialAlert">
+    lidoEm?: DateTimeNullableFilter<"FinancialAlert"> | Date | string | null
+    criadoEm?: DateTimeFilter<"FinancialAlert"> | Date | string
+  }
+
+  export type NotificationUpsertWithWhereUniqueWithoutUsuarioInput = {
+    where: NotificationWhereUniqueInput
+    update: XOR<NotificationUpdateWithoutUsuarioInput, NotificationUncheckedUpdateWithoutUsuarioInput>
+    create: XOR<NotificationCreateWithoutUsuarioInput, NotificationUncheckedCreateWithoutUsuarioInput>
+  }
+
+  export type NotificationUpdateWithWhereUniqueWithoutUsuarioInput = {
+    where: NotificationWhereUniqueInput
+    data: XOR<NotificationUpdateWithoutUsuarioInput, NotificationUncheckedUpdateWithoutUsuarioInput>
+  }
+
+  export type NotificationUpdateManyWithWhereWithoutUsuarioInput = {
+    where: NotificationScalarWhereInput
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutUsuarioInput>
+  }
+
+  export type NotificationScalarWhereInput = {
+    AND?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+    OR?: NotificationScalarWhereInput[]
+    NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+    id?: StringFilter<"Notification"> | string
+    idUsuario?: StringFilter<"Notification"> | string
+    tipo?: StringFilter<"Notification"> | string
+    titulo?: StringFilter<"Notification"> | string
+    mensagem?: StringFilter<"Notification"> | string
+    canal?: StringFilter<"Notification"> | string
+    status?: StringFilter<"Notification"> | string
+    dados?: JsonNullableFilter<"Notification">
+    enviadaEm?: DateTimeNullableFilter<"Notification"> | Date | string | null
+    lidaEm?: DateTimeNullableFilter<"Notification"> | Date | string | null
+    erro?: StringNullableFilter<"Notification"> | string | null
+    criadoEm?: DateTimeFilter<"Notification"> | Date | string
+  }
+
   export type UsuarioCreateWithoutCategoriasInput = {
     id?: string
     nome: string
@@ -9950,6 +16572,10 @@ export namespace Prisma {
     lancamentos?: LancamentoCreateNestedManyWithoutUsuarioInput
     orcamentos?: OrcamentoCreateNestedManyWithoutUsuarioInput
     contas?: ContaCreateNestedManyWithoutUsuarioInput
+    analyticJobs?: AnalyticJobCreateNestedManyWithoutUsuarioInput
+    insights?: InsightCreateNestedManyWithoutUsuarioInput
+    alertas?: FinancialAlertCreateNestedManyWithoutUsuarioInput
+    notificacoes?: NotificationCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateWithoutCategoriasInput = {
@@ -9962,6 +16588,10 @@ export namespace Prisma {
     lancamentos?: LancamentoUncheckedCreateNestedManyWithoutUsuarioInput
     orcamentos?: OrcamentoUncheckedCreateNestedManyWithoutUsuarioInput
     contas?: ContaUncheckedCreateNestedManyWithoutUsuarioInput
+    analyticJobs?: AnalyticJobUncheckedCreateNestedManyWithoutUsuarioInput
+    insights?: InsightUncheckedCreateNestedManyWithoutUsuarioInput
+    alertas?: FinancialAlertUncheckedCreateNestedManyWithoutUsuarioInput
+    notificacoes?: NotificationUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioCreateOrConnectWithoutCategoriasInput = {
@@ -10058,6 +16688,10 @@ export namespace Prisma {
     lancamentos?: LancamentoUpdateManyWithoutUsuarioNestedInput
     orcamentos?: OrcamentoUpdateManyWithoutUsuarioNestedInput
     contas?: ContaUpdateManyWithoutUsuarioNestedInput
+    analyticJobs?: AnalyticJobUpdateManyWithoutUsuarioNestedInput
+    insights?: InsightUpdateManyWithoutUsuarioNestedInput
+    alertas?: FinancialAlertUpdateManyWithoutUsuarioNestedInput
+    notificacoes?: NotificationUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateWithoutCategoriasInput = {
@@ -10070,6 +16704,10 @@ export namespace Prisma {
     lancamentos?: LancamentoUncheckedUpdateManyWithoutUsuarioNestedInput
     orcamentos?: OrcamentoUncheckedUpdateManyWithoutUsuarioNestedInput
     contas?: ContaUncheckedUpdateManyWithoutUsuarioNestedInput
+    analyticJobs?: AnalyticJobUncheckedUpdateManyWithoutUsuarioNestedInput
+    insights?: InsightUncheckedUpdateManyWithoutUsuarioNestedInput
+    alertas?: FinancialAlertUncheckedUpdateManyWithoutUsuarioNestedInput
+    notificacoes?: NotificationUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type LancamentoUpsertWithWhereUniqueWithoutCategoriaInput = {
@@ -10114,6 +16752,10 @@ export namespace Prisma {
     categorias?: CategoriaCreateNestedManyWithoutUsuarioInput
     orcamentos?: OrcamentoCreateNestedManyWithoutUsuarioInput
     contas?: ContaCreateNestedManyWithoutUsuarioInput
+    analyticJobs?: AnalyticJobCreateNestedManyWithoutUsuarioInput
+    insights?: InsightCreateNestedManyWithoutUsuarioInput
+    alertas?: FinancialAlertCreateNestedManyWithoutUsuarioInput
+    notificacoes?: NotificationCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateWithoutLancamentosInput = {
@@ -10126,6 +16768,10 @@ export namespace Prisma {
     categorias?: CategoriaUncheckedCreateNestedManyWithoutUsuarioInput
     orcamentos?: OrcamentoUncheckedCreateNestedManyWithoutUsuarioInput
     contas?: ContaUncheckedCreateNestedManyWithoutUsuarioInput
+    analyticJobs?: AnalyticJobUncheckedCreateNestedManyWithoutUsuarioInput
+    insights?: InsightUncheckedCreateNestedManyWithoutUsuarioInput
+    alertas?: FinancialAlertUncheckedCreateNestedManyWithoutUsuarioInput
+    notificacoes?: NotificationUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioCreateOrConnectWithoutLancamentosInput = {
@@ -10212,6 +16858,10 @@ export namespace Prisma {
     categorias?: CategoriaUpdateManyWithoutUsuarioNestedInput
     orcamentos?: OrcamentoUpdateManyWithoutUsuarioNestedInput
     contas?: ContaUpdateManyWithoutUsuarioNestedInput
+    analyticJobs?: AnalyticJobUpdateManyWithoutUsuarioNestedInput
+    insights?: InsightUpdateManyWithoutUsuarioNestedInput
+    alertas?: FinancialAlertUpdateManyWithoutUsuarioNestedInput
+    notificacoes?: NotificationUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateWithoutLancamentosInput = {
@@ -10224,6 +16874,10 @@ export namespace Prisma {
     categorias?: CategoriaUncheckedUpdateManyWithoutUsuarioNestedInput
     orcamentos?: OrcamentoUncheckedUpdateManyWithoutUsuarioNestedInput
     contas?: ContaUncheckedUpdateManyWithoutUsuarioNestedInput
+    analyticJobs?: AnalyticJobUncheckedUpdateManyWithoutUsuarioNestedInput
+    insights?: InsightUncheckedUpdateManyWithoutUsuarioNestedInput
+    alertas?: FinancialAlertUncheckedUpdateManyWithoutUsuarioNestedInput
+    notificacoes?: NotificationUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type CategoriaUpsertWithoutLancamentosInput = {
@@ -10306,6 +16960,10 @@ export namespace Prisma {
     categorias?: CategoriaCreateNestedManyWithoutUsuarioInput
     lancamentos?: LancamentoCreateNestedManyWithoutUsuarioInput
     orcamentos?: OrcamentoCreateNestedManyWithoutUsuarioInput
+    analyticJobs?: AnalyticJobCreateNestedManyWithoutUsuarioInput
+    insights?: InsightCreateNestedManyWithoutUsuarioInput
+    alertas?: FinancialAlertCreateNestedManyWithoutUsuarioInput
+    notificacoes?: NotificationCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateWithoutContasInput = {
@@ -10318,6 +16976,10 @@ export namespace Prisma {
     categorias?: CategoriaUncheckedCreateNestedManyWithoutUsuarioInput
     lancamentos?: LancamentoUncheckedCreateNestedManyWithoutUsuarioInput
     orcamentos?: OrcamentoUncheckedCreateNestedManyWithoutUsuarioInput
+    analyticJobs?: AnalyticJobUncheckedCreateNestedManyWithoutUsuarioInput
+    insights?: InsightUncheckedCreateNestedManyWithoutUsuarioInput
+    alertas?: FinancialAlertUncheckedCreateNestedManyWithoutUsuarioInput
+    notificacoes?: NotificationUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioCreateOrConnectWithoutContasInput = {
@@ -10382,6 +17044,10 @@ export namespace Prisma {
     categorias?: CategoriaUpdateManyWithoutUsuarioNestedInput
     lancamentos?: LancamentoUpdateManyWithoutUsuarioNestedInput
     orcamentos?: OrcamentoUpdateManyWithoutUsuarioNestedInput
+    analyticJobs?: AnalyticJobUpdateManyWithoutUsuarioNestedInput
+    insights?: InsightUpdateManyWithoutUsuarioNestedInput
+    alertas?: FinancialAlertUpdateManyWithoutUsuarioNestedInput
+    notificacoes?: NotificationUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateWithoutContasInput = {
@@ -10394,6 +17060,10 @@ export namespace Prisma {
     categorias?: CategoriaUncheckedUpdateManyWithoutUsuarioNestedInput
     lancamentos?: LancamentoUncheckedUpdateManyWithoutUsuarioNestedInput
     orcamentos?: OrcamentoUncheckedUpdateManyWithoutUsuarioNestedInput
+    analyticJobs?: AnalyticJobUncheckedUpdateManyWithoutUsuarioNestedInput
+    insights?: InsightUncheckedUpdateManyWithoutUsuarioNestedInput
+    alertas?: FinancialAlertUncheckedUpdateManyWithoutUsuarioNestedInput
+    notificacoes?: NotificationUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type LancamentoUpsertWithWhereUniqueWithoutContaInput = {
@@ -10422,6 +17092,10 @@ export namespace Prisma {
     categorias?: CategoriaCreateNestedManyWithoutUsuarioInput
     lancamentos?: LancamentoCreateNestedManyWithoutUsuarioInput
     contas?: ContaCreateNestedManyWithoutUsuarioInput
+    analyticJobs?: AnalyticJobCreateNestedManyWithoutUsuarioInput
+    insights?: InsightCreateNestedManyWithoutUsuarioInput
+    alertas?: FinancialAlertCreateNestedManyWithoutUsuarioInput
+    notificacoes?: NotificationCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateWithoutOrcamentosInput = {
@@ -10434,6 +17108,10 @@ export namespace Prisma {
     categorias?: CategoriaUncheckedCreateNestedManyWithoutUsuarioInput
     lancamentos?: LancamentoUncheckedCreateNestedManyWithoutUsuarioInput
     contas?: ContaUncheckedCreateNestedManyWithoutUsuarioInput
+    analyticJobs?: AnalyticJobUncheckedCreateNestedManyWithoutUsuarioInput
+    insights?: InsightUncheckedCreateNestedManyWithoutUsuarioInput
+    alertas?: FinancialAlertUncheckedCreateNestedManyWithoutUsuarioInput
+    notificacoes?: NotificationUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioCreateOrConnectWithoutOrcamentosInput = {
@@ -10489,6 +17167,10 @@ export namespace Prisma {
     categorias?: CategoriaUpdateManyWithoutUsuarioNestedInput
     lancamentos?: LancamentoUpdateManyWithoutUsuarioNestedInput
     contas?: ContaUpdateManyWithoutUsuarioNestedInput
+    analyticJobs?: AnalyticJobUpdateManyWithoutUsuarioNestedInput
+    insights?: InsightUpdateManyWithoutUsuarioNestedInput
+    alertas?: FinancialAlertUpdateManyWithoutUsuarioNestedInput
+    notificacoes?: NotificationUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateWithoutOrcamentosInput = {
@@ -10501,6 +17183,10 @@ export namespace Prisma {
     categorias?: CategoriaUncheckedUpdateManyWithoutUsuarioNestedInput
     lancamentos?: LancamentoUncheckedUpdateManyWithoutUsuarioNestedInput
     contas?: ContaUncheckedUpdateManyWithoutUsuarioNestedInput
+    analyticJobs?: AnalyticJobUncheckedUpdateManyWithoutUsuarioNestedInput
+    insights?: InsightUncheckedUpdateManyWithoutUsuarioNestedInput
+    alertas?: FinancialAlertUncheckedUpdateManyWithoutUsuarioNestedInput
+    notificacoes?: NotificationUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type CategoriaUpsertWithoutOrcamentosInput = {
@@ -10534,6 +17220,326 @@ export namespace Prisma {
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
     atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
     lancamentos?: LancamentoUncheckedUpdateManyWithoutCategoriaNestedInput
+  }
+
+  export type UsuarioCreateWithoutAnalyticJobsInput = {
+    id?: string
+    nome: string
+    email: string
+    senhaHash: string
+    criadoEm?: Date | string
+    atualizadoEm?: Date | string
+    categorias?: CategoriaCreateNestedManyWithoutUsuarioInput
+    lancamentos?: LancamentoCreateNestedManyWithoutUsuarioInput
+    orcamentos?: OrcamentoCreateNestedManyWithoutUsuarioInput
+    contas?: ContaCreateNestedManyWithoutUsuarioInput
+    insights?: InsightCreateNestedManyWithoutUsuarioInput
+    alertas?: FinancialAlertCreateNestedManyWithoutUsuarioInput
+    notificacoes?: NotificationCreateNestedManyWithoutUsuarioInput
+  }
+
+  export type UsuarioUncheckedCreateWithoutAnalyticJobsInput = {
+    id?: string
+    nome: string
+    email: string
+    senhaHash: string
+    criadoEm?: Date | string
+    atualizadoEm?: Date | string
+    categorias?: CategoriaUncheckedCreateNestedManyWithoutUsuarioInput
+    lancamentos?: LancamentoUncheckedCreateNestedManyWithoutUsuarioInput
+    orcamentos?: OrcamentoUncheckedCreateNestedManyWithoutUsuarioInput
+    contas?: ContaUncheckedCreateNestedManyWithoutUsuarioInput
+    insights?: InsightUncheckedCreateNestedManyWithoutUsuarioInput
+    alertas?: FinancialAlertUncheckedCreateNestedManyWithoutUsuarioInput
+    notificacoes?: NotificationUncheckedCreateNestedManyWithoutUsuarioInput
+  }
+
+  export type UsuarioCreateOrConnectWithoutAnalyticJobsInput = {
+    where: UsuarioWhereUniqueInput
+    create: XOR<UsuarioCreateWithoutAnalyticJobsInput, UsuarioUncheckedCreateWithoutAnalyticJobsInput>
+  }
+
+  export type UsuarioUpsertWithoutAnalyticJobsInput = {
+    update: XOR<UsuarioUpdateWithoutAnalyticJobsInput, UsuarioUncheckedUpdateWithoutAnalyticJobsInput>
+    create: XOR<UsuarioCreateWithoutAnalyticJobsInput, UsuarioUncheckedCreateWithoutAnalyticJobsInput>
+    where?: UsuarioWhereInput
+  }
+
+  export type UsuarioUpdateToOneWithWhereWithoutAnalyticJobsInput = {
+    where?: UsuarioWhereInput
+    data: XOR<UsuarioUpdateWithoutAnalyticJobsInput, UsuarioUncheckedUpdateWithoutAnalyticJobsInput>
+  }
+
+  export type UsuarioUpdateWithoutAnalyticJobsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    senhaHash?: StringFieldUpdateOperationsInput | string
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorias?: CategoriaUpdateManyWithoutUsuarioNestedInput
+    lancamentos?: LancamentoUpdateManyWithoutUsuarioNestedInput
+    orcamentos?: OrcamentoUpdateManyWithoutUsuarioNestedInput
+    contas?: ContaUpdateManyWithoutUsuarioNestedInput
+    insights?: InsightUpdateManyWithoutUsuarioNestedInput
+    alertas?: FinancialAlertUpdateManyWithoutUsuarioNestedInput
+    notificacoes?: NotificationUpdateManyWithoutUsuarioNestedInput
+  }
+
+  export type UsuarioUncheckedUpdateWithoutAnalyticJobsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    senhaHash?: StringFieldUpdateOperationsInput | string
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorias?: CategoriaUncheckedUpdateManyWithoutUsuarioNestedInput
+    lancamentos?: LancamentoUncheckedUpdateManyWithoutUsuarioNestedInput
+    orcamentos?: OrcamentoUncheckedUpdateManyWithoutUsuarioNestedInput
+    contas?: ContaUncheckedUpdateManyWithoutUsuarioNestedInput
+    insights?: InsightUncheckedUpdateManyWithoutUsuarioNestedInput
+    alertas?: FinancialAlertUncheckedUpdateManyWithoutUsuarioNestedInput
+    notificacoes?: NotificationUncheckedUpdateManyWithoutUsuarioNestedInput
+  }
+
+  export type UsuarioCreateWithoutInsightsInput = {
+    id?: string
+    nome: string
+    email: string
+    senhaHash: string
+    criadoEm?: Date | string
+    atualizadoEm?: Date | string
+    categorias?: CategoriaCreateNestedManyWithoutUsuarioInput
+    lancamentos?: LancamentoCreateNestedManyWithoutUsuarioInput
+    orcamentos?: OrcamentoCreateNestedManyWithoutUsuarioInput
+    contas?: ContaCreateNestedManyWithoutUsuarioInput
+    analyticJobs?: AnalyticJobCreateNestedManyWithoutUsuarioInput
+    alertas?: FinancialAlertCreateNestedManyWithoutUsuarioInput
+    notificacoes?: NotificationCreateNestedManyWithoutUsuarioInput
+  }
+
+  export type UsuarioUncheckedCreateWithoutInsightsInput = {
+    id?: string
+    nome: string
+    email: string
+    senhaHash: string
+    criadoEm?: Date | string
+    atualizadoEm?: Date | string
+    categorias?: CategoriaUncheckedCreateNestedManyWithoutUsuarioInput
+    lancamentos?: LancamentoUncheckedCreateNestedManyWithoutUsuarioInput
+    orcamentos?: OrcamentoUncheckedCreateNestedManyWithoutUsuarioInput
+    contas?: ContaUncheckedCreateNestedManyWithoutUsuarioInput
+    analyticJobs?: AnalyticJobUncheckedCreateNestedManyWithoutUsuarioInput
+    alertas?: FinancialAlertUncheckedCreateNestedManyWithoutUsuarioInput
+    notificacoes?: NotificationUncheckedCreateNestedManyWithoutUsuarioInput
+  }
+
+  export type UsuarioCreateOrConnectWithoutInsightsInput = {
+    where: UsuarioWhereUniqueInput
+    create: XOR<UsuarioCreateWithoutInsightsInput, UsuarioUncheckedCreateWithoutInsightsInput>
+  }
+
+  export type UsuarioUpsertWithoutInsightsInput = {
+    update: XOR<UsuarioUpdateWithoutInsightsInput, UsuarioUncheckedUpdateWithoutInsightsInput>
+    create: XOR<UsuarioCreateWithoutInsightsInput, UsuarioUncheckedCreateWithoutInsightsInput>
+    where?: UsuarioWhereInput
+  }
+
+  export type UsuarioUpdateToOneWithWhereWithoutInsightsInput = {
+    where?: UsuarioWhereInput
+    data: XOR<UsuarioUpdateWithoutInsightsInput, UsuarioUncheckedUpdateWithoutInsightsInput>
+  }
+
+  export type UsuarioUpdateWithoutInsightsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    senhaHash?: StringFieldUpdateOperationsInput | string
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorias?: CategoriaUpdateManyWithoutUsuarioNestedInput
+    lancamentos?: LancamentoUpdateManyWithoutUsuarioNestedInput
+    orcamentos?: OrcamentoUpdateManyWithoutUsuarioNestedInput
+    contas?: ContaUpdateManyWithoutUsuarioNestedInput
+    analyticJobs?: AnalyticJobUpdateManyWithoutUsuarioNestedInput
+    alertas?: FinancialAlertUpdateManyWithoutUsuarioNestedInput
+    notificacoes?: NotificationUpdateManyWithoutUsuarioNestedInput
+  }
+
+  export type UsuarioUncheckedUpdateWithoutInsightsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    senhaHash?: StringFieldUpdateOperationsInput | string
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorias?: CategoriaUncheckedUpdateManyWithoutUsuarioNestedInput
+    lancamentos?: LancamentoUncheckedUpdateManyWithoutUsuarioNestedInput
+    orcamentos?: OrcamentoUncheckedUpdateManyWithoutUsuarioNestedInput
+    contas?: ContaUncheckedUpdateManyWithoutUsuarioNestedInput
+    analyticJobs?: AnalyticJobUncheckedUpdateManyWithoutUsuarioNestedInput
+    alertas?: FinancialAlertUncheckedUpdateManyWithoutUsuarioNestedInput
+    notificacoes?: NotificationUncheckedUpdateManyWithoutUsuarioNestedInput
+  }
+
+  export type UsuarioCreateWithoutAlertasInput = {
+    id?: string
+    nome: string
+    email: string
+    senhaHash: string
+    criadoEm?: Date | string
+    atualizadoEm?: Date | string
+    categorias?: CategoriaCreateNestedManyWithoutUsuarioInput
+    lancamentos?: LancamentoCreateNestedManyWithoutUsuarioInput
+    orcamentos?: OrcamentoCreateNestedManyWithoutUsuarioInput
+    contas?: ContaCreateNestedManyWithoutUsuarioInput
+    analyticJobs?: AnalyticJobCreateNestedManyWithoutUsuarioInput
+    insights?: InsightCreateNestedManyWithoutUsuarioInput
+    notificacoes?: NotificationCreateNestedManyWithoutUsuarioInput
+  }
+
+  export type UsuarioUncheckedCreateWithoutAlertasInput = {
+    id?: string
+    nome: string
+    email: string
+    senhaHash: string
+    criadoEm?: Date | string
+    atualizadoEm?: Date | string
+    categorias?: CategoriaUncheckedCreateNestedManyWithoutUsuarioInput
+    lancamentos?: LancamentoUncheckedCreateNestedManyWithoutUsuarioInput
+    orcamentos?: OrcamentoUncheckedCreateNestedManyWithoutUsuarioInput
+    contas?: ContaUncheckedCreateNestedManyWithoutUsuarioInput
+    analyticJobs?: AnalyticJobUncheckedCreateNestedManyWithoutUsuarioInput
+    insights?: InsightUncheckedCreateNestedManyWithoutUsuarioInput
+    notificacoes?: NotificationUncheckedCreateNestedManyWithoutUsuarioInput
+  }
+
+  export type UsuarioCreateOrConnectWithoutAlertasInput = {
+    where: UsuarioWhereUniqueInput
+    create: XOR<UsuarioCreateWithoutAlertasInput, UsuarioUncheckedCreateWithoutAlertasInput>
+  }
+
+  export type UsuarioUpsertWithoutAlertasInput = {
+    update: XOR<UsuarioUpdateWithoutAlertasInput, UsuarioUncheckedUpdateWithoutAlertasInput>
+    create: XOR<UsuarioCreateWithoutAlertasInput, UsuarioUncheckedCreateWithoutAlertasInput>
+    where?: UsuarioWhereInput
+  }
+
+  export type UsuarioUpdateToOneWithWhereWithoutAlertasInput = {
+    where?: UsuarioWhereInput
+    data: XOR<UsuarioUpdateWithoutAlertasInput, UsuarioUncheckedUpdateWithoutAlertasInput>
+  }
+
+  export type UsuarioUpdateWithoutAlertasInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    senhaHash?: StringFieldUpdateOperationsInput | string
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorias?: CategoriaUpdateManyWithoutUsuarioNestedInput
+    lancamentos?: LancamentoUpdateManyWithoutUsuarioNestedInput
+    orcamentos?: OrcamentoUpdateManyWithoutUsuarioNestedInput
+    contas?: ContaUpdateManyWithoutUsuarioNestedInput
+    analyticJobs?: AnalyticJobUpdateManyWithoutUsuarioNestedInput
+    insights?: InsightUpdateManyWithoutUsuarioNestedInput
+    notificacoes?: NotificationUpdateManyWithoutUsuarioNestedInput
+  }
+
+  export type UsuarioUncheckedUpdateWithoutAlertasInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    senhaHash?: StringFieldUpdateOperationsInput | string
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorias?: CategoriaUncheckedUpdateManyWithoutUsuarioNestedInput
+    lancamentos?: LancamentoUncheckedUpdateManyWithoutUsuarioNestedInput
+    orcamentos?: OrcamentoUncheckedUpdateManyWithoutUsuarioNestedInput
+    contas?: ContaUncheckedUpdateManyWithoutUsuarioNestedInput
+    analyticJobs?: AnalyticJobUncheckedUpdateManyWithoutUsuarioNestedInput
+    insights?: InsightUncheckedUpdateManyWithoutUsuarioNestedInput
+    notificacoes?: NotificationUncheckedUpdateManyWithoutUsuarioNestedInput
+  }
+
+  export type UsuarioCreateWithoutNotificacoesInput = {
+    id?: string
+    nome: string
+    email: string
+    senhaHash: string
+    criadoEm?: Date | string
+    atualizadoEm?: Date | string
+    categorias?: CategoriaCreateNestedManyWithoutUsuarioInput
+    lancamentos?: LancamentoCreateNestedManyWithoutUsuarioInput
+    orcamentos?: OrcamentoCreateNestedManyWithoutUsuarioInput
+    contas?: ContaCreateNestedManyWithoutUsuarioInput
+    analyticJobs?: AnalyticJobCreateNestedManyWithoutUsuarioInput
+    insights?: InsightCreateNestedManyWithoutUsuarioInput
+    alertas?: FinancialAlertCreateNestedManyWithoutUsuarioInput
+  }
+
+  export type UsuarioUncheckedCreateWithoutNotificacoesInput = {
+    id?: string
+    nome: string
+    email: string
+    senhaHash: string
+    criadoEm?: Date | string
+    atualizadoEm?: Date | string
+    categorias?: CategoriaUncheckedCreateNestedManyWithoutUsuarioInput
+    lancamentos?: LancamentoUncheckedCreateNestedManyWithoutUsuarioInput
+    orcamentos?: OrcamentoUncheckedCreateNestedManyWithoutUsuarioInput
+    contas?: ContaUncheckedCreateNestedManyWithoutUsuarioInput
+    analyticJobs?: AnalyticJobUncheckedCreateNestedManyWithoutUsuarioInput
+    insights?: InsightUncheckedCreateNestedManyWithoutUsuarioInput
+    alertas?: FinancialAlertUncheckedCreateNestedManyWithoutUsuarioInput
+  }
+
+  export type UsuarioCreateOrConnectWithoutNotificacoesInput = {
+    where: UsuarioWhereUniqueInput
+    create: XOR<UsuarioCreateWithoutNotificacoesInput, UsuarioUncheckedCreateWithoutNotificacoesInput>
+  }
+
+  export type UsuarioUpsertWithoutNotificacoesInput = {
+    update: XOR<UsuarioUpdateWithoutNotificacoesInput, UsuarioUncheckedUpdateWithoutNotificacoesInput>
+    create: XOR<UsuarioCreateWithoutNotificacoesInput, UsuarioUncheckedCreateWithoutNotificacoesInput>
+    where?: UsuarioWhereInput
+  }
+
+  export type UsuarioUpdateToOneWithWhereWithoutNotificacoesInput = {
+    where?: UsuarioWhereInput
+    data: XOR<UsuarioUpdateWithoutNotificacoesInput, UsuarioUncheckedUpdateWithoutNotificacoesInput>
+  }
+
+  export type UsuarioUpdateWithoutNotificacoesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    senhaHash?: StringFieldUpdateOperationsInput | string
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorias?: CategoriaUpdateManyWithoutUsuarioNestedInput
+    lancamentos?: LancamentoUpdateManyWithoutUsuarioNestedInput
+    orcamentos?: OrcamentoUpdateManyWithoutUsuarioNestedInput
+    contas?: ContaUpdateManyWithoutUsuarioNestedInput
+    analyticJobs?: AnalyticJobUpdateManyWithoutUsuarioNestedInput
+    insights?: InsightUpdateManyWithoutUsuarioNestedInput
+    alertas?: FinancialAlertUpdateManyWithoutUsuarioNestedInput
+  }
+
+  export type UsuarioUncheckedUpdateWithoutNotificacoesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    senhaHash?: StringFieldUpdateOperationsInput | string
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorias?: CategoriaUncheckedUpdateManyWithoutUsuarioNestedInput
+    lancamentos?: LancamentoUncheckedUpdateManyWithoutUsuarioNestedInput
+    orcamentos?: OrcamentoUncheckedUpdateManyWithoutUsuarioNestedInput
+    contas?: ContaUncheckedUpdateManyWithoutUsuarioNestedInput
+    analyticJobs?: AnalyticJobUncheckedUpdateManyWithoutUsuarioNestedInput
+    insights?: InsightUncheckedUpdateManyWithoutUsuarioNestedInput
+    alertas?: FinancialAlertUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type CategoriaCreateManyUsuarioInput = {
@@ -10579,6 +17585,52 @@ export namespace Prisma {
     ativa?: boolean
     criadoEm?: Date | string
     atualizadoEm?: Date | string
+  }
+
+  export type AnalyticJobCreateManyUsuarioInput = {
+    id?: string
+    tipo: string
+    status: string
+    payload: JsonNullValueInput | InputJsonValue
+    resultado?: NullableJsonNullValueInput | InputJsonValue
+    erro?: string | null
+    criadoEm?: Date | string
+    iniciadoEm?: Date | string | null
+    finalizadoEm?: Date | string | null
+  }
+
+  export type InsightCreateManyUsuarioInput = {
+    id?: string
+    tipo: string
+    titulo: string
+    descricao: string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    criadoEm?: Date | string
+  }
+
+  export type FinancialAlertCreateManyUsuarioInput = {
+    id?: string
+    tipo: string
+    severidade: string
+    titulo: string
+    mensagem: string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    lidoEm?: Date | string | null
+    criadoEm?: Date | string
+  }
+
+  export type NotificationCreateManyUsuarioInput = {
+    id?: string
+    tipo: string
+    titulo: string
+    mensagem: string
+    canal: string
+    status: string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    enviadaEm?: Date | string | null
+    lidaEm?: Date | string | null
+    erro?: string | null
+    criadoEm?: Date | string
   }
 
   export type CategoriaUpdateWithoutUsuarioInput = {
@@ -10720,6 +17772,144 @@ export namespace Prisma {
     ativa?: BoolFieldUpdateOperationsInput | boolean
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
     atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AnalyticJobUpdateWithoutUsuarioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    payload?: JsonNullValueInput | InputJsonValue
+    resultado?: NullableJsonNullValueInput | InputJsonValue
+    erro?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    iniciadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalizadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AnalyticJobUncheckedUpdateWithoutUsuarioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    payload?: JsonNullValueInput | InputJsonValue
+    resultado?: NullableJsonNullValueInput | InputJsonValue
+    erro?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    iniciadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalizadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AnalyticJobUncheckedUpdateManyWithoutUsuarioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    payload?: JsonNullValueInput | InputJsonValue
+    resultado?: NullableJsonNullValueInput | InputJsonValue
+    erro?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    iniciadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalizadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type InsightUpdateWithoutUsuarioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InsightUncheckedUpdateWithoutUsuarioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InsightUncheckedUpdateManyWithoutUsuarioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FinancialAlertUpdateWithoutUsuarioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    severidade?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    lidoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FinancialAlertUncheckedUpdateWithoutUsuarioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    severidade?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    lidoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FinancialAlertUncheckedUpdateManyWithoutUsuarioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    severidade?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    lidoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUpdateWithoutUsuarioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    canal?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    enviadaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lidaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    erro?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUncheckedUpdateWithoutUsuarioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    canal?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    enviadaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lidaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    erro?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutUsuarioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tipo?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    canal?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    dados?: NullableJsonNullValueInput | InputJsonValue
+    enviadaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lidaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    erro?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type LancamentoCreateManyCategoriaInput = {

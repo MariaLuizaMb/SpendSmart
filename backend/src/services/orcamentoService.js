@@ -4,10 +4,26 @@ import {
   NotFoundError,
   ValidationError,
 } from "../errors/appError.js";
+import { enqueueBudgetAlertJob } from "../jobs/producers/budgetAlertProducer.js";
+import { enqueueFinancialAnalysisJob } from "../jobs/producers/financialAnalysisProducer.js";
 
 const INCLUDE_CATEGORIA = {
   categoria: true,
 };
+
+async function enqueueFinancialJobs({ idUsuario, eventType, entityId }) {
+  const payload = {
+    userId: idUsuario,
+    eventType,
+    entityType: "budget",
+    entityId,
+  };
+
+  await Promise.all([
+    enqueueFinancialAnalysisJob(payload),
+    enqueueBudgetAlertJob(payload),
+  ]);
+}
 
 function validarValorObrigatorio(valor) {
   if (valor === undefined || valor === null || valor === "") {
@@ -190,7 +206,7 @@ class OrcamentoService {
     }
 
     try {
-      return await prisma.orcamento.create({
+      const orcamento = await prisma.orcamento.create({
         data: {
           idUsuario,
           valor: valorValidado,
@@ -201,6 +217,14 @@ class OrcamentoService {
         },
         include: INCLUDE_CATEGORIA,
       });
+
+      await enqueueFinancialJobs({
+        idUsuario,
+        eventType: "created",
+        entityId: orcamento.id,
+      });
+
+      return orcamento;
     } catch (error) {
       tratarErroPrismaDuplicidade(error);
     }
@@ -329,11 +353,19 @@ class OrcamentoService {
     }
 
     try {
-      return await prisma.orcamento.update({
+      const orcamentoAtualizado = await prisma.orcamento.update({
         where: { id },
         data: dadosAtualizacao,
         include: INCLUDE_CATEGORIA,
       });
+
+      await enqueueFinancialJobs({
+        idUsuario,
+        eventType: "updated",
+        entityId: orcamentoAtualizado.id,
+      });
+
+      return orcamentoAtualizado;
     } catch (error) {
       tratarErroPrismaDuplicidade(error);
     }
@@ -355,6 +387,12 @@ class OrcamentoService {
 
     await prisma.orcamento.delete({
       where: { id },
+    });
+
+    await enqueueFinancialJobs({
+      idUsuario,
+      eventType: "deleted",
+      entityId: id,
     });
 
     return { id, mensagem: "Orçamento removido com sucesso." };

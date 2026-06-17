@@ -1,12 +1,7 @@
 import { TrendingUp } from "lucide-react";
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 
-import BudgetAlertTooltip from "@/components/orcamentos/BudgetAlertTooltip";
-import BudgetStatusBadge from "@/components/orcamentos/BudgetStatusBadge";
-import {
-  formatarMoeda,
-  obterNomeOrcamento,
-} from "@/components/orcamentos/budget-utils";
+import { obterNomeOrcamento } from "@/components/orcamentos/budget-utils";
 import {
   Select,
   SelectContent,
@@ -24,9 +19,11 @@ export default function BudgetUsageCard({
   const possuiOrcamento = Boolean(orcamentoSelecionado);
   const utilizado = orcamentoSelecionado?.utilizado || 0;
   const limite = orcamentoSelecionado?.limite || 0;
-  const restante = orcamentoSelecionado?.restante || 0;
   const percentual = limite ? (utilizado / limite) * 100 : 0;
-  const valorGastoGrafico = Math.min(Math.max(utilizado, 0), Math.max(limite, 0));
+  const valorGastoGrafico = Math.min(
+    Math.max(utilizado, 0),
+    Math.max(limite, 0),
+  );
   const valorRestanteGrafico = Math.max(limite - utilizado, 0);
   const dadosGrafico = [
     { name: "Total gasto", value: valorGastoGrafico },
@@ -36,14 +33,7 @@ export default function BudgetUsageCard({
     limite > 0 && (valorGastoGrafico > 0 || valorRestanteGrafico > 0)
       ? dadosGrafico
       : [{ name: "Total restante", value: 1 }];
-  const alerta =
-    percentual > 100
-      ? "Este orçamento já ultrapassou o limite definido para o período."
-      : percentual > 85
-        ? "Este orçamento está muito próximo do limite definido."
-        : percentual > 60
-          ? "Este orçamento exige atenção para não se aproximar do limite."
-          : "";
+
   const tendencia =
     utilizado <= 0
       ? "Sem movimentações no período"
@@ -79,7 +69,7 @@ export default function BudgetUsageCard({
             onValueChange={onOrcamentoSelecionadoChange}
             disabled={carregando || orcamentos.length === 0}
           >
-            <SelectTrigger className="h-9 w-[118px] rounded-xl bg-white px-3 text-sm">
+            <SelectTrigger className="w-[118px] rounded-xl bg-white text-sm">
               <SelectValue placeholder="Geral" />
             </SelectTrigger>
             <SelectContent align="end">
@@ -129,7 +119,9 @@ export default function BudgetUsageCard({
                         dataKey="value"
                         innerRadius="60%"
                         outerRadius="96%"
-                        paddingAngle={utilizado > 0 && valorRestanteGrafico > 0 ? 2 : 0}
+                        paddingAngle={
+                          utilizado > 0 && valorRestanteGrafico > 0 ? 2 : 0
+                        }
                         startAngle={0}
                         endAngle={360}
                         stroke="#ffffff"
@@ -140,7 +132,9 @@ export default function BudgetUsageCard({
                           <Cell
                             key={item.name}
                             fill={
-                              item.name === "Total gasto" ? "#0f2f64" : "#60aeea"
+                              item.name === "Total gasto"
+                                ? "#0f2f64"
+                                : "#60aeea"
                             }
                           />
                         ))}
@@ -168,18 +162,6 @@ export default function BudgetUsageCard({
               </p>
             </div>
           </>
-        )}
-      </div>
-
-      <div className="mt-3 flex min-h-7 items-center gap-2">
-        {possuiOrcamento && (
-          <BudgetStatusBadge status={orcamentoSelecionado.status} />
-        )}
-        <BudgetAlertTooltip mensagem={alerta} alerta />
-        {possuiOrcamento && (
-          <span className="ml-auto hidden text-xs text-zinc-500 sm:inline">
-            {formatarMoeda(utilizado)} de {formatarMoeda(limite)}
-          </span>
         )}
       </div>
     </section>
