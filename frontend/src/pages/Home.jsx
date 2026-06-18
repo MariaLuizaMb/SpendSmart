@@ -6,6 +6,7 @@ import {
   useRef,
   useState,
 } from "react";
+import PropTypes from "prop-types";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Bell,
@@ -988,6 +989,36 @@ function ListaLancamentos({
   );
 }
 
+ListaLancamentos.propTypes = {
+  lancamentos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      tipo: PropTypes.string,
+      valor: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      dataTransacao: PropTypes.string,
+      categoria: PropTypes.shape({
+        nome: PropTypes.string,
+      }),
+      nomeCategoria: PropTypes.string,
+    })
+  ).isRequired,
+  carregando: PropTypes.bool.isRequired,
+  erro: PropTypes.string,
+  contas: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      nome: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  contaSelecionada: PropTypes.string.isRequired,
+  setContaSelecionada: PropTypes.func.isRequired,
+  onNovoLancamento: PropTypes.func.isRequired,
+};
+
+ListaLancamentos.defaultProps = {
+  erro: "",
+};
+
 function MetricaCard({
   titulo,
   valor,
@@ -1065,6 +1096,22 @@ function MetricaCard({
     </Card>
   );
 }
+
+MetricaCard.propTypes = {
+  titulo: PropTypes.string.isRequired,
+  valor: PropTypes.node.isRequired,
+  descricao: PropTypes.node.isRequired,
+  icone: PropTypes.elementType.isRequired,
+  variante: PropTypes.oneOf(["sky", "indigo", "emerald", "rose", "orange"]),
+  dataUi: PropTypes.string,
+  className: PropTypes.string,
+};
+
+MetricaCard.defaultProps = {
+  variante: "sky",
+  dataUi: "",
+  className: "",
+};
 
 function MetricasCards({ metricas, carregando, erro }) {
   const valorCarregando = carregando ? "Carregando..." : null;
@@ -1790,6 +1837,23 @@ export function NovoLancamentoDialog({
     </Dialog>
   );
 }
+
+NovoLancamentoDialog.propTypes = {
+  aberto: PropTypes.bool.isRequired,
+  onAbertoChange: PropTypes.func.isRequired,
+  contas: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      nome: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  contaSelecionada: PropTypes.string,
+  onLancamentoCriado: PropTypes.func.isRequired,
+};
+
+NovoLancamentoDialog.defaultProps = {
+  contaSelecionada: "",
+};
 
 export default function Home() {
   const usuario = obterUsuario();

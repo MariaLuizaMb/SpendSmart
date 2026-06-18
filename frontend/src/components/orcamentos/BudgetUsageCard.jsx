@@ -1,5 +1,6 @@
 import { TrendingUp } from "lucide-react";
-import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
+import { Pie, PieChart, ResponsiveContainer } from "recharts";
+import PropTypes from "prop-types";
 
 import { obterNomeOrcamento } from "@/components/orcamentos/budget-utils";
 import {
@@ -128,16 +129,6 @@ export default function BudgetUsageCard({
                         strokeWidth={3}
                         isAnimationActive={false}
                       >
-                        {dadosGraficoVisiveis.map((item) => (
-                          <Cell
-                            key={item.name}
-                            fill={
-                              item.name === "Total gasto"
-                                ? "#0f2f64"
-                                : "#60aeea"
-                            }
-                          />
-                        ))}
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
@@ -167,3 +158,26 @@ export default function BudgetUsageCard({
     </section>
   );
 }
+
+BudgetUsageCard.propTypes = {
+  orcamentos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      utilizado: PropTypes.number,
+      limite: PropTypes.number,
+      idCategoria: PropTypes.string,
+    })
+  ).isRequired,
+  orcamentoSelecionado: PropTypes.shape({
+    id: PropTypes.string,
+    utilizado: PropTypes.number,
+    limite: PropTypes.number,
+    idCategoria: PropTypes.string,
+  }),
+  onOrcamentoSelecionadoChange: PropTypes.func.isRequired,
+  carregando: PropTypes.bool.isRequired,
+};
+
+BudgetUsageCard.defaultProps = {
+  orcamentoSelecionado: null,
+};

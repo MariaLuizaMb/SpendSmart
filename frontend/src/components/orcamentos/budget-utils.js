@@ -50,7 +50,7 @@ export function converterValorMonetarioParaNumero(valor) {
   if (!valor) return 0;
 
   const valorNormalizado = String(valor)
-    .replace(/\./g, "")
+    .replaceAll(".", "")
     .replace(",", ".")
     .replace(/[^\d.]/g, "");
 

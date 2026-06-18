@@ -1,5 +1,6 @@
 import { CheckCircle2, LoaderCircle } from "lucide-react";
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -173,3 +174,23 @@ export default function CategoryFormDialog({
     </Dialog>
   );
 }
+
+CategoryFormDialog.propTypes = {
+  aberto: PropTypes.bool.isRequired,
+  categoria: PropTypes.shape({
+    id: PropTypes.string,
+    nome: PropTypes.string,
+    tipo: PropTypes.string,
+  }),
+  salvando: PropTypes.bool.isRequired,
+  erro: PropTypes.string,
+  sucesso: PropTypes.string,
+  onAbertoChange: PropTypes.func.isRequired,
+  onSalvar: PropTypes.func.isRequired,
+};
+
+CategoryFormDialog.defaultProps = {
+  categoria: undefined,
+  erro: "",
+  sucesso: "",
+};

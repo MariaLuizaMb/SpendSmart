@@ -1,4 +1,5 @@
 import { LoaderCircle } from "lucide-react";
+import PropTypes from "prop-types";
 
 import BudgetActions from "@/components/orcamentos/BudgetActions";
 import BudgetProgressBar from "@/components/orcamentos/BudgetProgressBar";
@@ -138,3 +139,31 @@ export default function BudgetsTable({
     </ScrollArea>
   );
 }
+
+BudgetsTable.propTypes = {
+  orcamentos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      limite: PropTypes.number.isRequired,
+      utilizado: PropTypes.number.isRequired,
+      restante: PropTypes.number.isRequired,
+      percentual: PropTypes.number.isRequired,
+      status: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  carregando: PropTypes.bool.isRequired,
+  erro: PropTypes.string,
+  haFiltrosAtivos: PropTypes.bool.isRequired,
+  selecionados: PropTypes.instanceOf(Set).isRequired,
+  todosSelecionados: PropTypes.bool.isRequired,
+  onSelecionarTodos: PropTypes.func.isRequired,
+  onSelecionarOrcamento: PropTypes.func.isRequired,
+  onEditar: PropTypes.func.isRequired,
+  onRemover: PropTypes.func.isRequired,
+  orcamentoRemovendo: PropTypes.string,
+};
+
+BudgetsTable.defaultProps = {
+  erro: "",
+  orcamentoRemovendo: null,
+};

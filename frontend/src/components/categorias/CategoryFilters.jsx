@@ -1,4 +1,5 @@
 import { Search } from "lucide-react";
+import PropTypes from "prop-types";
 
 import { Input } from "@/components/ui/input";
 import {
@@ -76,3 +77,12 @@ export default function CategoryFilters({
     </div>
   );
 }
+
+CategoryFilters.propTypes = {
+  busca: PropTypes.string.isRequired,
+  origem: PropTypes.string.isRequired,
+  uso: PropTypes.string.isRequired,
+  onBuscaChange: PropTypes.func.isRequired,
+  onOrigemChange: PropTypes.func.isRequired,
+  onUsoChange: PropTypes.func.isRequired,
+};

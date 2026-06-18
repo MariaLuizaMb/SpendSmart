@@ -1,4 +1,5 @@
 import { ExternalLink, LoaderCircle, Pencil, Trash2 } from "lucide-react";
+import PropTypes from "prop-types";
 
 import {
   AlertDialog,
@@ -88,3 +89,14 @@ export default function CategoryActions({
     </div>
   );
 }
+
+CategoryActions.propTypes = {
+  categoria: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    nome: PropTypes.string.isRequired,
+  }).isRequired,
+  removendo: PropTypes.bool.isRequired,
+  onEditar: PropTypes.func.isRequired,
+  onRemover: PropTypes.func.isRequired,
+  onVerLancamentos: PropTypes.func.isRequired,
+};

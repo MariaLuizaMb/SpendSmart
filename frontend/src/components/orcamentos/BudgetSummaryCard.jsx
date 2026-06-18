@@ -1,4 +1,5 @@
 import { createElement } from "react";
+import PropTypes from "prop-types";
 
 export default function BudgetSummaryCard({
   titulo,
@@ -58,3 +59,17 @@ export default function BudgetSummaryCard({
     </section>
   );
 }
+
+BudgetSummaryCard.propTypes = {
+  titulo: PropTypes.string.isRequired,
+  valor: PropTypes.node.isRequired,
+  descricao: PropTypes.node.isRequired,
+  icon: PropTypes.elementType.isRequired,
+  variante: PropTypes.oneOf(["zinc", "emerald", "amber", "red", "blue"]),
+  carregando: PropTypes.bool,
+};
+
+BudgetSummaryCard.defaultProps = {
+  variante: "zinc",
+  carregando: false,
+};

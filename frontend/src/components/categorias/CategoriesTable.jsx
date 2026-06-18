@@ -1,4 +1,5 @@
 import { LoaderCircle } from "lucide-react";
+import PropTypes from "prop-types";
 
 import CategoryActions from "@/components/categorias/CategoryActions";
 import {
@@ -147,3 +148,37 @@ export default function CategoriesTable({
     </ScrollArea>
   );
 }
+
+CheckboxTabela.propTypes = {
+  checked: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
+  label: PropTypes.string.isRequired,
+};
+
+CategoriesTable.propTypes = {
+  categorias: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      nome: PropTypes.string,
+      tipo: PropTypes.string,
+      quantidadeLancamentos: PropTypes.number,
+    })
+  ).isRequired,
+  carregando: PropTypes.bool.isRequired,
+  erro: PropTypes.string,
+  haFiltrosAtivos: PropTypes.bool.isRequired,
+  selecionados: PropTypes.instanceOf(Set).isRequired,
+  todosSelecionados: PropTypes.bool.isRequired,
+  codigosCategoria: PropTypes.instanceOf(Map).isRequired,
+  onSelecionarTodas: PropTypes.func.isRequired,
+  onSelecionarCategoria: PropTypes.func.isRequired,
+  onEditar: PropTypes.func.isRequired,
+  onRemover: PropTypes.func.isRequired,
+  onVerLancamentos: PropTypes.func.isRequired,
+  categoriaRemovendo: PropTypes.string,
+};
+
+CategoriesTable.defaultProps = {
+  erro: "",
+  categoriaRemovendo: null,
+};

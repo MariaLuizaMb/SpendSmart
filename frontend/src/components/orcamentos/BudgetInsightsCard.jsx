@@ -1,5 +1,6 @@
 import { createElement } from "react";
 import { FileText, Gauge, TrendingUp } from "lucide-react";
+import PropTypes from "prop-types";
 
 import BudgetAlertTooltip from "@/components/orcamentos/BudgetAlertTooltip";
 import {
@@ -140,3 +141,30 @@ export default function BudgetInsightsCard({ orcamentoGeral, orcamentos }) {
     </section>
   );
 }
+
+InsightBlock.propTypes = {
+  icon: PropTypes.elementType.isRequired,
+  titulo: PropTypes.string.isRequired,
+  texto: PropTypes.node.isRequired,
+  badge: PropTypes.node,
+  alerta: PropTypes.bool,
+  tooltip: PropTypes.string,
+  iconClassName: PropTypes.string,
+  className: PropTypes.string,
+};
+
+InsightBlock.defaultProps = {
+  badge: null,
+  alerta: false,
+  tooltip: "",
+  iconClassName: "",
+  className: "",
+};
+
+BudgetInsightsCard.propTypes = {
+  orcamentos: PropTypes.arrayOf(
+    PropTypes.shape({
+      lancamentosAssociados: PropTypes.array,
+    })
+  ).isRequired,
+};

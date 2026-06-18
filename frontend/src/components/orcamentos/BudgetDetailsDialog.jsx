@@ -1,5 +1,6 @@
 import BudgetProgressBar from "@/components/orcamentos/BudgetProgressBar";
 import BudgetStatusBadge from "@/components/orcamentos/BudgetStatusBadge";
+import PropTypes from "prop-types";
 import {
   calcularPrevisaoEstouro,
   calcularRitmoConsumo,
@@ -152,3 +153,33 @@ export default function BudgetDetailsDialog({ orcamento, aberto, onAbertoChange 
     </Dialog>
   );
 }
+
+DetailItem.propTypes = {
+  label: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+};
+
+BudgetDetailsDialog.propTypes = {
+  orcamento: PropTypes.shape({
+    id: PropTypes.string,
+    limite: PropTypes.number,
+    utilizado: PropTypes.number,
+    percentual: PropTypes.number,
+    lancamentosAssociados: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        descricao: PropTypes.string,
+        valor: PropTypes.number,
+        categoria: PropTypes.shape({
+          nome: PropTypes.string,
+        }),
+      })
+    ),
+  }),
+  aberto: PropTypes.bool.isRequired,
+  onAbertoChange: PropTypes.func.isRequired,
+};
+
+BudgetDetailsDialog.defaultProps = {
+  orcamento: null,
+};

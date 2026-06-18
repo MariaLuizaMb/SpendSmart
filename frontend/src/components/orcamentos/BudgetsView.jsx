@@ -174,11 +174,11 @@ export default function BudgetsView() {
   useEffect(() => {
     if (!mensagemSucesso) return undefined;
 
-    const timeout = window.setTimeout(() => {
+    const timeout = globalThis.setTimeout(() => {
       setMensagemSucesso("");
     }, 4000);
 
-    return () => window.clearTimeout(timeout);
+    return () => globalThis.clearTimeout(timeout);
   }, [mensagemSucesso]);
 
   const orcamentosEnriquecidos = useMemo(

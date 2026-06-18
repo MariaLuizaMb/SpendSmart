@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import {
@@ -27,3 +28,12 @@ export default function BudgetProgressBar({ percentual, className }) {
     </div>
   );
 }
+
+BudgetProgressBar.propTypes = {
+  percentual: PropTypes.number.isRequired,
+  className: PropTypes.string,
+};
+
+BudgetProgressBar.defaultProps = {
+  className: "",
+};
