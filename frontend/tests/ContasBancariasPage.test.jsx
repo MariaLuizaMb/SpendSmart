@@ -35,12 +35,15 @@ vi.mock("@/pages/Home", () => ({
 }));
 
 vi.mock("@/components/ui/cardConta", () => ({
-  default: ({ conta }) => (
-    <section aria-label="Cartão da conta">
-      <span>{conta?.nome || "Sem conta"}</span>
-      <span>{conta?.saldoAtual ?? conta?.saldoInicial ?? 0}</span>
-    </section>
-  ),
+  default: ({ conta }) => {
+    // console.log("ContaCard mock render", conta);
+    return (
+      <section aria-label="Cartão da conta">
+        <span>{conta?.nome || "Sem conta"}</span>
+        <span>{conta?.saldoAtual ?? conta?.saldoInicial ?? 0}</span>
+      </section>
+    );
+  },
 }));
 
 vi.mock("@/components/ui/sidebar", () => ({
@@ -368,8 +371,10 @@ describe("ContasBancarias page", () => {
     await waitFor(() => {
       expect(mockApi.removerConta).toHaveBeenCalledWith("conta-banco-a");
     });
+    await waitFor(() => {
+      expect(screen.getByText("Conta 1 de 1")).toBeInTheDocument();
+    });
     expect(screen.getByText("Nubank")).toBeInTheDocument();
-    expect(screen.getByText("Conta 1 de 1")).toBeInTheDocument();
   });
 
   it("deve exibir erros de listagem e remoção", async () => {

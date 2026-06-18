@@ -1,0 +1,280 @@
+
+> frontend@0.0.0 test
+> vitest run --run ContasBancariasPage.test.jsx -t deve desativar conta
+
+
+ RUN  v4.1.7 C:/Users/maria/Arquivos/Arquivos-do-PC/Setimo_Periodo/Projeto_Integrador/SpendSmart/frontend
+
+stdout | tests/ContasBancariasPage.test.jsx > ContasBancarias page > deve desativar conta
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div>[39m
+      [36m<div>[39m
+        [36m<aside>[39m
+          [0mMaria[0m
+          [0m-[0m
+          [0mcontas-bancarias[0m
+        [36m</aside>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"grid h-screen min-h-0 min-w-0 grid-rows-[auto_minmax(0,1fr)] gap-5 overflow-y-auto bg-[#E9E9E9] p-4 sm:py-4 sm:pl-2 sm:pr-4"[39m
+          [33mdata-ui[39m=[32m"contas-area-principal"[39m
+        [36m>[39m
+          [36m<header[39m
+            [33mclass[39m=[32m"flex shrink-0 items-start justify-between gap-4"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"mt-1 size-9 shrink-0 md:hidden"[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [0mMenu[0m
+            [36m</button>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"min-w-0 flex-1"[39m
+            [36m>[39m
+              [36m<h1[39m
+                [33mclass[39m=[32m"text-2xl font-bold leading-tight text-zinc-950 sm:text-3xl"[39m
+              [36m>[39m
+                [0mContas Bancárias[0m
+              [36m</h1>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"mt-2 text-sm text-zinc-950"[39m
+              [36m>[39m
+                [0mCadastre e acompanhe suas contas em um só lugar[0m
+              [36m</p>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex shrink-0 items-start gap-3"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mNotificações [0m
+                [0mheader[0m
+              [36m</button>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"group/card flex-col overflow-hidden text-sm text-card-foreground has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl hidden w-64 gap-1 rounded-xl border-0 bg-white px-5 py-3 shadow-md ring-1 ring-zinc-200 sm:flex"[39m
+                [33mdata-size[39m=[32m"default"[39m
+                [33mdata-slot[39m=[32m"card"[39m
+              [36m>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"text-xs font-bold leading-none text-zinc-950"[39m
+                [36m>[39m
+                  [0mSaldo Total[0m
+                [36m</p>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"whitespace-nowrap text-xs leading-none text-zinc-500"[39m
+                [36m>[39m
+                  [0mSaldo total de todas as contas[0m
+                [36m</p>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"text-base font-bold leading-6 text-zinc-950"[39m
+                [36m>[39m
+                  [0mR$ 120,00[0m
+                [36m</p>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</header>[39m
+          [36m<main[39m
+            [33mclass[39m=[32m"min-h-0"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"group/card flex flex-col overflow-hidden text-sm text-card-foreground has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl h-auto min-h-0 gap-0 rounded-2xl border-0 bg-white py-0 shadow-md ring-1 ring-zinc-200"[39m
+              [33mdata-size[39m=[32m"default"[39m
+              [33mdata-slot[39m=[32m"card"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"group/card-header @container/card-header grid auto-rows-min rounded-t-xl group-data-[size=sm]/card:px-3 has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-4 group-data-[size=sm]/card:[.border-b]:pb-3 grid-cols-[minmax(0,1fr)_auto] items-start gap-3 px-5 pb-4 pt-5"[39m
+                [33mdata-slot[39m=[32m"card-header"[39m
+              [36m>[39m
+                [36m<div>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"font-heading group-data-[size=sm]/card:text-sm text-lg font-bold text-zinc-950"[39m
+                    [33mdata-slot[39m=[32m"card-title"[39m
+                  [36m>[39m
+                    [0mMinhas contas[0m
+                  [36m</div>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"mt-1 text-xs text-zinc-600"[39m
+                  [36m>[39m
+                    [0mContas cadastradas[0m
+                  [36m</p>[39m
+                [36m</div>[39m
+                [36m<button[39m
+                  [33mclass[39m=[32m"group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [a]:hover:bg-primary/80 h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 justify-self-end bg-zinc-950 text-xs text-white hover:bg-zinc-800"[39m
+                  [33mdata-size[39m=[32m"default"[39m
+                  [33mdata-slot[39m=[32m"button"[39m
+                  [33mdata-variant[39m=[32m"default"[39m
+                  [33mtype[39m=[32m"button"[39m
+                [36m>[39m
+                  [0mCriar Nova Conta[0m
+                [36m</button>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"group-data-[size=sm]/card:px-3 min-h-0 px-5 pb-4"[39m
+                [33mdata-slot[39m=[32m"card-content"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"rounded-xl border border-zinc-200 p-4"[39m
+                [36m>[39m
+                  [36m<form[39m
+                    [33mclass[39m=[32m"grid min-h-[220px] items-center gap-5 lg:grid-cols-[minmax(320px,420px)_minmax(0,1fr)]"[39m
+                  [36m>[39m
+                    [36m<div[39m
+                      [33mclass[39m=[32m"flex items-center"[39m
+                    [36m>[39m
+                      [36m<section[39m
+                        [33maria-label[39m=[32m"Cartão da conta"[39m
+                      [36m>[39m
+                        [36m<span>[39m
+                  ...
+
+ ❯ tests/ContasBancariasPage.test.jsx (5 tests | 1 failed | 4 skipped) 351ms
+     × deve desativar conta 350ms
+System.Management.Automation.RemoteException
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+System.Management.Automation.RemoteException
+ FAIL  tests/ContasBancariasPage.test.jsx > ContasBancarias page > deve desativar conta
+TestingLibraryElementError: Unable to find an element with the text: Nubank. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+System.Management.Automation.RemoteException
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div>[39m
+      [36m<div>[39m
+        [36m<aside>[39m
+          [0mMaria[0m
+          [0m-[0m
+          [0mcontas-bancarias[0m
+        [36m</aside>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"grid h-screen min-h-0 min-w-0 grid-rows-[auto_minmax(0,1fr)] gap-5 overflow-y-auto bg-[#E9E9E9] p-4 sm:py-4 sm:pl-2 sm:pr-4"[39m
+          [33mdata-ui[39m=[32m"contas-area-principal"[39m
+        [36m>[39m
+          [36m<header[39m
+            [33mclass[39m=[32m"flex shrink-0 items-start justify-between gap-4"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"mt-1 size-9 shrink-0 md:hidden"[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [0mMenu[0m
+            [36m</button>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"min-w-0 flex-1"[39m
+            [36m>[39m
+              [36m<h1[39m
+                [33mclass[39m=[32m"text-2xl font-bold leading-tight text-zinc-950 sm:text-3xl"[39m
+              [36m>[39m
+                [0mContas Bancárias[0m
+              [36m</h1>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"mt-2 text-sm text-zinc-950"[39m
+              [36m>[39m
+                [0mCadastre e acompanhe suas contas em um só lugar[0m
+              [36m</p>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex shrink-0 items-start gap-3"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mNotificações [0m
+                [0mheader[0m
+              [36m</button>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"group/card flex-col overflow-hidden text-sm text-card-foreground has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl hidden w-64 gap-1 rounded-xl border-0 bg-white px-5 py-3 shadow-md ring-1 ring-zinc-200 sm:flex"[39m
+                [33mdata-size[39m=[32m"default"[39m
+                [33mdata-slot[39m=[32m"card"[39m
+              [36m>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"text-xs font-bold leading-none text-zinc-950"[39m
+                [36m>[39m
+                  [0mSaldo Total[0m
+                [36m</p>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"whitespace-nowrap text-xs leading-none text-zinc-500"[39m
+                [36m>[39m
+                  [0mSaldo total de todas as contas[0m
+                [36m</p>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"text-base font-bold leading-6 text-zinc-950"[39m
+                [36m>[39m
+                  [0mR$ 120,00[0m
+                [36m</p>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</header>[39m
+          [36m<main[39m
+            [33mclass[39m=[32m"min-h-0"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"group/card flex flex-col overflow-hidden text-sm text-card-foreground has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl h-auto min-h-0 gap-0 rounded-2xl border-0 bg-white py-0 shadow-md ring-1 ring-zinc-200"[39m
+              [33mdata-size[39m=[32m"default"[39m
+              [33mdata-slot[39m=[32m"card"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"group/card-header @container/card-header grid auto-rows-min rounded-t-xl group-data-[size=sm]/card:px-3 has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-4 group-data-[size=sm]/card:[.border-b]:pb-3 grid-cols-[minmax(0,1fr)_auto] items-start gap-3 px-5 pb-4 pt-5"[39m
+                [33mdata-slot[39m=[32m"card-header"[39m
+              [36m>[39m
+                [36m<div>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"font-heading group-data-[size=sm]/card:text-sm text-lg font-bold text-zinc-950"[39m
+                    [33mdata-slot[39m=[32m"card-title"[39m
+                  [36m>[39m
+                    [0mMinhas contas[0m
+                  [36m</div>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"mt-1 text-xs text-zinc-600"[39m
+                  [36m>[39m
+                    [0mContas cadastradas[0m
+                  [36m</p>[39m
+                [36m</div>[39m
+                [36m<button[39m
+                  [33mclass[39m=[32m"group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [a]:hover:bg-primary/80 h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 justify-self-end bg-zinc-950 text-xs text-white hover:bg-zinc-800"[39m
+                  [33mdata-size[39m=[32m"default"[39m
+                  [33mdata-slot[39m=[32m"button"[39m
+                  [33mdata-variant[39m=[32m"default"[39m
+                  [33mtype[39m=[32m"button"[39m
+                [36m>[39m
+                  [0mCriar Nova Conta[0m
+                [36m</button>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"group-data-[size=sm]/card:px-3 min-h-0 px-5 pb-4"[39m
+                [33mdata-slot[39m=[32m"card-content"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"rounded-xl border border-zinc-200 p-4"[39m
+                [36m>[39m
+                  [36m<form[39m
+                    [33mclass[39m=[32m"grid min-h-[220px] items-center gap-5 lg:grid-cols-[minmax(320px,420px)_minmax(0,1fr)]"[39m
+                  [36m>[39m
+                    [36m<div[39m
+                      [33mclass[39m=[32m"flex items-center"[39m
+                    [36m>[39m
+                      [36m<section[39m
+                        [33maria-label[39m=[32m"Cartão da conta"[39m
+                      [36m>[39m
+                        [36m<span>[39m
+                  ...
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/ContasBancariasPage.test.jsx:375:19
+    373|     });
+    374|     screen.debug();
+    375|     expect(screen.getByText("Nubank")).toBeInTheDocument();
+       |                   ^
+    376|     expect(screen.getByText("Conta 1 de 1")).toBeInTheDocument();
+    377|   });
+System.Management.Automation.RemoteException
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+System.Management.Automation.RemoteException
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 4 skipped (5)
+   Start at  11:42:02
+   Duration  2.43s (transform 230ms, setup 202ms, import 594ms, tests 351ms, environment 1.08s)
+
