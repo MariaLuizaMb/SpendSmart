@@ -371,10 +371,8 @@ describe("ContasBancarias page", () => {
     await waitFor(() => {
       expect(mockApi.removerConta).toHaveBeenCalledWith("conta-banco-a");
     });
-    await waitFor(() => {
-      expect(screen.getByText("Conta 1 de 1")).toBeInTheDocument();
-    });
-    expect(screen.getByText("Nubank")).toBeInTheDocument();
+    expect(await screen.findByText(/Conta 1 de 1/)).toBeInTheDocument();
+    expect(await screen.findByText("Nubank")).toBeInTheDocument();
   });
 
   it("deve exibir erros de listagem e remoção", async () => {
