@@ -17,6 +17,7 @@ vi.mock("@/services/api", () => ({
   listarContas: vi.fn(),
   listarLancamentos: vi.fn(),
   listarOrcamentos: vi.fn(),
+  excluirContaUsuario: vi.fn(),
 }));
 
 vi.mock("react-router-dom", async () => {
@@ -35,6 +36,7 @@ import {
   listarContas,
   listarLancamentos,
   listarOrcamentos,
+  excluirContaUsuario,
 } from "@/services/api";
 
 function renderPerfil() {
@@ -68,6 +70,7 @@ describe("Perfil", () => {
       { id: "lancamento-3" },
     ]);
     listarOrcamentos.mockResolvedValue([{ id: "orcamento-1" }]);
+    excluirContaUsuario.mockResolvedValue({});
   });
 
   it("deve exibir a tela de perfil sem breadcrumb e com dados seguros do usuario", async () => {
@@ -87,8 +90,12 @@ describe("Perfil", () => {
     expect(screen.queryByText(/SpendSmart > Perfil/i)).not.toBeInTheDocument();
     expect(screen.getAllByText("Maria Luiza")).toHaveLength(2);
     expect(screen.getAllByText("maria@email.com")).toHaveLength(2);
-    expect(screen.getByText(/Conta criada em 19\/04\/2026/i)).toBeInTheDocument();
-    expect(screen.getByText(/Última atualização 18\/05\/2026/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Conta criada em 19\/04\/2026/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/Última atualização 18\/05\/2026/i),
+    ).toBeInTheDocument();
     expect(screen.queryByText("Preferências")).not.toBeInTheDocument();
     expect(screen.queryByText("senhaHash")).not.toBeInTheDocument();
 
@@ -144,8 +151,10 @@ describe("Perfil", () => {
       screen.getAllByRole("button", { name: "Excluir conta" }).at(-1),
     );
 
-    expect(removerAuth).toHaveBeenCalledTimes(1);
-    expect(mockNavigate).toHaveBeenCalledWith("/");
+    await waitFor(() => {
+      expect(removerAuth).toHaveBeenCalled();
+      expect(mockNavigate).toHaveBeenCalledWith("/");
+    });
   });
 
   it("deve permitir desconectar sem abrir confirmacao de exclusao", async () => {
