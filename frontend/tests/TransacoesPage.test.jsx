@@ -55,7 +55,11 @@ vi.mock("@/pages/Home", () => ({
 vi.mock("@/components/ui/sidebar", () => ({
   SidebarProvider: ({ children }) => <div>{children}</div>,
   SidebarInset: ({ children, ...props }) => <div {...props}>{children}</div>,
-  SidebarTrigger: (props) => <button type="button" {...props}>Menu</button>,
+  SidebarTrigger: (props) => (
+    <button type="button" {...props}>
+      Menu
+    </button>
+  ),
 }));
 
 vi.mock("@/components/ui/tooltip", () => ({
@@ -69,24 +73,93 @@ vi.mock("@/components/ui/scroll-area", () => ({
 
 vi.mock("@/components/ui/dialog", () => ({
   Dialog: ({ children, open }) => (open ? <div>{children}</div> : null),
-  DialogContent: ({ children, ...props }) => <div role="dialog" {...props}>{children}</div>,
+  DialogContent: ({ children, ...props }) => (
+    <div role="dialog" {...props}>
+      {children}
+    </div>
+  ),
   DialogDescription: ({ children }) => <p>{children}</p>,
-  DialogTitle: ({ children, asChild }) => (asChild ? children : <h2>{children}</h2>),
+  DialogTitle: ({ children, asChild }) =>
+    asChild ? children : <h2>{children}</h2>,
 }));
 
-vi.mock("@/components/ui/alert-dialog", () => ({
-  AlertDialog: ({ children }) => <div>{children}</div>,
-  AlertDialogAction: ({ children, ...props }) => <button {...props}>{children}</button>,
-  AlertDialogCancel: ({ children, ...props }) => <button {...props}>{children}</button>,
-  AlertDialogContent: ({ children }) => <div role="alertdialog">{children}</div>,
-  AlertDialogDescription: ({ children }) => <p>{children}</p>,
-  AlertDialogFooter: ({ children }) => <footer>{children}</footer>,
-  AlertDialogHeader: ({ children }) => <header>{children}</header>,
-  AlertDialogTitle: ({ children }) => <h2>{children}</h2>,
-  AlertDialogTrigger: ({ children }) => children,
-}));
+vi.mock("@/components/ui/alert-dialog", async () => {
+  const ReactActual = await vi.importActual("react");
+  const AlertDialogContext = ReactActual.createContext({
+    open: false,
+    setOpen: () => {},
+  });
 
-const SelectContext = React.createContext({ onValueChange: () => {}, value: "" });
+  function useAlertDialog() {
+    return ReactActual.useContext(AlertDialogContext);
+  }
+
+  return {
+    AlertDialog: ({ children }) => {
+      const [open, setOpen] = ReactActual.useState(false);
+
+      return (
+        <AlertDialogContext.Provider value={{ open, setOpen }}>
+          <div>{children}</div>
+        </AlertDialogContext.Provider>
+      );
+    },
+    AlertDialogAction: ({ children, onClick, ...props }) => {
+      const { setOpen } = useAlertDialog();
+
+      return (
+        <button
+          {...props}
+          onClick={async (event) => {
+            await onClick?.(event);
+            setOpen(false);
+          }}
+        >
+          {children}
+        </button>
+      );
+    },
+    AlertDialogCancel: ({ children, onClick, ...props }) => {
+      const { setOpen } = useAlertDialog();
+
+      return (
+        <button
+          {...props}
+          onClick={(event) => {
+            onClick?.(event);
+            setOpen(false);
+          }}
+        >
+          {children}
+        </button>
+      );
+    },
+    AlertDialogContent: ({ children }) => {
+      const { open } = useAlertDialog();
+
+      return open ? <div role="alertdialog">{children}</div> : null;
+    },
+    AlertDialogDescription: ({ children }) => <p>{children}</p>,
+    AlertDialogFooter: ({ children }) => <footer>{children}</footer>,
+    AlertDialogHeader: ({ children }) => <header>{children}</header>,
+    AlertDialogTitle: ({ children }) => <h2>{children}</h2>,
+    AlertDialogTrigger: ({ children }) => {
+      const { setOpen } = useAlertDialog();
+
+      return ReactActual.cloneElement(children, {
+        onClick: (event) => {
+          children.props.onClick?.(event);
+          setOpen(true);
+        },
+      });
+    },
+  };
+});
+
+const SelectContext = React.createContext({
+  onValueChange: () => {},
+  value: "",
+});
 
 vi.mock("@/components/ui/select", async () => {
   const ReactActual = await vi.importActual("react");
@@ -195,13 +268,18 @@ describe("Transacoes page", () => {
     renderTransacoes("/transacoes?categoriaId=cat-despesa");
 
     expect(screen.getByText("Carregando lançamentos...")).toBeInTheDocument();
-    expect(await screen.findByText("Mercado")).toBeInTheDocument();
+    await screen.findByRole("table");
+
+    expect(screen.getAllByText(/Mercado/i).length).toBeGreaterThan(0);
     expect(mockApi.listarLancamentos).toHaveBeenCalledWith({
       semConta: undefined,
       idCategoria: "cat-despesa",
     });
 
-    await user.type(screen.getByPlaceholderText("Buscar na listagem"), "salário");
+    await user.type(
+      screen.getByPlaceholderText("Buscar na listagem"),
+      "salário",
+    );
     expect(screen.getByText("Salário")).toBeInTheDocument();
     expect(screen.queryByText("Compra semanal")).not.toBeInTheDocument();
 
@@ -222,11 +300,15 @@ describe("Transacoes page", () => {
     });
 
     await user.click(screen.getByRole("button", { name: "Conta desativada" }));
-    expect(await screen.findByText("Banco velho (desativada)")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Banco velho (desativada)"),
+    ).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Novo Lançamento" }));
     expect(screen.getByText("Novo lançamento mockado")).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Criar lançamento mockado" }));
+    await user.click(
+      screen.getByRole("button", { name: "Criar lançamento mockado" }),
+    );
     await waitFor(() => {
       expect(mockApi.listarLancamentos).toHaveBeenCalled();
     });
@@ -236,36 +318,65 @@ describe("Transacoes page", () => {
     const user = userEvent.setup();
     renderTransacoes();
 
-    await screen.findByText("Mercado");
+    await screen.findByRole("table");
 
     await user.click(screen.getByLabelText("Selecionar transação D02"));
-    expect(screen.getByText(/1 de 3 transações selecionada/)).toBeInTheDocument();
+    expect(
+      await screen.findByText(/1 de 3 transações selecionada/),
+    ).toBeInTheDocument();
 
-    const linhaMercado = screen.getByText("D02").closest("tr");
-    await user.click(within(linhaMercado).getByRole("button", { name: "Remover" }));
+    const linhaD02 = screen
+      .getByLabelText("Selecionar transação D02")
+      .closest("tr");
+    const botaoRemoverLinhaD02 = within(linhaD02).getAllByRole("button", {
+      name: "Remover",
+    })[0];
+    await user.click(botaoRemoverLinhaD02);
+    // Confirmar remoção no AlertDialog
+    const alertDialog = await screen.findByRole("alertdialog");
+    const botaoConfirmar = within(alertDialog).getByRole("button", {
+      name: "Remover",
+    });
+    await user.click(botaoConfirmar);
 
     await waitFor(() => {
       expect(mockApi.removerLancamento).toHaveBeenCalledWith("l1");
     });
-    expect(await screen.findByText("Transação removida com sucesso.")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Transação removida com sucesso."),
+    ).toBeInTheDocument();
 
     await user.click(screen.getByLabelText("Selecionar todas as transações"));
-    await user.click(screen.getAllByRole("button", { name: "Remover" })[0]);
+    // Encontrar o botão Remover no header/footer (quando há seleção em lote)
+    const cabecalhoTabela = screen.getByRole("table").querySelector("thead");
+    const botaoRemoverLote = within(cabecalhoTabela).getByRole("button", {
+      name: "Remover",
+    });
+    await user.click(botaoRemoverLote);
+    // Confirmar remoção em lote no AlertDialog
+    const alertDialogLote = await screen.findByRole("alertdialog");
+    const botaoConfirmarLote = within(alertDialogLote).getByRole("button", {
+      name: "Remover",
+    });
+    await user.click(botaoConfirmarLote);
 
     await waitFor(() => {
       expect(mockApi.removerLancamento).toHaveBeenCalledWith("l2");
       expect(mockApi.removerLancamento).toHaveBeenCalledWith("l3");
     });
-    expect(await screen.findByText("Transações removidas com sucesso.")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Transações removidas com sucesso."),
+    ).toBeInTheDocument();
   });
 
   it("deve abrir detalhes, editar lançamento, tratar erro e excluir pelo modal", async () => {
     const user = userEvent.setup();
     renderTransacoes();
 
-    await screen.findByText("Mercado");
+    await screen.findByRole("table");
     await user.click(screen.getAllByRole("button", { name: "Detalhes" })[0]);
-    expect(screen.getByRole("dialog")).toHaveTextContent("Detalhes da transação");
+    const dialogDetalhes = screen.getByRole("dialog");
+    expect(dialogDetalhes).toHaveTextContent("Detalhes da transação");
     expect(await screen.findByText("Atualizado em")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Editar" }));
@@ -283,7 +394,9 @@ describe("Transacoes page", () => {
         }),
       );
     });
-    expect(await screen.findByText("Transação atualizada com sucesso.")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Transação atualizada com sucesso."),
+    ).toBeInTheDocument();
 
     await user.click(screen.getAllByRole("button", { name: "Detalhes" })[0]);
     await user.click(screen.getByRole("button", { name: "Editar" }));
@@ -292,7 +405,18 @@ describe("Transacoes page", () => {
     expect(await screen.findByText("falha editar")).toBeInTheDocument();
 
     mockApi.removerLancamento.mockRejectedValueOnce(new Error("falha excluir"));
-    await user.click(screen.getAllByRole("button", { name: "Remover" }).at(-1));
+    // Clicar em Cancelar para sair do modo edição
+    await user.click(screen.getByRole("button", { name: "Cancelar" }));
+    // Agora clicar em Excluir
+    const botaoExcluir = screen.getByRole("button", { name: "Excluir" });
+    await user.click(botaoExcluir);
+    // Confirmar exclusão no AlertDialog
+    const alertDialogExclusao = await screen.findByRole("alertdialog");
+    const botaoConfirmarExclusao = within(alertDialogExclusao).getByRole(
+      "button",
+      { name: "Remover" },
+    );
+    await user.click(botaoConfirmarExclusao);
     expect(await screen.findByText("falha excluir")).toBeInTheDocument();
   });
 
@@ -300,15 +424,22 @@ describe("Transacoes page", () => {
     const user = userEvent.setup();
     renderTransacoes();
 
-    await screen.findByText("Mercado");
+    await screen.findByRole("table");
     await user.click(screen.getByRole("button", { name: "Definir orçamento" }));
-    expect(screen.getByRole("dialog")).toHaveTextContent("Definir orçamento");
+    const dialogOrcamento = screen.getByRole("dialog");
+    expect(dialogOrcamento).toHaveTextContent("Definir orçamento");
 
     await user.click(screen.getByRole("button", { name: "Salvar orçamento" }));
-    expect(await screen.findByText("Informe um valor maior que zero.")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Informe um valor maior que zero."),
+    ).toBeInTheDocument();
 
     await user.type(screen.getByLabelText("Valor"), "10000");
-    await user.click(screen.getByRole("button", { name: "Mercado" }));
+    // Clicar no botão Mercado dentro do dialog
+    const botoesMercado = await within(dialogOrcamento).findAllByRole("button", {
+      name: /Mercado/i,
+    });
+    await user.click(botoesMercado[0]);
     await user.click(screen.getByRole("button", { name: "Salvar orçamento" }));
 
     await waitFor(() => {
@@ -319,13 +450,17 @@ describe("Transacoes page", () => {
         }),
       );
     });
-    expect(await screen.findByText("Orçamento cadastrado com sucesso.")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Orçamento cadastrado com sucesso."),
+    ).toBeInTheDocument();
   });
 
   it("deve exibir erros de metadados, listagem, remoção individual e lote", async () => {
     const user = userEvent.setup();
     mockApi.listarContas.mockRejectedValueOnce(new Error("falha contas"));
-    mockApi.listarLancamentos.mockRejectedValueOnce(new Error("falha lançamentos"));
+    mockApi.listarLancamentos.mockRejectedValueOnce(
+      new Error("falha lançamentos"),
+    );
 
     renderTransacoes();
 
@@ -333,17 +468,39 @@ describe("Transacoes page", () => {
 
     mockApi.listarLancamentos.mockResolvedValue(lancamentos);
     await user.click(screen.getByRole("button", { name: "Limpar filtros" }));
-    await screen.findByText("Mercado");
+    await screen.findByRole("table");
 
     mockApi.removerLancamento.mockRejectedValueOnce(new Error("falha remover"));
     await user.click(screen.getByLabelText("Selecionar transação D02"));
-    const linhaMercado = screen.getByText("D02").closest("tr");
-    await user.click(within(linhaMercado).getByRole("button", { name: "Remover" }));
+    const linhaD02 = screen
+      .getByLabelText("Selecionar transação D02")
+      .closest("tr");
+    const botaoRemoverLinhaD02 = within(linhaD02).getAllByRole("button", {
+      name: "Remover",
+    })[0];
+    await user.click(botaoRemoverLinhaD02);
+    // Confirmar remoção no AlertDialog (mesmo com erro)
+    const alertDialogIndividual = await screen.findByRole("alertdialog");
+    const botaoConfirmarIndividual = within(alertDialogIndividual).getByRole(
+      "button",
+      { name: "Remover" },
+    );
+    await user.click(botaoConfirmarIndividual);
     expect(await screen.findByText("falha remover")).toBeInTheDocument();
 
     mockApi.removerLancamento.mockRejectedValueOnce(new Error("falha lote"));
     await user.click(screen.getByLabelText("Selecionar todas as transações"));
-    await user.click(screen.getAllByRole("button", { name: "Remover" })[0]);
+    const cabecalhoTabela = screen.getByRole("table").querySelector("thead");
+    const botaoRemoverLoteHeader = within(cabecalhoTabela).getByRole("button", {
+      name: "Remover",
+    });
+    await user.click(botaoRemoverLoteHeader);
+    // Confirmar remoção em lote no AlertDialog (mesmo com erro)
+    const alertDialogLote = await screen.findByRole("alertdialog");
+    const botaoConfirmarLote = within(alertDialogLote).getByRole("button", {
+      name: "Remover",
+    });
+    await user.click(botaoConfirmarLote);
     expect(await screen.findByText("falha lote")).toBeInTheDocument();
   });
 });

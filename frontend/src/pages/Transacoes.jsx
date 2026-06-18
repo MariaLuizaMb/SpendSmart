@@ -343,15 +343,17 @@ function NovoOrcamentoDialog({ aberto, onAbertoChange, onOrcamentoCriado }) {
   }, []);
 
   function alterarAbertura(proximoAberto) {
-    if (proximoAberto) {
-      setFormulario(criarFormularioOrcamentoInicial());
-      setErro("");
-      setSucesso("");
-      void carregarCategorias();
-    }
-
     onAbertoChange(proximoAberto);
   }
+
+  useEffect(() => {
+    if (!aberto) return;
+
+    setFormulario(criarFormularioOrcamentoInicial());
+    setErro("");
+    setSucesso("");
+    void carregarCategorias();
+  }, [aberto, carregarCategorias]);
 
   function atualizarCampo(event) {
     const { name, value } = event.target;
@@ -436,6 +438,7 @@ function NovoOrcamentoDialog({ aberto, onAbertoChange, onOrcamentoCriado }) {
         <form
           data-ui="modal-novo-orcamento-formulario"
           onSubmit={salvarOrcamento}
+          noValidate
           className="flex max-h-[92vh] flex-col"
         >
           <Card className="max-h-[92vh] overflow-hidden border-0 py-0 ring-0">
@@ -1353,8 +1356,18 @@ export default function Transacoes() {
   const todosSelecionados =
     lancamentosFiltrados.length > 0 &&
     lancamentosFiltrados.every((lancamento) => selecionados.has(lancamento.id));
+  const textoQuantidadeTransacoes =
+    lancamentosFiltrados.length === 1 ? "transação" : "transações";
+  const textoQuantidadeSelecionada =
+    selecionados.size === 1 ? "selecionada" : "selecionadas";
+  const resumoSelecao = `${selecionados.size} de ${lancamentosFiltrados.length} ${textoQuantidadeTransacoes} ${textoQuantidadeSelecionada}.`;
 
   function limparFiltrosLancamentos() {
+    if (!haFiltrosAtivos) {
+      void carregarLancamentos();
+      return;
+    }
+
     setFiltro("");
     setFiltroConta(OPCAO_TODAS_CONTAS);
     setSearchParams((parametrosAtuais) => {
@@ -1829,18 +1842,14 @@ export default function Transacoes() {
               </CardContent>
 
               <CardFooter className="justify-between gap-3 border-0 bg-white px-4 py-4 text-xs text-zinc-500">
-                <span>
-                  {selecionados.size} de {lancamentosFiltrados.length} transação
-                  {lancamentosFiltrados.length === 1 ? "" : "es"} selecionada
-                  {selecionados.size === 1 ? "" : "s"}.
-                </span>
+                <span>{resumoSelecao}</span>
 
                 <div className="flex shrink-0 flex-wrap justify-end gap-2">
                   <Button
                     type="button"
                     variant="outline"
                     onClick={limparFiltrosLancamentos}
-                    disabled={!haFiltrosAtivos}
+                    disabled={!haFiltrosAtivos && !erro}
                     className="border-zinc-200 bg-white text-xs text-zinc-950 hover:bg-zinc-50"
                   >
                     Limpar filtros
