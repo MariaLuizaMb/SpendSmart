@@ -56,28 +56,72 @@ describe("Home helpers", () => {
     expect(formatarValorMonetarioInput("")).toBe("");
     expect(converterValorMonetarioParaNumero("R$ 1.234,56")).toBe(1234.56);
     expect(converterValorMonetarioParaNumero("")).toBe(0);
+    expect(converterValorMonetarioParaNumero("R$ - 1.234,56")).toBe(1234.56);
+
     expect(formatarData("2026-05-05T00:00:00.000Z")).toBe("05/05/2026");
     expect(formatarData()).toBe("00/00/0000");
+
     expect(formatarValorEixoGrafico(1500)).toBe("R$ 1.500");
     expect(formatarPercentualAbsoluto(-12.6)).toBe("13%");
+    expect(formatarPercentualAbsoluto(0)).toBe("0%");
   });
 
   it("deve calcular totais e categoria de maior despesa", () => {
     expect(obterValorLancamento(lancamentos[0])).toBe(120.5);
+
     expect(obterNomeCategoria(lancamentos[2])).toBe("Salário");
     expect(obterNomeCategoria({})).toBe("Categoria");
+
     expect(normalizarNomeCategoria("Alimentação")).toBe("alimentação");
+
     expect(somarLancamentosPorTipo(lancamentos, "DESPESA")).toBe(200);
     expect(somarLancamentosPorTipo(lancamentos, "RECEITA")).toBe(500);
-    expect(
-      obterCategoriaComMaiorDespesa(lancamentos),
-    ).toEqual({
+
+    expect(obterCategoriaComMaiorDespesa(lancamentos)).toEqual({
       nome: "Mercado",
       total: 200,
     });
+
+    // caso sem despesas
+    expect(
+      obterCategoriaComMaiorDespesa([
+        {
+          id: "x",
+          tipo: "RECEITA",
+          valor: 10,
+          dataTransacao: "2026-05-01T00:00:00.000Z",
+          nomeCategoria: "X",
+        },
+      ]),
+    ).toEqual({ nome: "Nenhuma categoria", total: 0 });
+
+    // caso vazio
     expect(obterCategoriaComMaiorDespesa([])).toEqual({
       nome: "Nenhuma categoria",
       total: 0,
+    });
+
+    // caso com categorias repetidas
+    const lancamentosRepetidos = [
+      {
+        id: "d1",
+        tipo: "DESPESA",
+        valor: 10,
+        dataTransacao: "2026-05-01T00:00:00.000Z",
+        categoria: { nome: "Mercado" },
+      },
+      {
+        id: "d2",
+        tipo: "DESPESA",
+        valor: 20,
+        dataTransacao: "2026-05-02T00:00:00.000Z",
+        nomeCategoria: "mercado",
+      },
+    ];
+
+    expect(obterCategoriaComMaiorDespesa(lancamentosRepetidos)).toEqual({
+      nome: "Mercado",
+      total: 30,
     });
   });
 
@@ -88,21 +132,34 @@ describe("Home helpers", () => {
         { idCategoria: "cat-1", valor: 300 },
       ]),
     ).toBe(1000);
+
     expect(
       obterLimiteOrcamentoMensal([
         { idCategoria: "cat-1", valor: 300 },
         { idCategoria: "cat-2", valor: 200 },
       ]),
     ).toBe(500);
+
+    expect(obterLimiteOrcamentoMensal([])).toBe(0);
+
     expect(calcularVariacaoPercentual(50, 0)).toBe(100);
     expect(calcularVariacaoPercentual(0, 0)).toBe(0);
     expect(calcularVariacaoPercentual(75, 100)).toBe(-25);
+
     expect(calcularVariacaoPercentualPorDiferenca(-50, -100)).toBe(50);
     expect(calcularVariacaoPercentualPorDiferenca(-10, 0)).toBe(-100);
+    expect(calcularVariacaoPercentualPorDiferenca(0, 0)).toBe(0);
+
+    // fallback do eixo
     expect(criarEscalaEixoY(0)).toEqual({
       limiteSuperior: 300,
       ticks: [50, 100, 150, 200, 250, 300],
     });
+    expect(criarEscalaEixoY(-1)).toEqual({
+      limiteSuperior: 300,
+      ticks: [50, 100, 150, 200, 250, 300],
+    });
+
     expect(criarEscalaEixoY(900, 3)).toEqual({
       limiteSuperior: 1500,
       ticks: [500, 1000, 1500],
@@ -110,7 +167,8 @@ describe("Home helpers", () => {
   });
 
   it("deve calcular intervalos e filtrar lançamentos por período", () => {
-    const referencia = new Date(Date.UTC(2026, 4, 13));
+    const referencia = new Date(Date.UTC(2026, 4, 13)); // 13/05/2026
+
     const semana = obterIntervaloPorPeriodo("semana", referencia);
     const mes = obterIntervaloPorPeriodo("mes", referencia);
     const ano = obterIntervaloPorPeriodo("ano", referencia);
@@ -118,10 +176,17 @@ describe("Home helpers", () => {
     expect(semana.inicio.toISOString()).toBe("2026-05-11T00:00:00.000Z");
     expect(mes.inicio.toISOString()).toBe("2026-05-01T00:00:00.000Z");
     expect(ano.inicio.toISOString()).toBe("2026-01-01T00:00:00.000Z");
+
     expect(obterIntervaloPorPeriodo("todos", referencia)).toBeNull();
+
     expect(obterIntervaloMesAnterior(referencia).inicio.toISOString()).toBe(
       "2026-04-01T00:00:00.000Z",
     );
+
+    // intervalo null não filtra
+    expect(filtrarLancamentosPorIntervalo(lancamentos, null).length).toBe(3);
+
+    // apenas do mês
     expect(
       filtrarLancamentosPorIntervalo(lancamentos, mes).map((item) => item.id),
     ).toEqual(["1", "2"]);
@@ -130,11 +195,13 @@ describe("Home helpers", () => {
   it("deve formatar datas de input e criar estado inicial do formulário", () => {
     expect(formatarDataParaInput(new Date(2026, 4, 6))).toBe("2026-05-06");
     expect(formatarDataParaInput()).toBe("");
+
     expect(converterInputParaData("2026-05-06")).toEqual(
       new Date(2026, 4, 6),
     );
     expect(converterInputParaData("")).toBeUndefined();
     expect(converterInputParaData("data-invalida")).toBeUndefined();
+
     expect(criarFormularioLancamentoInicial("conta-1")).toEqual(
       expect.objectContaining({
         tipo: "DESPESA",
@@ -142,6 +209,7 @@ describe("Home helpers", () => {
         recorrencia: "NENHUMA",
       }),
     );
+
     expect(obterContaInicialLancamento("__sem_conta__", [])).toBe("");
     expect(obterContaInicialLancamento("", [{ id: "conta-1" }])).toBe(
       "conta-1",

@@ -53,6 +53,14 @@ import {
   listarLancamentos,
 } from "@/services/api";
 
+// evita warning e torna determinístico em testes
+globalThis.ResizeObserver = class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
+
+
 globalThis.ResizeObserver = class ResizeObserver {
   observe() {}
   unobserve() {}
