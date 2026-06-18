@@ -1,9 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  CheckCircle2,
-  LoaderCircle,
-  WalletCards,
-} from "lucide-react";
+import { CheckCircle2, LoaderCircle, WalletCards } from "lucide-react";
 
 import { HomeSidebar, NotificationsMenu } from "@/pages/Home";
 import ContaCard from "@/components/ui/cardConta";
@@ -365,9 +361,7 @@ function DetalhesContaDialog({
                         readOnly={!editando}
                         disabled={salvando}
                         className={
-                          editando
-                            ? "bg-white pl-10 pr-3"
-                            : "bg-zinc-50 px-3"
+                          editando ? "bg-white pl-10 pr-3" : "bg-zinc-50 px-3"
                         }
                       />
                     </div>
@@ -954,16 +948,19 @@ export default function ContasBancarias() {
     try {
       await removerConta(contaSelecionada.id);
 
-      setContas((contasAtuais) => {
-        const proximasContas = contasAtuais.filter(
-          (conta) => conta.id !== contaSelecionada.id,
-        );
+      const proximasContas = contas.filter(
+        (conta) => conta.id !== contaSelecionada.id,
+      );
+      const novoIndice = Math.min(
+        indiceConta,
+        Math.max(proximasContas.length - 1, 0),
+      );
 
-        setIndiceConta((indiceAtual) =>
-          Math.min(indiceAtual, Math.max(proximasContas.length - 1, 0)),
-        );
-        return proximasContas;
-      });
+      setContas(proximasContas);
+      setIndiceConta(novoIndice);
+      setFormulario(
+        criarFormularioPorConta(proximasContas[novoIndice] || null),
+      );
       setCriandoConta(false);
       setEditandoConta(false);
       setSucesso("Conta bancária desativada com sucesso.");
@@ -1095,6 +1092,12 @@ export default function ContasBancarias() {
                         Crie sua primeira conta bancária para acompanhar seus
                         saldos.
                       </p>
+
+                      {erro && (
+                        <p className="mt-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                          {erro}
+                        </p>
+                      )}
                     </div>
                   ) : (
                     <form
@@ -1338,15 +1341,15 @@ export default function ContasBancarias() {
                                 type="submit"
                                 disabled={camposBloqueados}
                                 className="h-8 rounded-lg bg-zinc-950 px-4 text-sm text-white hover:bg-zinc-800"
-                                >
-                                  {salvando ? (
-                                    <LoaderCircle
-                                      className="animate-spin"
-                                      size={16}
-                                    />
-                                  ) : null}
-                                  {salvando ? "Salvando..." : "Salvar"}
-                                </Button>
+                              >
+                                {salvando ? (
+                                  <LoaderCircle
+                                    className="animate-spin"
+                                    size={16}
+                                  />
+                                ) : null}
+                                {salvando ? "Salvando..." : "Salvar"}
+                              </Button>
                             </>
                           ) : (
                             <>
