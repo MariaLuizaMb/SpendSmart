@@ -81,7 +81,9 @@ describe("dashboard components", () => {
 
     expect(screen.getByText("Receitas")).toBeInTheDocument();
     expect(screen.getByText("R$ 3.000,00")).toBeInTheDocument();
-    expect(screen.getByLabelText("Receita recorrente detectada")).toBeInTheDocument();
+    expect(
+      screen.getByLabelText("Receita recorrente detectada"),
+    ).toBeInTheDocument();
 
     rerender(
       <TooltipProvider>
@@ -138,7 +140,9 @@ describe("dashboard components", () => {
 
     expect(screen.getByText("Status do Orçamento")).toBeInTheDocument();
     expect(screen.getByText("Atenção")).toBeInTheDocument();
-    expect(screen.getByText("Despesas próximas do limite.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Despesas próximas do limite."),
+    ).toBeInTheDocument();
     expect(screen.getByText("Ranking de categorias")).toBeInTheDocument();
     expect(screen.getByText("Mercado")).toBeInTheDocument();
     expect(screen.getByText("Lazer")).toBeInTheDocument();
@@ -148,7 +152,11 @@ describe("dashboard components", () => {
   it("deve renderizar estados vazios dos cards de gráfico e tendências", () => {
     renderComTooltip(
       <>
-        <RecentHistoryChart historico={[]} periodo="6" onPeriodoChange={vi.fn()} />
+        <RecentHistoryChart
+          historico={[]}
+          periodo="6"
+          onPeriodoChange={vi.fn()}
+        />
         <PredictedBalanceCard saldo={{ saldoAtual: 0 }} projecoes={{}} />
         <TrendsCard tendencias={null} alertas={[]} />
       </>,
@@ -184,10 +192,63 @@ describe("dashboard components", () => {
     expect(screen.getByText("Mercado")).toBeInTheDocument();
 
     await user.click(screen.getByLabelText(/Selecionar transação D01/i));
-    expect(screen.getByText("1 de 1 transação selecionada.")).toBeInTheDocument();
+    expect(
+      screen.getByText("1 de 1 transação selecionada."),
+    ).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: /Novo Lançamento/i }));
     expect(onNovoLancamento).toHaveBeenCalledTimes(1);
+  });
+
+  it("deve cobrir dialog de detalhes: return null quando lancamento não existe e fechamento via botão", async () => {
+    const user = userEvent.setup();
+
+    // Primeiro cobre o early-return do dialog quando lancamentoDetalhes é null.
+    const { rerender } = renderComTooltip(
+      <DashboardTransactionsTable lancamentos={[]} />,
+    );
+
+    // Nenhum dialog deve existir
+    expect(screen.queryByText("Detalhes da transação")).not.toBeInTheDocument();
+
+    // Agora renderiza com lancamentos reais e abre detalhes.
+    rerender(
+      <TooltipProvider>
+        <DashboardTransactionsTable lancamentos={lancamentos} />
+      </TooltipProvider>,
+    );
+
+    // Abre o dialog clicando em “Detalhes”
+    const detalhesBotao = await screen.findAllByRole("button", {
+      name: /Detalhes/i,
+    });
+
+    await user.click(detalhesBotao[0]);
+
+    expect(
+      screen.getByRole("dialog", { name: /Detalhes da transação/i }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Detalhes da transação")).toBeInTheDocument();
+
+    // Cobre o caminho onAbertoChange(false) via botão “Fechar"
+    await user.click(screen.getByRole("button", { name: /Fechar/i }));
+
+    // Após fechar, o texto deve sumir
+    expect(screen.queryByText("Detalhes da transação")).not.toBeInTheDocument();
+  });
+
+  it("deve cobrir branch: nenhum lançamento encontrado com filtro preenchido", async () => {
+    const user = userEvent.setup();
+
+    renderComTooltip(<DashboardTransactionsTable lancamentos={lancamentos} />);
+
+    await screen.findByText("Transações");
+
+    await user.type(screen.getByPlaceholderText("Pesquisar"), "inexistente");
+
+    expect(
+      await screen.findByText("Nenhum lançamento encontrado para a busca."),
+    ).toBeInTheDocument();
   });
 
   it("deve exibir carregamento e erro na tabela de transações", () => {
@@ -206,7 +267,9 @@ describe("dashboard components", () => {
       </TooltipProvider>,
     );
 
-    expect(screen.getByText("Falha ao carregar lançamentos.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Falha ao carregar lançamentos."),
+    ).toBeInTheDocument();
 
     rerender(
       <TooltipProvider>
@@ -215,6 +278,8 @@ describe("dashboard components", () => {
     );
 
     const tabela = screen.getByRole("table");
-    expect(within(tabela).getByText("Nenhum lançamento encontrado.")).toBeInTheDocument();
+    expect(
+      within(tabela).getByText("Nenhum lançamento encontrado."),
+    ).toBeInTheDocument();
   });
 });

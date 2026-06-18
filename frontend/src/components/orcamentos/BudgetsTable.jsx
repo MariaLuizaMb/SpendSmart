@@ -65,16 +65,25 @@ export default function BudgetsTable({
           <tbody>
             {carregando && (
               <tr>
-                <td colSpan={10} className="h-80 text-center text-sm text-zinc-500">
-                  <LoaderCircle className="mx-auto mb-2 animate-spin" size={20} />
+                <td
+                  colSpan={10}
+                  className="h-80 text-center text-sm text-zinc-500"
+                >
+                  <LoaderCircle
+                    className="mx-auto mb-2 animate-spin"
+                    size={20}
+                  />
                   Carregando orçamentos...
                 </td>
               </tr>
             )}
 
-            {!carregando && erro && (
+            {erro && (
               <tr>
-                <td colSpan={10} className="h-80 text-center text-sm text-red-600">
+                <td
+                  colSpan={10}
+                  className="h-80 text-center text-sm text-red-600"
+                >
                   {erro || "Erro ao carregar orçamentos."}
                 </td>
               </tr>
@@ -82,7 +91,10 @@ export default function BudgetsTable({
 
             {!carregando && !erro && orcamentos.length === 0 && (
               <tr>
-                <td colSpan={10} className="h-80 text-center text-sm text-zinc-500">
+                <td
+                  colSpan={10}
+                  className="h-80 text-center text-sm text-zinc-500"
+                >
                   {haFiltrosAtivos
                     ? "Nenhum orçamento encontrado para os filtros selecionados."
                     : "Nenhum orçamento criado."}
@@ -110,11 +122,19 @@ export default function BudgetsTable({
                     <td className="px-3 py-3 font-medium">
                       {obterNomeOrcamento(orcamento)}
                     </td>
-                    <td className="px-3 py-3">{obterTipoOrcamento(orcamento)}</td>
+                    <td className="px-3 py-3">
+                      {obterTipoOrcamento(orcamento)}
+                    </td>
                     <td className="px-3 py-3">{formatarPeriodo(orcamento)}</td>
-                    <td className="px-3 py-3">{formatarMoeda(orcamento.limite)}</td>
-                    <td className="px-3 py-3">{formatarMoeda(orcamento.utilizado)}</td>
-                    <td className="px-3 py-3">{formatarMoeda(orcamento.restante)}</td>
+                    <td className="px-3 py-3">
+                      {formatarMoeda(orcamento.limite)}
+                    </td>
+                    <td className="px-3 py-3">
+                      {formatarMoeda(orcamento.utilizado)}
+                    </td>
+                    <td className="px-3 py-3">
+                      {formatarMoeda(orcamento.restante)}
+                    </td>
                     <td className="px-3 py-3">
                       <BudgetProgressBar percentual={orcamento.percentual} />
                     </td>
@@ -135,7 +155,6 @@ export default function BudgetsTable({
           </tbody>
         </table>
       </div>
-
     </ScrollArea>
   );
 }
@@ -149,7 +168,7 @@ BudgetsTable.propTypes = {
       restante: PropTypes.number.isRequired,
       percentual: PropTypes.number.isRequired,
       status: PropTypes.string.isRequired,
-    })
+    }),
   ).isRequired,
   carregando: PropTypes.bool.isRequired,
   erro: PropTypes.string,
