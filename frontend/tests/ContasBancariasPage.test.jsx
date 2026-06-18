@@ -182,7 +182,7 @@ vi.mock("@/components/ui/select", async () => {
   };
 });
 
-import ContasBancarias from "../src/pages/ContasBancarias";
+import ContasBancarias from "../src/pages/contasBancarias";
 
 const contas = [
   {
@@ -261,23 +261,36 @@ describe("ContasBancarias page", () => {
 
     const dialog = screen.getByRole("dialog");
     expect(dialog).toHaveTextContent("Detalhes da conta");
-    expect(await within(dialog).findByDisplayValue("10/05/2026")).toBeInTheDocument();
+    expect(
+      await within(dialog).findByDisplayValue("10/05/2026"),
+    ).toBeInTheDocument();
 
-    await user.click(within(dialog).getByRole("button", { name: "Editar informações" }));
+    await user.click(
+      within(dialog).getByRole("button", { name: "Editar informações" }),
+    );
     await user.clear(within(dialog).getByLabelText("Nome do banco"));
     await user.type(within(dialog).getByLabelText("Nome do banco"), "A");
-    await user.click(within(dialog).getByRole("button", { name: "Salvar alterações" }));
+    await user.click(
+      within(dialog).getByRole("button", { name: "Salvar alterações" }),
+    );
 
     expect(
-      await within(dialog).findByText("Informe um nome com pelo menos 2 caracteres."),
+      await within(dialog).findByText(
+        "Informe um nome com pelo menos 2 caracteres.",
+      ),
     ).toBeInTheDocument();
 
     await user.clear(within(dialog).getByLabelText("Nome do banco"));
-    await user.type(within(dialog).getByLabelText("Nome do banco"), "Banco Azul");
+    await user.type(
+      within(dialog).getByLabelText("Nome do banco"),
+      "Banco Azul",
+    );
     await user.clear(within(dialog).getByLabelText("Saldo"));
     await user.type(within(dialog).getByLabelText("Saldo"), "5000");
     await user.type(within(dialog).getByLabelText("Descrição"), "Atualizada");
-    await user.click(within(dialog).getByRole("button", { name: "Salvar alterações" }));
+    await user.click(
+      within(dialog).getByRole("button", { name: "Salvar alterações" }),
+    );
 
     await waitFor(() => {
       expect(mockApi.editarConta).toHaveBeenCalledWith(
@@ -289,7 +302,9 @@ describe("ContasBancarias page", () => {
         }),
       );
     });
-    expect(await screen.findByText("Conta bancária atualizada com sucesso.")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Conta bancária atualizada com sucesso."),
+    ).toBeInTheDocument();
   });
 
   it("deve validar e criar conta pelo modal", async () => {
@@ -301,17 +316,27 @@ describe("ContasBancarias page", () => {
 
     const dialog = screen.getByRole("dialog");
     expect(dialog).toHaveTextContent("Adicionar nova conta");
-    await user.click(within(dialog).getByRole("button", { name: "Outro banco" }));
-    await user.click(within(dialog).getByRole("button", { name: "Salvar conta" }));
+    await user.click(
+      within(dialog).getByRole("button", { name: "Outro banco" }),
+    );
+    await user.click(
+      within(dialog).getByRole("button", { name: "Salvar conta" }),
+    );
 
     expect(
-      await within(dialog).findByText("Informe um nome com pelo menos 2 caracteres."),
+      await within(dialog).findByText(
+        "Informe um nome com pelo menos 2 caracteres.",
+      ),
     ).toBeInTheDocument();
 
     await user.type(within(dialog).getByLabelText("Nome do banco"), "Inter");
-    await user.click(within(dialog).getByRole("button", { name: "Carteira digital" }));
+    await user.click(
+      within(dialog).getByRole("button", { name: "Carteira digital" }),
+    );
     await user.type(within(dialog).getByLabelText("Descrição"), "Conta nova");
-    await user.click(within(dialog).getByRole("button", { name: "Salvar conta" }));
+    await user.click(
+      within(dialog).getByRole("button", { name: "Salvar conta" }),
+    );
 
     await waitFor(() => {
       expect(mockApi.cadastrarConta).toHaveBeenCalledWith(
@@ -324,7 +349,9 @@ describe("ContasBancarias page", () => {
         }),
       );
     });
-    expect(await screen.findByText("Conta bancária cadastrada com sucesso.")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Conta bancária cadastrada com sucesso."),
+    ).toBeInTheDocument();
   });
 
   it("deve desativar conta", async () => {
@@ -334,7 +361,9 @@ describe("ContasBancarias page", () => {
     await screen.findByText("Banco A");
     await user.click(screen.getByRole("button", { name: "Desativar" }));
     const alertDialog = await screen.findByRole("alertdialog");
-    await user.click(within(alertDialog).getByRole("button", { name: "Desativar" }));
+    await user.click(
+      within(alertDialog).getByRole("button", { name: "Desativar" }),
+    );
 
     await waitFor(() => {
       expect(mockApi.removerConta).toHaveBeenCalledWith("conta-banco-a");
@@ -356,7 +385,9 @@ describe("ContasBancarias page", () => {
     await screen.findByText("Banco A");
     await user.click(screen.getByRole("button", { name: "Desativar" }));
     const alertDialog = await screen.findByRole("alertdialog");
-    await user.click(within(alertDialog).getByRole("button", { name: "Desativar" }));
+    await user.click(
+      within(alertDialog).getByRole("button", { name: "Desativar" }),
+    );
 
     expect(await screen.findByText("falha remover")).toBeInTheDocument();
   });
