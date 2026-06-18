@@ -37,6 +37,21 @@ class AuthController {
       return handleError(res, error);
     }
   }
+
+  static async excluirConta(req, res) {
+    try {
+      const usuarioId = req.usuario?.id;
+
+      const resultado = await AuthService.excluirConta(usuarioId);
+
+      return res.status(200).json({
+        success: true,
+        message: resultado?.mensagem || "Usuário excluído com sucesso.",
+      });
+    } catch (error) {
+      return handleError(res, error);
+    }
+  }
 }
 
 export default AuthController;

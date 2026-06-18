@@ -1,10 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  FolderKanban,
-  Layers3,
-  ShieldCheck,
-  Tag,
-} from "lucide-react";
+import { FolderKanban, Layers3, ShieldCheck, Tag } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import CategoryFilters, {
@@ -136,7 +131,10 @@ function criarMapaCodigosCategoria(categorias) {
     const prefixo = tipo === "RECEITA" ? "R" : "D";
 
     contadores[tipo] += 1;
-    mapa.set(categoria.id, `${prefixo}${String(contadores[tipo]).padStart(2, "0")}`);
+    mapa.set(
+      categoria.id,
+      `${prefixo}${String(contadores[tipo]).padStart(2, "0")}`,
+    );
 
     return mapa;
   }, new Map());
@@ -223,7 +221,9 @@ export default function Categorias() {
 
       if (
         termo &&
-        !String(categoria.nome || "").toLocaleLowerCase("pt-BR").includes(termo)
+        !String(categoria.nome || "")
+          .toLocaleLowerCase("pt-BR")
+          .includes(termo)
       ) {
         return false;
       }
@@ -268,7 +268,9 @@ export default function Categorias() {
 
     const [idSelecionado] = Array.from(selecionados);
 
-    return categorias.find((categoria) => categoria.id === idSelecionado) || null;
+    return (
+      categorias.find((categoria) => categoria.id === idSelecionado) || null
+    );
   }, [categorias, selecionados]);
 
   const haFiltrosAtivos =
@@ -297,7 +299,9 @@ export default function Categorias() {
       const proximos = new Set(selecionadosAtuais);
 
       if (todosSelecionados) {
-        categoriasFiltradas.forEach((categoria) => proximos.delete(categoria.id));
+        categoriasFiltradas.forEach((categoria) =>
+          proximos.delete(categoria.id),
+        );
         return proximos;
       }
 
@@ -365,7 +369,9 @@ export default function Categorias() {
       setCategoriaEmEdicao(null);
       await carregarDados();
     } catch (error) {
-      setErroFormulario(error.message || "Não foi possível salvar a categoria.");
+      setErroFormulario(
+        error.message || "Não foi possível salvar a categoria.",
+      );
     } finally {
       setSalvandoCategoria(false);
     }
@@ -413,7 +419,9 @@ export default function Categorias() {
 
               <div>
                 <h1 className="text-2xl font-bold leading-tight text-zinc-950 sm:text-3xl">
-                  {visaoAtiva === VISAO_ORCAMENTOS ? "Orçamentos" : "Categorias"}
+                  {visaoAtiva === VISAO_ORCAMENTOS
+                    ? "Orçamentos"
+                    : "Categorias"}
                 </h1>
                 <p className="mt-2 text-sm text-zinc-950">
                   {visaoAtiva === VISAO_ORCAMENTOS
@@ -522,7 +530,8 @@ export default function Categorias() {
 
                   <CardFooter className="justify-between gap-3 border-0 bg-white px-4 py-4 text-xs text-zinc-500">
                     <span>
-                      {selecionados.size} de {categoriasFiltradas.length} categoria
+                      {selecionados.size} de {categoriasFiltradas.length}{" "}
+                      categoria
                       {categoriasFiltradas.length === 1 ? "" : "s"} selecionada
                       {selecionados.size === 1 ? "" : "s"}.
                     </span>

@@ -42,10 +42,6 @@ describe("AppRoutes", () => {
 
     render(<AppRoutes />);
 
-    // Como é BrowserRouter, não conseguimos controlar location diretamente
-    // por isso validamos via navegação clicando no link de Login->Cadastro.
-    // O AppRoutes renderiza Login inicialmente na rota '/'.
-    // A UI do Login mostra um h1 "Bem vindo de volta!".
     expect(
       screen.getByRole("heading", { name: /Bem vindo de volta!/i }),
     ).toBeInTheDocument();

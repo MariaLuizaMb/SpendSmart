@@ -110,7 +110,10 @@ export function lancamentoNoMes(lancamento, mes, ano) {
 
   const data = new Date(lancamento.dataTransacao);
 
-  return data.getUTCMonth() + 1 === Number(mes) && data.getUTCFullYear() === Number(ano);
+  return (
+    data.getUTCMonth() + 1 === Number(mes) &&
+    data.getUTCFullYear() === Number(ano)
+  );
 }
 
 export function lancamentoEhDespesa(lancamento) {
@@ -160,7 +163,8 @@ export function obterStatusOrcamento(percentual) {
 export function obterLabelStatus(status, compacto = false) {
   if (status === STATUS_ORCAMENTO.ULTRAPASSADO) return "Ultrapassado";
   if (status === STATUS_ORCAMENTO.CRITICO) return "Crítico";
-  if (status === STATUS_ORCAMENTO.ATENCAO) return compacto ? "Atenção" : "Em atenção";
+  if (status === STATUS_ORCAMENTO.ATENCAO)
+    return compacto ? "Atenção" : "Em atenção";
 
   return "Seguro";
 }
@@ -183,7 +187,9 @@ export function criarFormularioOrcamentoInicial(orcamento) {
   return {
     tipo: ehGeral ? "GERAL" : "CATEGORIA",
     idCategoria: orcamento?.idCategoria || OPCAO_ORCAMENTO_GERAL,
-    valor: orcamento ? formatarValorMonetarioInput(String(paraNumero(orcamento.valor) * 100)) : "",
+    valor: orcamento
+      ? formatarValorMonetarioInput(String(paraNumero(orcamento.valor) * 100))
+      : "",
     mes: String(orcamento?.mes || atual.mes),
     ano: String(orcamento?.ano || atual.ano),
     descricao: orcamento?.descricao || "",
@@ -204,7 +210,10 @@ export function calcularDiasRestantesMes(mes, ano) {
   const hoje = new Date();
   const fim = new Date(ano, mes, 0);
 
-  if (hoje.getMonth() + 1 !== Number(mes) || hoje.getFullYear() !== Number(ano)) {
+  if (
+    hoje.getMonth() + 1 !== Number(mes) ||
+    hoje.getFullYear() !== Number(ano)
+  ) {
     return 0;
   }
 
@@ -239,14 +248,20 @@ export function calcularPrevisaoEstouro(orcamento) {
   const utilizado = paraNumero(orcamento?.utilizado);
   const hoje = new Date();
 
-  if (!limite || !utilizado || hoje.getMonth() + 1 !== mes || hoje.getFullYear() !== ano) {
+  if (
+    !limite ||
+    !utilizado ||
+    hoje.getMonth() + 1 !== mes ||
+    hoje.getFullYear() !== ano
+  ) {
     return null;
   }
 
   const gastoDiario = utilizado / Math.max(hoje.getDate(), 1);
   const restante = limite - utilizado;
 
-  if (restante <= 0) return { dias: 0, mensagem: "O orçamento já foi ultrapassado." };
+  if (restante <= 0)
+    return { dias: 0, mensagem: "O orçamento definido já foi ultrapassado." };
   if (gastoDiario <= 0) return null;
 
   const dias = Math.ceil(restante / gastoDiario);

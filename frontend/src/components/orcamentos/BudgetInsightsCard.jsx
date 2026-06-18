@@ -91,13 +91,6 @@ export default function BudgetInsightsCard({ orcamentoGeral, orcamentos }) {
               ? `Você usou ${formatarPercentual(ritmo.percentual)} do orçamento, mas ainda restam ${ritmo.diasRestantes} dias no mês.`
               : "Não há dados suficientes para calcular esta informação."
           }
-          badge={
-            ritmo
-              ? ritmo.consumoAcelerado
-                ? "Consumo acelerado"
-                : "Dentro do esperado"
-              : ""
-          }
           alerta={Boolean(ritmo?.consumoAcelerado)}
           iconClassName="bg-amber-100 text-amber-700"
           tooltip={
@@ -114,7 +107,6 @@ export default function BudgetInsightsCard({ orcamentoGeral, orcamentos }) {
             previsao?.mensagem ||
             "Não há dados suficientes para calcular esta informação."
           }
-          badge={previsao ? "Acompanhar limite" : ""}
           alerta={Boolean(previsao)}
           iconClassName="bg-red-100 text-red-700"
           className="border-t border-zinc-200 pt-5 lg:border-l lg:border-t-0 lg:pt-1"
@@ -125,9 +117,6 @@ export default function BudgetInsightsCard({ orcamentoGeral, orcamentos }) {
           icon={FileText}
           titulo="Orçamentos sem movimentação"
           texto={`${semMovimentacao} ${semMovimentacao === 1 ? "orçamento ainda não teve" : "orçamentos ainda não tiveram"} lançamentos associados neste período.`}
-          badge={
-            semMovimentacao > 0 ? "Sem movimentação" : "Todos movimentados"
-          }
           alerta={semMovimentacao > 0}
           iconClassName="bg-blue-100 text-blue-700"
           className="border-t border-zinc-200 pt-5 lg:border-l lg:border-t-0 lg:pt-1"
@@ -165,6 +154,6 @@ BudgetInsightsCard.propTypes = {
   orcamentos: PropTypes.arrayOf(
     PropTypes.shape({
       lancamentosAssociados: PropTypes.array,
-    })
+    }),
   ).isRequired,
 };

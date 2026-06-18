@@ -1,5 +1,5 @@
 import { TrendingUp } from "lucide-react";
-import { Pie, PieChart, ResponsiveContainer } from "recharts";
+import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 import PropTypes from "prop-types";
 
 import { obterNomeOrcamento } from "@/components/orcamentos/budget-utils";
@@ -34,6 +34,8 @@ export default function BudgetUsageCard({
     limite > 0 && (valorGastoGrafico > 0 || valorRestanteGrafico > 0)
       ? dadosGrafico
       : [{ name: "Total restante", value: 1 }];
+
+  const coresGrafico = ["#001f3f", "#87ceeb"];
 
   const tendencia =
     utilizado <= 0
@@ -101,11 +103,17 @@ export default function BudgetUsageCard({
               <div className="order-2 flex justify-center sm:order-1 sm:block">
                 <div className="space-y-2 text-xs text-zinc-950">
                   <div className="flex items-center gap-2">
-                    <span className="size-4 rounded-sm bg-blue-950" />
+                    <span
+                      className="size-4 rounded-sm"
+                      style={{ backgroundColor: "#001f3f" }}
+                    />
                     <span>Total gasto</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="size-4 rounded-sm bg-blue-300" />
+                    <span
+                      className="size-4 rounded-sm"
+                      style={{ backgroundColor: "#87ceeb" }}
+                    />
                     <span>Total restante</span>
                   </div>
                 </div>
@@ -129,6 +137,12 @@ export default function BudgetUsageCard({
                         strokeWidth={3}
                         isAnimationActive={false}
                       >
+                        {dadosGraficoVisiveis.map((entrada, indice) => (
+                          <Cell
+                            key={`cell-${indice}`}
+                            fill={coresGrafico[indice % coresGrafico.length]}
+                          />
+                        ))}
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
@@ -166,7 +180,7 @@ BudgetUsageCard.propTypes = {
       utilizado: PropTypes.number,
       limite: PropTypes.number,
       idCategoria: PropTypes.string,
-    })
+    }),
   ).isRequired,
   orcamentoSelecionado: PropTypes.shape({
     id: PropTypes.string,

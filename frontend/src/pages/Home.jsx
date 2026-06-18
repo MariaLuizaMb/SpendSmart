@@ -554,9 +554,7 @@ export function NotificationsMenu({ variant = "sidebarItem", className = "" }) {
       >
         <div className="flex items-center justify-between gap-3 px-3 py-2">
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-zinc-900">
-              Notificações
-            </p>
+            <p className="text-sm font-semibold text-zinc-900">Notificações</p>
             <p className="text-xs text-zinc-500">
               {naoLidas.length
                 ? `${naoLidas.length} não lida${naoLidas.length > 1 ? "s" : ""}`
@@ -733,7 +731,7 @@ export function HomeSidebar({ usuario, paginaAtiva = "home" }) {
                 >
                   <Link to="/home">
                     <HomeIcon />
-                    <span>Home</span>
+                    <span>Início</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -746,7 +744,7 @@ export function HomeSidebar({ usuario, paginaAtiva = "home" }) {
                 >
                   <Link to="/dashboard">
                     <LayoutDashboard />
-                    <span>Dashboard</span>
+                    <span>Análises</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -771,7 +769,7 @@ export function HomeSidebar({ usuario, paginaAtiva = "home" }) {
                   data-open={settingsAberto}
                 >
                   <Settings />
-                  <span>Configurações</span>
+                  <span>Gerenciamento</span>
                   <ChevronDown
                     className={`ml-auto transition-transform group-data-[collapsible=icon]:hidden ${
                       settingsAberto ? "rotate-180" : ""
@@ -798,7 +796,7 @@ export function HomeSidebar({ usuario, paginaAtiva = "home" }) {
                         isActive={paginaAtiva === "categorias"}
                       >
                         <Link to="/categorias">
-                          <span>Categorias de Gastos</span>
+                          <span>Categorias e Orçamentos</span>
                         </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
@@ -1000,7 +998,7 @@ ListaLancamentos.propTypes = {
         nome: PropTypes.string,
       }),
       nomeCategoria: PropTypes.string,
-    })
+    }),
   ).isRequired,
   carregando: PropTypes.bool.isRequired,
   erro: PropTypes.string,
@@ -1008,7 +1006,7 @@ ListaLancamentos.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       nome: PropTypes.string.isRequired,
-    })
+    }),
   ).isRequired,
   contaSelecionada: PropTypes.string.isRequired,
   setContaSelecionada: PropTypes.func.isRequired,
@@ -1845,7 +1843,7 @@ NovoLancamentoDialog.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       nome: PropTypes.string.isRequired,
-    })
+    }),
   ).isRequired,
   contaSelecionada: PropTypes.string,
   onLancamentoCriado: PropTypes.func.isRequired,

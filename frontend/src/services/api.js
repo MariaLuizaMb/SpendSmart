@@ -55,6 +55,14 @@ export async function listarCategorias() {
   return resultado.data || resultado;
 }
 
+export async function excluirContaUsuario() {
+  const resultado = await request("/auth/excluir-conta", {
+    method: "DELETE",
+  });
+
+  return resultado.data || resultado;
+}
+
 export async function cadastrarCategoria(dados) {
   const resultado = await request("/categorias", {
     method: "POST",
