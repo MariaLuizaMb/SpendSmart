@@ -4,6 +4,8 @@ import { Eye, EyeOff } from "lucide-react";
 import { loginUsuario } from "@/services/api";
 import { salvarAuth } from "@/lib/auth";
 import { emailTemFormatoValido } from "@/utils/emailValidator";
+import capaLogin from "@/assets/img/capa_login.png";
+import logoSpendSmart from "@/assets/img/logo.svg";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -181,23 +183,12 @@ export default function Login() {
         <section className="grid w-full max-w-4xl overflow-hidden rounded-xl bg-white shadow-xl md:grid-cols-2">
           <div className="px-8 py-8 sm:px-10 md:px-12">
             <div className="mb-5 flex items-center justify-center gap-2 text-sm font-medium text-zinc-900">
-              <span className="inline-flex h-4 w-4 items-center justify-center">
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M9 7h6" />
-                  <path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7" />
-                  <rect width="12" height="13" x="6" y="7" rx="2" />
-                  <path d="M9 11h6" />
-                  <path d="M9 15h4" />
-                </svg>
-              </span>
+              <img
+                src={logoSpendSmart}
+                alt=""
+                aria-hidden="true"
+                className="h-5 w-5"
+              />
               <span>SpendSmart</span>
             </div>
 
@@ -289,29 +280,12 @@ export default function Login() {
             </form>
           </div>
 
-          <div className="hidden items-center justify-center border-l border-zinc-100 bg-zinc-50 md:flex">
-            <div className="relative flex h-40 w-40 items-center justify-center">
-              <div className="absolute h-px w-36 rotate-45 bg-zinc-200" />
-              <div className="absolute h-px w-36 -rotate-45 bg-zinc-200" />
-
-              <div className="absolute h-24 w-24 rounded-full border border-zinc-200" />
-              <div className="absolute h-14 w-14 rounded-full border border-zinc-200 bg-zinc-50" />
-
-              <div className="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-400 shadow-sm">
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect width="14" height="11" x="5" y="7" rx="2" />
-                  <path d="m8 11 2.5 2.5L16 9" />
-                </svg>
-              </div>
-            </div>
+          <div className="hidden border-l border-zinc-100 bg-zinc-50 md:block">
+            <img
+              src={capaLogin}
+              alt="Capa do SpendSmart"
+              className="h-full w-full object-cover"
+            />
           </div>
         </section>
 

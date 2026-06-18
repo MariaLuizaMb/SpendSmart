@@ -17,8 +17,11 @@ import {
   listarCategorias,
   listarContas,
   listarLancamentos,
+  listarNotificacoes,
   listarOrcamentos,
   loginUsuario,
+  marcarNotificacaoComoLida,
+  marcarTodasNotificacoesComoLidas,
   removerConta,
   removerLancamento,
 } from "../src/services/api";
@@ -79,6 +82,8 @@ describe("api service", () => {
     await removerLancamento("l1");
     await editarConta("c1", { nome: "Banco" });
     await removerConta("c1");
+    await marcarNotificacaoComoLida("n1");
+    await marcarTodasNotificacoesComoLidas();
 
     const chamadas = global.fetch.mock.calls.map(([url, options]) => ({
       url,
@@ -106,6 +111,14 @@ describe("api service", () => {
         },
         { url: "http://localhost:3000/contas/editar/c1", method: "PUT" },
         { url: "http://localhost:3000/contas/remover/c1", method: "DELETE" },
+        {
+          url: "http://localhost:3000/notifications/n1/read",
+          method: "PATCH",
+        },
+        {
+          url: "http://localhost:3000/notifications/read-all",
+          method: "PATCH",
+        },
       ]),
     );
   });
@@ -127,6 +140,7 @@ describe("api service", () => {
     });
     await listarLancamentos({ semConta: true, idConta: "conta-1" });
     await listarContas();
+    await listarNotificacoes(10);
 
     expect(global.fetch).toHaveBeenCalledWith(
       "http://localhost:3000/orcamentos?mes=5&ano=2026",
@@ -146,6 +160,10 @@ describe("api service", () => {
     );
     expect(global.fetch).toHaveBeenCalledWith(
       "http://localhost:3000/contas",
+      expect.any(Object),
+    );
+    expect(global.fetch).toHaveBeenCalledWith(
+      "http://localhost:3000/notifications?limite=10",
       expect.any(Object),
     );
   });

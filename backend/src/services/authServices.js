@@ -96,6 +96,30 @@ class AuthService {
       },
     };
   }
+
+  static async excluirConta(idUsuario) {
+    if (!idUsuario) {
+      throw new ValidationError("Usuário não autenticado.");
+    }
+
+    const usuario = await prisma.usuario.findUnique({
+      where: { id: idUsuario },
+      select: { id: true },
+    });
+
+    if (!usuario) {
+      throw new ValidationError("Usuário não encontrado.");
+    }
+
+    await prisma.usuario.delete({
+      where: { id: idUsuario },
+    });
+
+    return {
+      id: idUsuario,
+      mensagem: "Usuário excluído com sucesso.",
+    };
+  }
 }
 
 export default AuthService;

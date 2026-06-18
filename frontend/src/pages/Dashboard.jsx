@@ -23,7 +23,11 @@ import {
   paraNumero,
   resumoTemDados,
 } from "@/components/dashboard/dashboard-utils";
-import { NovoLancamentoDialog, HomeSidebar } from "@/pages/Home";
+import {
+  NovoLancamentoDialog,
+  HomeSidebar,
+  NotificationsMenu,
+} from "@/pages/Home";
 import { obterUsuario } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -280,8 +284,7 @@ export default function Dashboard() {
     !erroAnalise &&
     !resumoTemDados({ resumo, projecoes, saldo, categorias });
   const confiabilidadeBaixa =
-    confiabilidade.qualidadeDosDados === "BAIXA" ||
-    insights.dadosInsuficientes;
+    confiabilidade.qualidadeDosDados === "BAIXA" || insights.dadosInsuficientes;
   const alertaOrcamento =
     obterAlertasPorTipo(alertas, [
       "ORCAMENTO_ESTOURADO",
@@ -325,7 +328,8 @@ export default function Dashboard() {
       {
         titulo: "Saldo Total das Contas",
         valor: formatarMoeda(saldo.saldoAtual),
-        descricao: "Somatório do saldo presente em todas as contas cadastradas.",
+        descricao:
+          "Somatório do saldo presente em todas as contas cadastradas.",
         icon: WalletCards,
         alerta: alertaSaldo?.descricao,
         variante: "sky",
@@ -341,7 +345,8 @@ export default function Dashboard() {
       {
         titulo: "Renda Gasta",
         valor: formatarPercentual(rendaGasta),
-        descricao: "Percentual da renda total gasto ou comprometido no período.",
+        descricao:
+          "Percentual da renda total gasto ou comprometido no período.",
         icon: Wallet,
         alerta:
           rendaGasta >= 90
@@ -397,7 +402,7 @@ export default function Dashboard() {
 
               <div>
                 <h1 className="text-2xl font-bold leading-tight text-zinc-950 sm:text-3xl">
-                  Dashboard
+                  Análises Financeiras
                 </h1>
                 <p className="mt-2 max-w-3xl text-sm text-zinc-950">
                   Acompanhe sua situação financeira e veja projeções com base
@@ -407,6 +412,8 @@ export default function Dashboard() {
             </div>
 
             <div className="flex w-full items-center gap-2 sm:w-auto">
+              <NotificationsMenu variant="header" />
+
               {avisoDados && (
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -424,7 +431,10 @@ export default function Dashboard() {
                 </Tooltip>
               )}
 
-              <div ref={seletorDataRef} className="relative min-w-0 flex-1 sm:flex-none">
+              <div
+                ref={seletorDataRef}
+                className="relative min-w-0 flex-1 sm:flex-none"
+              >
                 <div className="relative w-full sm:w-[250px]">
                   <Input
                     id="periodoDashboard"
@@ -531,7 +541,8 @@ export default function Dashboard() {
                 projecoes={{
                   receitaProjetada,
                   despesaProjetada,
-                  saldoProjetado: projecoes.saldoProjetado ?? resumo.saldoProjetado,
+                  saldoProjetado:
+                    projecoes.saldoProjetado ?? resumo.saldoProjetado,
                 }}
                 alerta={alertaSaldo}
                 carregando={carregandoAnalise}

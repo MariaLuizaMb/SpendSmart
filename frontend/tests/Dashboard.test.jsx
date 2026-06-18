@@ -53,6 +53,13 @@ import {
   listarLancamentos,
 } from "@/services/api";
 
+// evita warning e torna determinístico em testes
+globalThis.ResizeObserver = class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
+
 globalThis.ResizeObserver = class ResizeObserver {
   observe() {}
   unobserve() {}
@@ -164,14 +171,19 @@ describe("Dashboard page", () => {
   });
 
   it("deve carregar análise, lançamentos e contas do período atual", async () => {
+    const hoje = new Date();
+
     renderDashboard();
 
-    expect(screen.getByRole("heading", { name: "Dashboard" })).toBeInTheDocument();
+    // O título do Dashboard atual é "Análises Financeiras"
+    expect(
+      screen.getByRole("heading", { name: /Análises Financeiras/i }),
+    ).toBeInTheDocument();
 
     await waitFor(() => {
       expect(buscarAnalisePreditiva).toHaveBeenCalledWith({
-        mes: "5",
-        ano: "2026",
+        mes: String(hoje.getMonth() + 1),
+        ano: String(hoje.getFullYear()),
       });
       expect(listarLancamentos).toHaveBeenCalledWith({ limite: 80 });
       expect(listarContas).toHaveBeenCalled();
@@ -212,9 +224,7 @@ describe("Dashboard page", () => {
 
     renderDashboard();
 
-    expect(
-      await screen.findByText("falha lançamentos"),
-    ).toBeInTheDocument();
+    expect(await screen.findByText("falha lançamentos")).toBeInTheDocument();
     expect(
       screen.getByLabelText("Não foi possível carregar a análise preditiva."),
     ).toBeInTheDocument();

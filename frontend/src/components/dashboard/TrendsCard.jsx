@@ -68,7 +68,6 @@ function obterConfig(direcao) {
 function obterMensagemContextoGeral(tendencias) {
   const percentualReceitas = paraNumero(tendencias?.tendenciaReceitas?.percentual);
   const percentualDespesas = paraNumero(tendencias?.tendenciaDespesas?.percentual);
-  const percentualSaldo = paraNumero(tendencias?.tendenciaSaldo?.percentual);
   const direcaoReceitas = tendencias?.tendenciaReceitas?.direcao;
   const direcaoDespesas = tendencias?.tendenciaDespesas?.direcao;
   const direcaoSaldo = tendencias?.tendenciaSaldo?.direcao;

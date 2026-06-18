@@ -20,33 +20,33 @@ export default function DashboardSummaryCard({
 }) {
   const estilosPorVariante = {
     sky: {
-      gradiente: "from-white via-white to-sky-100",
+      gradiente: "from-white via-white to-sky-50",
       bordaIcone: "border-sky-400",
-      fundoIcone: "bg-sky-100/70",
+      fundoIcone: "bg-sky-100",
       textoIcone: "text-sky-500",
     },
     indigo: {
-      gradiente: "from-white via-white to-indigo-100",
+      gradiente: "from-white via-white to-indigo-50",
       bordaIcone: "border-indigo-400",
-      fundoIcone: "bg-indigo-100/70",
+      fundoIcone: "bg-indigo-100",
       textoIcone: "text-indigo-500",
     },
     emerald: {
-      gradiente: "from-white via-white to-emerald-100",
+      gradiente: "from-white via-white to-emerald-50",
       bordaIcone: "border-emerald-400",
-      fundoIcone: "bg-emerald-100/70",
+      fundoIcone: "bg-emerald-100",
       textoIcone: "text-emerald-500",
     },
     rose: {
-      gradiente: "from-white via-white to-rose-100",
+      gradiente: "from-white via-white to-rose-50",
       bordaIcone: "border-rose-400",
-      fundoIcone: "bg-rose-100/70",
+      fundoIcone: "bg-rose-100",
       textoIcone: "text-rose-500",
     },
     orange: {
-      gradiente: "from-white via-white to-orange-100",
+      gradiente: "from-white via-white to-orange-50",
       bordaIcone: "border-orange-400",
-      fundoIcone: "bg-orange-100/70",
+      fundoIcone: "bg-orange-100",
       textoIcone: "text-orange-500",
     },
   };
@@ -54,18 +54,18 @@ export default function DashboardSummaryCard({
 
   return (
     <Card
-      className={`@container/dashboard-summary-card relative h-full min-h-[clamp(8rem,42cqw,9.25rem)] overflow-hidden rounded-[18px] border-0 bg-linear-to-r py-[clamp(0.75rem,4cqw,1rem)] shadow-lg ring-0 ${estilos.gradiente}`}
+      className={`@container/dashboard-summary-card relative h-full min-h-[clamp(8rem,42cqw,9.25rem)] overflow-hidden rounded-2xl border-0 bg-linear-to-r py-[clamp(0.75rem,4cqw,1rem)] shadow-lg ring-0 ${estilos.gradiente}`}
     >
       <div
-        className={`absolute right-[clamp(0.75rem,4cqw,1rem)] top-[clamp(0.75rem,4cqw,1rem)] flex size-[clamp(2rem,11cqw,2.25rem)] items-center justify-center rounded-full border-2 ${estilos.bordaIcone} ${estilos.fundoIcone} ${estilos.textoIcone}`}
+        className={`absolute right-4 top-4 flex size-10 items-center justify-center rounded-xl ${estilos.fundoIcone} ${estilos.textoIcone}`}
       >
         {createElement(icon, {
-          className: "size-[clamp(1rem,5cqw,1.125rem)]",
+          size: 20,
           strokeWidth: 2.1,
         })}
       </div>
 
-      <div className="absolute right-[clamp(3rem,15cqw,3.5rem)] top-[clamp(0.75rem,4cqw,1rem)]">
+      <div className="absolute right-16 top-4">
         <AlertTooltip mensagem={alerta} />
       </div>
 

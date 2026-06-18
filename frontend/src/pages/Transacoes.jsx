@@ -1,17 +1,18 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   CalendarDays,
   CheckCircle2,
-  Pencil,
   LoaderCircle,
-  PiggyBank,
-  Plus,
-  Save,
   Search,
   Trash2,
 } from "lucide-react";
 
-import { NovoLancamentoDialog, HomeSidebar } from "@/pages/Home";
+import {
+  NovoLancamentoDialog,
+  HomeSidebar,
+  NotificationsMenu,
+} from "@/pages/Home";
 import { obterUsuario } from "@/lib/auth";
 import {
   AlertDialog,
@@ -341,13 +342,17 @@ function NovoOrcamentoDialog({ aberto, onAbertoChange, onOrcamentoCriado }) {
     }
   }, []);
 
+  function alterarAbertura(proximoAberto) {
+    onAbertoChange(proximoAberto);
+  }
+
   useEffect(() => {
     if (!aberto) return;
 
     setFormulario(criarFormularioOrcamentoInicial());
     setErro("");
     setSucesso("");
-    void Promise.resolve().then(carregarCategorias);
+    void carregarCategorias();
   }, [aberto, carregarCategorias]);
 
   function atualizarCampo(event) {
@@ -425,7 +430,7 @@ function NovoOrcamentoDialog({ aberto, onAbertoChange, onOrcamentoCriado }) {
   }
 
   return (
-    <Dialog open={aberto} onOpenChange={onAbertoChange}>
+    <Dialog open={aberto} onOpenChange={alterarAbertura}>
       <DialogContent
         data-ui="modal-novo-orcamento-conteudo"
         className="max-h-[92vh] overflow-hidden p-0 sm:max-w-lg"
@@ -433,6 +438,7 @@ function NovoOrcamentoDialog({ aberto, onAbertoChange, onOrcamentoCriado }) {
         <form
           data-ui="modal-novo-orcamento-formulario"
           onSubmit={salvarOrcamento}
+          noValidate
           className="flex max-h-[92vh] flex-col"
         >
           <Card className="max-h-[92vh] overflow-hidden border-0 py-0 ring-0">
@@ -462,7 +468,7 @@ function NovoOrcamentoDialog({ aberto, onAbertoChange, onOrcamentoCriado }) {
                       onChange={atualizarValorOrcamento}
                       placeholder="0,00"
                       disabled={salvando}
-                      className="h-10 pl-10 pr-3"
+                      className="pl-10 pr-3"
                       required
                     />
                   </div>
@@ -502,7 +508,7 @@ function NovoOrcamentoDialog({ aberto, onAbertoChange, onOrcamentoCriado }) {
                       value={formulario.ano}
                       onChange={atualizarCampo}
                       disabled={salvando}
-                      className="h-10 px-3"
+                      className="px-3"
                       required
                     />
                   </div>
@@ -939,7 +945,7 @@ function DetalhesLancamentoDialog({
                             onChange={atualizarValorLancamento}
                             placeholder="0,00"
                             disabled={camposBloqueados}
-                            className="h-10 pl-10 pr-3"
+                            className="pl-10 pr-3"
                             required
                           />
                         </div>
@@ -1033,7 +1039,7 @@ function DetalhesLancamentoDialog({
                               setCalendarioAberto((abertoAtual) => !abertoAtual)
                             }
                             disabled={camposBloqueados}
-                            className="h-10 w-full justify-between px-3 text-left font-normal text-zinc-700"
+                            className="w-full justify-between px-3 text-left font-normal text-zinc-700"
                           >
                             <span>
                               {formatarData(formulario.dataTransacao)}
@@ -1042,7 +1048,7 @@ function DetalhesLancamentoDialog({
                           </Button>
 
                           {calendarioAberto && (
-                            <div className="absolute right-0 top-11 z-50 rounded-xl border border-zinc-200 bg-white p-1 shadow-lg">
+                            <div className="absolute right-0 top-9 z-50 rounded-xl border border-zinc-200 bg-white p-1 shadow-lg">
                               <Calendar
                                 mode="single"
                                 selected={dataSelecionada}
@@ -1201,6 +1207,8 @@ function DetalhesLancamentoDialog({
 
 export default function Transacoes() {
   const usuario = obterUsuario();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const categoriaIdFiltro = searchParams.get("categoriaId") || "";
 
   const [lancamentos, setLancamentos] = useState([]);
   const [contas, setContas] = useState([]);
@@ -1219,8 +1227,11 @@ export default function Transacoes() {
   const [mensagemSucesso, setMensagemSucesso] = useState("");
 
   const haFiltrosAtivos = useMemo(
-    () => filtroConta !== OPCAO_TODAS_CONTAS || Boolean(filtro.trim()),
-    [filtro, filtroConta],
+    () =>
+      filtroConta !== OPCAO_TODAS_CONTAS ||
+      Boolean(filtro.trim()) ||
+      Boolean(categoriaIdFiltro),
+    [categoriaIdFiltro, filtro, filtroConta],
   );
 
   const contaParaNovoLancamento = useMemo(() => {
@@ -1253,6 +1264,7 @@ export default function Transacoes() {
     try {
       const lancamentosResultado = await listarLancamentos({
         semConta: filtroConta === OPCAO_CONTA_VAZIA ? true : undefined,
+        idCategoria: categoriaIdFiltro || undefined,
       });
 
       setLancamentos(lancamentosResultado);
@@ -1273,7 +1285,7 @@ export default function Transacoes() {
     } finally {
       setCarregando(false);
     }
-  }, [filtroConta]);
+  }, [categoriaIdFiltro, filtroConta]);
 
   useEffect(() => {
     void Promise.resolve().then(carregarMetadados);
@@ -1344,10 +1356,26 @@ export default function Transacoes() {
   const todosSelecionados =
     lancamentosFiltrados.length > 0 &&
     lancamentosFiltrados.every((lancamento) => selecionados.has(lancamento.id));
+  const textoQuantidadeTransacoes =
+    lancamentosFiltrados.length === 1 ? "transação" : "transações";
+  const textoQuantidadeSelecionada =
+    selecionados.size === 1 ? "selecionada" : "selecionadas";
+  const resumoSelecao = `${selecionados.size} de ${lancamentosFiltrados.length} ${textoQuantidadeTransacoes} ${textoQuantidadeSelecionada}.`;
 
   function limparFiltrosLancamentos() {
+    if (!haFiltrosAtivos) {
+      void carregarLancamentos();
+      return;
+    }
+
     setFiltro("");
     setFiltroConta(OPCAO_TODAS_CONTAS);
+    setSearchParams((parametrosAtuais) => {
+      const proximosParametros = new URLSearchParams(parametrosAtuais);
+      proximosParametros.delete("categoriaId");
+
+      return proximosParametros;
+    });
   }
 
   function alternarTodosSelecionados() {
@@ -1485,24 +1513,28 @@ export default function Transacoes() {
           data-ui="transacoes-area-principal"
           className="grid h-screen min-h-0 min-w-0 grid-rows-[auto_minmax(0,1fr)] gap-5 overflow-y-auto bg-[#E9E9E9] p-4 sm:py-4 sm:pl-2 sm:pr-4 lg:overflow-hidden"
         >
-          <header className="flex shrink-0 items-start">
-            <SidebarTrigger className="mt-1 size-9 shrink-0 md:hidden" />
+          <header className="flex shrink-0 items-start justify-between gap-3">
+            <div className="flex min-w-0 items-start gap-3">
+              <SidebarTrigger className="mt-1 size-9 shrink-0 md:hidden" />
 
-            <div>
-              <h1 className="text-2xl font-bold leading-tight text-zinc-950 sm:text-3xl">
-                Transações
-              </h1>
+              <div>
+                <h1 className="text-2xl font-bold leading-tight text-zinc-950 sm:text-3xl">
+                  Transações
+                </h1>
 
-              <p className="mt-2 text-sm text-zinc-950">
-                Visualize seu histórico de transações completo.
-              </p>
+                <p className="mt-2 text-sm text-zinc-950">
+                  Visualize seu histórico de transações completo.
+                </p>
+              </div>
             </div>
+
+            <NotificationsMenu variant="header" />
           </header>
 
           <main className="min-h-0">
             <Card className="h-full min-h-0 gap-0 rounded-2xl border-0 bg-white shadow-none ring-0">
               <CardHeader className="gap-3 px-4 pb-3 pt-4">
-                <div className="grid gap-3 lg:grid-cols-[minmax(220px,1fr)_180px_150px] lg:items-center">
+                <div className="grid gap-3 lg:grid-cols-[minmax(220px,1fr)_max-content_max-content] lg:items-center">
                   <div className="relative w-full">
                     <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-400" />
 
@@ -1510,12 +1542,12 @@ export default function Transacoes() {
                       value={filtro}
                       onChange={(event) => setFiltro(event.target.value)}
                       placeholder="Buscar na listagem"
-                      className="h-10 rounded-lg pl-9"
+                      className="pl-9"
                     />
                   </div>
 
                   <Select value={filtroConta} onValueChange={setFiltroConta}>
-                    <SelectTrigger className="h-10 w-full">
+                    <SelectTrigger className="w-fit min-w-max">
                       <SelectValue placeholder="Contas" />
                     </SelectTrigger>
 
@@ -1533,7 +1565,7 @@ export default function Transacoes() {
                   </Select>
 
                   <Select value={ordenacao} onValueChange={setOrdenacao}>
-                    <SelectTrigger className="h-10 w-full">
+                    <SelectTrigger className="w-fit min-w-max">
                       <SelectValue placeholder="Ordenar" />
                     </SelectTrigger>
 
@@ -1810,18 +1842,14 @@ export default function Transacoes() {
               </CardContent>
 
               <CardFooter className="justify-between gap-3 border-0 bg-white px-4 py-4 text-xs text-zinc-500">
-                <span>
-                  {selecionados.size} de {lancamentosFiltrados.length} transação
-                  {lancamentosFiltrados.length === 1 ? "" : "es"} selecionada
-                  {selecionados.size === 1 ? "" : "s"}.
-                </span>
+                <span>{resumoSelecao}</span>
 
                 <div className="flex shrink-0 flex-wrap justify-end gap-2">
                   <Button
                     type="button"
                     variant="outline"
                     onClick={limparFiltrosLancamentos}
-                    disabled={!haFiltrosAtivos}
+                    disabled={!haFiltrosAtivos && !erro}
                     className="border-zinc-200 bg-white text-xs text-zinc-950 hover:bg-zinc-50"
                   >
                     Limpar filtros
@@ -1833,7 +1861,6 @@ export default function Transacoes() {
                     onClick={() => setModalOrcamentoAberto(true)}
                     className="border-zinc-200 bg-white text-xs text-zinc-950 hover:bg-zinc-50"
                   >
-                    <PiggyBank size={14} />
                     Definir orçamento
                   </Button>
 
@@ -1843,7 +1870,6 @@ export default function Transacoes() {
                     onClick={() => setModalLancamentoAberto(true)}
                     className="border-zinc-200 bg-white text-xs text-zinc-950 hover:bg-zinc-50"
                   >
-                    <Plus size={14} />
                     Novo Lançamento
                   </Button>
                 </div>

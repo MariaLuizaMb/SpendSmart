@@ -1,13 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  CheckCircle2,
-  LoaderCircle,
-  Pencil,
-  Save,
-  WalletCards,
-} from "lucide-react";
+import { CheckCircle2, LoaderCircle, WalletCards } from "lucide-react";
 
-import { HomeSidebar } from "@/pages/Home";
+import { HomeSidebar, NotificationsMenu } from "@/pages/Home";
 import ContaCard from "@/components/ui/cardConta";
 import {
   AlertDialog,
@@ -324,7 +318,7 @@ function DetalhesContaDialog({
                         id="modeloCartaoContaDetalhes"
                         value={conta.nome}
                         readOnly
-                        className="h-10 bg-zinc-50 px-3"
+                        className="bg-zinc-50 px-3"
                       />
                     )}
                   </div>
@@ -340,7 +334,7 @@ function DetalhesContaDialog({
                           disabled={salvando}
                           minLength={2}
                           placeholder="Ex.: Inter, Bradesco"
-                          className="h-10 bg-white px-3"
+                          className="bg-white px-3"
                         />
                       </div>
                     )}
@@ -367,9 +361,7 @@ function DetalhesContaDialog({
                         readOnly={!editando}
                         disabled={salvando}
                         className={
-                          editando
-                            ? "h-10 bg-white pl-10 pr-3"
-                            : "h-10 bg-zinc-50 px-3"
+                          editando ? "bg-white pl-10 pr-3" : "bg-zinc-50 px-3"
                         }
                       />
                     </div>
@@ -401,7 +393,7 @@ function DetalhesContaDialog({
                         id="tipoContaDetalhes"
                         value={formatarTipoConta(formulario.tipo)}
                         readOnly
-                        className="h-10 bg-zinc-50 px-3"
+                        className="bg-zinc-50 px-3"
                       />
                     )}
                   </div>
@@ -418,7 +410,7 @@ function DetalhesContaDialog({
                           : formatarData(ultimaMovimentacao?.dataTransacao)
                       }
                       readOnly
-                      className="h-10 bg-zinc-50 px-3"
+                      className="bg-zinc-50 px-3"
                     />
                   </div>
 
@@ -475,9 +467,7 @@ function DetalhesContaDialog({
                 >
                   {salvando ? (
                     <LoaderCircle className="animate-spin" size={16} />
-                  ) : (
-                    <Save size={16} />
-                  )}
+                  ) : null}
                   {salvando ? "Salvando..." : "Salvar alterações"}
                 </Button>
               ) : (
@@ -490,7 +480,6 @@ function DetalhesContaDialog({
                   }}
                   className="bg-zinc-950 text-white hover:bg-zinc-800"
                 >
-                  <Pencil size={16} />
                   Editar informações
                 </Button>
               )}
@@ -629,7 +618,7 @@ function NovaContaDialog({ aberto, onAbertoChange, onContaCriada }) {
                         disabled={salvando}
                         minLength={2}
                         placeholder="Ex.: Inter, Bradesco"
-                        className="h-10 bg-white px-3"
+                        className="bg-white px-3"
                       />
                     </div>
                   )}
@@ -647,7 +636,7 @@ function NovaContaDialog({ aberto, onAbertoChange, onContaCriada }) {
                       onChange={atualizarCampo}
                       disabled={salvando}
                       placeholder="0,00"
-                      className="h-10 bg-white px-3"
+                      className="bg-white px-3"
                     />
                   </div>
 
@@ -959,16 +948,19 @@ export default function ContasBancarias() {
     try {
       await removerConta(contaSelecionada.id);
 
-      setContas((contasAtuais) => {
-        const proximasContas = contasAtuais.filter(
-          (conta) => conta.id !== contaSelecionada.id,
-        );
+      const proximasContas = contas.filter(
+        (conta) => conta.id !== contaSelecionada.id,
+      );
+      const novoIndice = Math.min(
+        indiceConta,
+        Math.max(proximasContas.length - 1, 0),
+      );
 
-        setIndiceConta((indiceAtual) =>
-          Math.min(indiceAtual, Math.max(proximasContas.length - 1, 0)),
-        );
-        return proximasContas;
-      });
+      setContas(proximasContas);
+      setIndiceConta(novoIndice);
+      setFormulario(
+        criarFormularioPorConta(proximasContas[novoIndice] || null),
+      );
       setCriandoConta(false);
       setEditandoConta(false);
       setSucesso("Conta bancária desativada com sucesso.");
@@ -1044,17 +1036,21 @@ export default function ContasBancarias() {
               </p>
             </div>
 
-            <Card className="hidden w-44 gap-1 rounded-xl border-0 bg-white px-4 py-3 shadow-md ring-1 ring-zinc-200 sm:flex">
-              <p className="text-xs font-bold leading-none text-zinc-950">
-                Saldo Total
-              </p>
-              <p className="text-xs leading-none text-zinc-500">
-                Saldo total de todas as contas
-              </p>
-              <p className="text-base font-bold leading-6 text-zinc-950">
-                {formatarMoeda(saldoTotal)}
-              </p>
-            </Card>
+            <div className="flex shrink-0 items-start gap-3">
+              <NotificationsMenu variant="header" />
+
+              <Card className="hidden w-64 gap-1 rounded-xl border-0 bg-white px-5 py-3 shadow-md ring-1 ring-zinc-200 sm:flex">
+                <p className="text-xs font-bold leading-none text-zinc-950">
+                  Saldo Total
+                </p>
+                <p className="whitespace-nowrap text-xs leading-none text-zinc-500">
+                  Saldo total de todas as contas
+                </p>
+                <p className="text-base font-bold leading-6 text-zinc-950">
+                  {formatarMoeda(saldoTotal)}
+                </p>
+              </Card>
+            </div>
           </header>
 
           <main className="min-h-0">
@@ -1096,6 +1092,12 @@ export default function ContasBancarias() {
                         Crie sua primeira conta bancária para acompanhar seus
                         saldos.
                       </p>
+
+                      {erro && (
+                        <p className="mt-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                          {erro}
+                        </p>
+                      )}
                     </div>
                   ) : (
                     <form
@@ -1345,9 +1347,7 @@ export default function ContasBancarias() {
                                     className="animate-spin"
                                     size={16}
                                   />
-                                ) : (
-                                  <CheckCircle2 size={16} />
-                                )}
+                                ) : null}
                                 {salvando ? "Salvando..." : "Salvar"}
                               </Button>
                             </>
@@ -1421,7 +1421,7 @@ export default function ContasBancarias() {
               <CardFooter className="justify-between border-0 bg-white px-5 pb-5 pt-0 text-xs text-zinc-500">
                 <span>
                   Conta {contas.length === 0 ? 0 : indiceConta + 1} de{" "}
-                  {contas.length}
+                  {Math.max(contas.length, 1)}
                 </span>
 
                 <div className="flex gap-2">

@@ -55,10 +55,35 @@ export async function listarCategorias() {
   return resultado.data || resultado;
 }
 
+export async function excluirContaUsuario() {
+  const resultado = await request("/auth/excluir-conta", {
+    method: "DELETE",
+  });
+
+  return resultado.data || resultado;
+}
+
 export async function cadastrarCategoria(dados) {
   const resultado = await request("/categorias", {
     method: "POST",
     body: JSON.stringify(dados),
+  });
+
+  return resultado.data || resultado;
+}
+
+export async function editarCategoria(id, dados) {
+  const resultado = await request(`/categorias/editar/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(dados),
+  });
+
+  return resultado.data || resultado;
+}
+
+export async function removerCategoria(id) {
+  const resultado = await request(`/categorias/remover/${id}`, {
+    method: "DELETE",
   });
 
   return resultado.data || resultado;
@@ -103,6 +128,29 @@ export async function listarOrcamentos({ mes, ano, idCategoria } = {}) {
   return resultado.data || resultado;
 }
 
+export async function buscarOrcamento(id) {
+  const resultado = await request(`/orcamentos/${id}`);
+
+  return resultado.data || resultado;
+}
+
+export async function editarOrcamento(id, dados) {
+  const resultado = await request(`/orcamentos/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(dados),
+  });
+
+  return resultado.data || resultado;
+}
+
+export async function removerOrcamento(id) {
+  const resultado = await request(`/orcamentos/${id}`, {
+    method: "DELETE",
+  });
+
+  return resultado.data || resultado;
+}
+
 export async function editarLancamento(id, dados) {
   const resultado = await request(`/lancamentos/editar/${id}`, {
     method: "PUT",
@@ -136,6 +184,33 @@ export async function buscarAnalisePreditiva({ mes, ano } = {}) {
   const resultado = await request(
     `/analytics/preditiva${query ? `?${query}` : ""}`,
   );
+
+  return resultado.data || resultado;
+}
+
+export async function listarNotificacoes(limite = 10) {
+  const params = new URLSearchParams();
+
+  if (limite) params.append("limite", limite);
+
+  const query = params.toString();
+  const resultado = await request(`/notifications${query ? `?${query}` : ""}`);
+
+  return resultado.data || resultado;
+}
+
+export async function marcarNotificacaoComoLida(id) {
+  const resultado = await request(`/notifications/${id}/read`, {
+    method: "PATCH",
+  });
+
+  return resultado.data || resultado;
+}
+
+export async function marcarTodasNotificacoesComoLidas() {
+  const resultado = await request("/notifications/read-all", {
+    method: "PATCH",
+  });
 
   return resultado.data || resultado;
 }

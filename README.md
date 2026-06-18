@@ -98,6 +98,37 @@ docker-compose up --build
 🌐 Frontend: http://localhost:5173
 🔗 Backend API: http://localhost:3000
 
+## Filas, Redis e Notificações
+
+O backend possui processamento assíncrono complementar com Redis e BullMQ. As rotas existentes continuam funcionando de forma síncrona; após criação, edição ou remoção de lançamentos e orçamentos, o backend tenta enfileirar jobs sem interromper a operação principal caso o Redis esteja indisponível.
+
+Filas configuradas:
+- `financial-analysis`: recalcula insights e alertas com apoio do serviço Python/FastAPI.
+- `budget-alerts`: processa alertas financeiros, persiste notificações e tenta enviar e-mails.
+
+Workers:
+```bash
+cd backend
+npm run worker:financial
+npm run worker:budget-alerts
+```
+
+Variáveis principais:
+```env
+REDIS_URL=redis://redis:6379
+QUEUE_PREFIX=spendsmart
+QUEUE_DISABLED=false
+MAIL_HOST=
+MAIL_PORT=587
+MAIL_USER=
+MAIL_PASS=
+MAIL_FROM="SpendSmart <no-reply@spendsmart.local>"
+MAIL_SECURE=false
+MAIL_DISABLED=true
+```
+
+Em desenvolvimento e teste, o envio real de e-mail pode permanecer desativado com `MAIL_DISABLED=true`. As notificações persistidas podem ser consultadas pelos endpoints protegidos `GET /notifications`, `PATCH /notifications/:id/read` e `PATCH /notifications/read-all`. O frontend possui um dropdown simples de notificações na sidebar para listar as últimas notificações e marcar itens como lidos, sem criar uma página completa nesta etapa.
+
 ## 📁 Estrutura de Pastas
 
 ```
