@@ -1421,7 +1421,7 @@ export default function ContasBancarias() {
               <CardFooter className="justify-between border-0 bg-white px-5 pb-5 pt-0 text-xs text-zinc-500">
                 <span>
                   Conta {contas.length === 0 ? 0 : indiceConta + 1} de{" "}
-                  {contas.length}
+                  {Math.max(contas.length, 1)}
                 </span>
 
                 <div className="flex gap-2">
