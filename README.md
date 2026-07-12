@@ -10,21 +10,17 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/status-em%20desenvolvimento-blue" alt="Status do Projeto"/>
-  <img src="https://img.shields.io/badge/Sprint-1-green" alt="Sprint Status"/>
-  <a href="https://github.com/MariaLuizaMb/SpendSmart/actions/workflows/ci.yml">
+<img src="https://img.shields.io/badge/status-finished-brightgreen" alt="Projeto finalizado"/>  <a href="https://github.com/MariaLuizaMb/SpendSmart/actions/workflows/ci.yml">
     <img src="https://github.com/MariaLuizaMb/SpendSmart/actions/workflows/ci.yml/badge.svg" alt="Actions Status"/>
   </a>
-  <a href="https://sonarcloud.io/summary/new_code?id=MariaLuizaMb_SpendSmart">
-    <img src="https://sonarcloud.io/api/project_badges/measure?project=MariaLuizaMb_SpendSmart&metric=alert_status" alt="Quality Gate Status"/>
-  </a>
+
 </p>
 
 ---
 
 ## 🎯 Objetivo do Produto
 
-O **SpendSmart** é uma plataforma de gestão financeira pessoal desenvolvida para indivíduos que buscam sair do controle reativo e migrar para uma análise estratégica de seus gastos. 
+O **SpendSmart** é uma plataforma de gestão financeira pessoal desenvolvida para indivíduos que buscam sair do controle reativo e migrar para uma análise estratégica de seus gastos.
 
 Diferente de uma simples planilha, o sistema utiliza **análise comportamental e preditiva** para identificar padrões de consumo, projetar gastos futuros e emitir alertas inteligentes. O objetivo central é promover a consciência financeira através de indicadores de desempenho e visualizações interativas de dados.
 
@@ -35,16 +31,17 @@ Diferente de uma simples planilha, o sistema utiliza **análise comportamental e
 - **Professor:** Dr. Rafael S. Durelli
 - **Integrantes:**
   - **Érika Mara de Morais Machado:** Gerente de Projeto & Product Manager/Product Owner. Responsável pela gestão do board, documentações, planejamento de Sprints, visão do produto e engenharia de requisitos.
-  - **Maria Luiza Bernardo Madeira:** Designer, Fullstack Developer & Data Specialist. Responsável pelo design de interfaces (UI/UX), implementação de funcionalidades e arquitetura do módulo analítico de dados.
-  - **João Vitor Garcia Moreira:** Fullstack Developer, QA & DevOps. Responsável pelo desenvolvimento de ponta a ponta, garantia de qualidade (testes automatizados) e infraestrutura de CI/CD e Deploy.
+  - **Maria Luiza Bernardo Madeira:** Designer, Fullstack Developer, Data Specialist, QA & DevOps. Responsável pelo design de interfaces (UI/UX), implementação de funcionalidades, arquitetura do módulo analítico de dados, garantia de qualidade (testes automatizados) e infraestrutura de CI/CD e Deploy.
+  - **João Vitor Garcia Moreira:** Fullstack Developer & QA. Responsável pelo desenvolvimento de ponta a ponta e garantia de qualidade (testes automatizados).
 
 ---
 
-## 🛠️ Tecnologias e Stack - SPRINT 1
+## 🛠️ Tecnologias e Stack
 
 A arquitetura foi desenhada para garantir isolamento de responsabilidades e alta performance:
 
 ### 🔹 Backend
+
 - **Node.js (LTS)**
 - **Express v5.2.x**
 - **Prisma ORM v7.7.x** (com suporte a Neon/PostgreSQL)
@@ -52,13 +49,30 @@ A arquitetura foi desenhada para garantir isolamento de responsabilidades e alta
 - **Vitest v4.1.x** (Testes Unitários e de Integração)
 
 ### 🔹 Frontend
+
 - **React v19.0**
 - **Vite v8.0.x**
 - **Tailwind CSS v4.0**
 - **Shadcn/UI & Radix UI** (Componentização)
 - **React Router Dom v7.14.x** (Navegação)
 
+### 🔹 Camada de análises (Analytics)
+
+- **FastAPI (Python)**
+- **scikit-learn** (modelagem/predição)
+- **pandas** (processamento de dados)
+- **psycopg** (acesso ao banco PostgreSQL)
+
+### 🔹 Filas & processamento assíncrono
+
+- **Redis**
+- **BullMQ** (filas `financial-analysis` e `budget-alerts`)
+- Workers:
+  - `financial-analysis` (recalcula insights e persiste insights/alertas)
+  - `budget-alerts` (gera alertas e cria notificações)
+
 ### 🔹 Infraestrutura
+
 - **Docker + Docker Compose**
 
 ---
@@ -74,6 +88,7 @@ Acompanhamos o desenvolvimento através de metodologias ágeis (Scrum), utilizan
 ## 🚀 Como Executar o Projeto
 
 ### 📥 Pré-requisitos
+
 - Git instalado
 - Docker + Docker Compose instalados
 
@@ -82,31 +97,38 @@ Acompanhamos o desenvolvimento através de metodologias ágeis (Scrum), utilizan
 ### 🛠️ Passo a Passo
 
 #### 1. Clone o repositório
+
 ```bash
 git clone https://github.com/MariaLuizaMb/SpendSmart.git
 cd SpendSmart
 
 ```
+
 #### 2. Configure os arquivos .env
 
 #### 3. Suba os containers
+
 ```
 docker-compose up --build
 ```
+
 #### 4. Acesse a aplicação
 
 🌐 Frontend: http://localhost:5173
 🔗 Backend API: http://localhost:3000
+📊 Analytics (FastAPI): http://localhost:8000
 
 ## Filas, Redis e Notificações
 
 O backend possui processamento assíncrono complementar com Redis e BullMQ. As rotas existentes continuam funcionando de forma síncrona; após criação, edição ou remoção de lançamentos e orçamentos, o backend tenta enfileirar jobs sem interromper a operação principal caso o Redis esteja indisponível.
 
 Filas configuradas:
+
 - `financial-analysis`: recalcula insights e alertas com apoio do serviço Python/FastAPI.
 - `budget-alerts`: processa alertas financeiros, persiste notificações e tenta enviar e-mails.
 
 Workers:
+
 ```bash
 cd backend
 npm run worker:financial
@@ -114,6 +136,7 @@ npm run worker:budget-alerts
 ```
 
 Variáveis principais:
+
 ```env
 REDIS_URL=redis://redis:6379
 QUEUE_PREFIX=spendsmart
@@ -134,6 +157,9 @@ Em desenvolvimento e teste, o envio real de e-mail pode permanecer desativado co
 ```
 📁 SpendSmart/
 │
+├── 📁 .github/               # CI/CD (GitHub Actions)
+├── 📁 analytics/             # Serviço Python (FastAPI)
+|
 ├── 📁 backend/
 │   ├── 📁 prisma/
 │   │   ├── 📁 migrations/
@@ -143,21 +169,27 @@ Em desenvolvimento e teste, o envio real de e-mail pode permanecer desativado co
 │   │
 │   ├── 📁 src/
 │   │   ├── 📁 controllers/     # Camada de controle (req/res)
-│   │   ├── 📁 services/        # Regras de negócio
 │   │   ├── 📁 routes/          # Definição de rotas
-│   │   ├── 📁 middlewares/     # Autenticação, etc
+│   │   ├── 📁 middlewares/     # Autenticação e validações
+│   │   ├── 📁 services/        # Regras de negócio (ex: insights, alertas, notificações)
 │   │   ├── 📁 database/        # Configuração do Prisma
+│   │   ├── 📁 queues/          # Conexão Redis e criação de filas (BullMQ)
+│   │   ├── 📁 jobs/             # Execução assíncrona (produtores/workers)
 │   │   ├── 📁 errors/          # Erros customizados
-│   │   ├── 📁 utils/           # Funções auxiliares
-│   │   ├── 📁 scripts/         # Scripts auxiliares
+│   │   ├── 📁 utils/           # Funções auxiliares/validators
+│   │   ├── 📁 scripts/         # Scripts auxiliares (seed)
+
 │   │   ├── 📄 app.js           # Configuração do Express
 │   │   └── 📄 server.js        # Inicialização do servidor
 │   │
+
 │   ├── 📁 tests/               # Testes com Vitest
 │   ├── 📄 Dockerfile
 │   ├── 📄 package.json
 │   └── 📄 vitest.config.js
 │
+├── 📁 .github/               # Documentos do projeto
+|
 ├── 📁 frontend/
 │   ├── 📁 public/              # Arquivos estáticos
 │   │
@@ -181,6 +213,7 @@ Em desenvolvimento e teste, o envio real de e-mail pode permanecer desativado co
 └── 📄 .gitignore
 
 ```
+
 ---
 
 ## 💬 Considerações Finais
