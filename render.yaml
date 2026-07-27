@@ -33,7 +33,6 @@ services:
         generateValue: true
       - key: DIRECT_URL
         sync: false
-    dockerCommand: "npx prisma generate && npx prisma migrate deploy && npm start"
 
   # ─────────────────────────────────────────
   # ANALYTICS — Web Service (Docker), protegido por API Key
