@@ -3,8 +3,9 @@ import AppError from "../errors/appError.js";
 class AnalyticsService {
   static async obterAnalisePreditiva({ idUsuario, mes, ano }) {
     const analyticsApiUrl = process.env.ANALYTICS_API_URL;
+    const analyticsApiKey = process.env.ANALYTICS_API_KEY;
 
-    if (!analyticsApiUrl) {
+    if (!analyticsApiUrl || !analyticsApiKey) {
       throw new AppError(
         "Serviço de analytics não configurado.",
         500,
@@ -22,6 +23,7 @@ class AnalyticsService {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-API-Key": analyticsApiKey,
         },
         body: JSON.stringify({ idUsuario, mes, ano }),
       });
