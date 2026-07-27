@@ -8,28 +8,37 @@ services:
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
     plan: free
-    healthCheckPath: /health # ajuste se seu backend não tiver essa rota
+    healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
-        sync: false # cole a connection string do Supabase/Neon no dashboard
+        sync: false
       - key: REDIS_URL
-        sync: false # cole a URL do Upstash no dashboard
+        sync: false
       - key: QUEUE_PREFIX
         value: spendsmart
       - key: QUEUE_DISABLED
         value: "false"
-      - key: FRONTEND_URL
-        sync: false # URL pública do frontend, pra configurar CORS
-
+      - key: CORS_ORIGIN
+        value: https://spendsmart-frontend.onrender.com
+      - key: ANALYTICS_API_URL
+        value: https://spendsmart-analytics.onrender.com
+      - key: ANALYTICS_API_KEY
+        fromService:
+          type: web
+          name: spendsmart-analytics
+          envVarKey: ANALYTICS_API_KEY
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DIRECT_URL
+        sync: false
     dockerCommand: "sh -c 'npx prisma generate && npx prisma migrate deploy && npm start'"
 
   # ─────────────────────────────────────────
-  # ANALYTICS — Private Service (Docker)
-  # só o backend acessa, sem URL pública
+  # ANALYTICS — Web Service (Docker), protegido por API Key
   # ─────────────────────────────────────────
-  - type: pserv
+  - type: web
     name: spendsmart-analytics
     runtime: docker
     dockerfilePath: ./analytics/Dockerfile
@@ -38,20 +47,22 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: ANALYTICS_API_KEY
+        generateValue: true
 
   # ─────────────────────────────────────────
   # FRONTEND — Static Site
-  # build dos arquivos estáticos, sem sleep
   # ─────────────────────────────────────────
   - type: web
     name: spendsmart-frontend
     runtime: static
+    rootDir: frontend
     buildCommand: npm install && npm run build
-    staticPublishPath: ./dist # confirme se seu vite.config aponta pra "dist"
+    staticPublishPath: dist
     envVars:
       - key: VITE_API_URL
-        sync: false # URL pública do backend, ex: https://spendsmart-backend.onrender.com
+        value: https://spendsmart-backend.onrender.com
     routes:
       - type: rewrite
         source: /*
-        destination: /index.html # necessário pra SPA com client-side routing
+        destination: /index.html
