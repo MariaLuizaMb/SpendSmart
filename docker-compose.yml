@@ -1,57 +1,68 @@
 services:
-  redis:
-    image: redis:7-alpine
-    container_name: spendsmart-redis
-    ports:
-      - "6379:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+  # ─────────────────────────────────────────
+  # BACKEND — Web Service (Docker)
+  # ─────────────────────────────────────────
+  - type: web
+    name: spendsmart-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: QUEUE_PREFIX
+        value: spendsmart
+      - key: QUEUE_DISABLED
+        value: "false"
+      - key: CORS_ORIGIN
+        value: https://spendsmart-frontend.onrender.com
+      - key: ANALYTICS_API_URL
+        value: https://spendsmart-analytics.onrender.com
+      - key: ANALYTICS_API_KEY
+        fromService:
+          type: web
+          name: spendsmart-analytics
+          envVarKey: ANALYTICS_API_KEY
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DIRECT_URL
+        sync: false
+    dockerCommand: "sh -c 'npx prisma generate && npx prisma migrate deploy && npm start'"
 
-  backend:
-    build:
-      context: ./backend
-    container_name: spendsmart-backend
-    ports:
-      - "3000:3000"
-    env_file:
-      - ./backend/.env
-    environment:
-      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
-      QUEUE_PREFIX: ${QUEUE_PREFIX:-spendsmart}
-      QUEUE_DISABLED: ${QUEUE_DISABLED:-false}
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
-    depends_on:
-      - analytics
-      - redis
-    command: sh -c "npx prisma generate && npm run dev"
+  # ─────────────────────────────────────────
+  # ANALYTICS — Web Service (Docker), protegido por API Key
+  # ─────────────────────────────────────────
+  - type: web
+    name: spendsmart-analytics
+    runtime: docker
+    dockerfilePath: ./analytics/Dockerfile
+    dockerContext: ./analytics
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ANALYTICS_API_KEY
+        generateValue: true
 
-  frontend:
-    build:
-      context: ./frontend
-    container_name: spendsmart-frontend
-    ports:
-      - "5173:5173"
-    env_file:
-      - ./frontend/.env
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    depends_on:
-      - backend
-    command: npm run dev -- --host 0.0.0.0
-
-  analytics:
-    build:
-      context: ./analytics
-    container_name: spendsmart-analytics
-    ports:
-      - "8000:8000"
-    env_file:
-      - ./analytics/.env
-    volumes:
-      - ./analytics:/app
+  # ─────────────────────────────────────────
+  # FRONTEND — Static Site
+  # ─────────────────────────────────────────
+  - type: web
+    name: spendsmart-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://spendsmart-backend.onrender.com
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
