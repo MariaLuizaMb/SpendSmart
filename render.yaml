@@ -48,6 +48,8 @@ services:
         value: production
       - key: ANALYTICS_API_KEY
         generateValue: true
+      - key: DATABASE_URL
+        sync: false
 
   # ─────────────────────────────────────────
   # FRONTEND — Static Site
