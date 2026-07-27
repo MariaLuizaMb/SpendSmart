@@ -60,7 +60,7 @@ services:
     staticPublishPath: dist
     envVars:
       - key: VITE_API_URL
-        value: https://spendsmart-backend.onrender.com
+        value: https://spendsmart-backend-dwvt.onrender.com
     routes:
       - type: rewrite
         source: /*
