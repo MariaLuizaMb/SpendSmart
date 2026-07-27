@@ -10,9 +10,9 @@ COPY prisma ./prisma
 
 RUN npx prisma generate
 
-RUN chmod +x start.sh
-
 COPY . .
+
+RUN chmod +x start.sh
 
 EXPOSE 3000
 
