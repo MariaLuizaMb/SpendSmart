@@ -21,7 +21,7 @@ services:
       - key: QUEUE_DISABLED
         value: "false"
       - key: CORS_ORIGIN
-        value: https://spendsmart-frontend.onrender.com
+        value: https://spendsmart-frontend-byw3.onrender.com
       - key: ANALYTICS_API_URL
         value: https://spendsmart-analytics.onrender.com
       - key: ANALYTICS_API_KEY
