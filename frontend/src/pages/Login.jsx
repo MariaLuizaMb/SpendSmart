@@ -197,9 +197,12 @@ export default function Login() {
                 Bem vindo de volta!
               </h1>
               <p className="mt-2 text-sm text-zinc-500">
-                Acesse seu gerenciador de finanças.(as credencias de login são
-                as mesmas que estão nos campos abaixo, caso queira testar o
-                sistema)
+                Acesse seu gerenciador de finanças.
+                <br />
+                <span className="text-xs">
+                  (as credenciais de login são as mesmas que estão nos campos
+                  abaixo, caso queira testar o sistema)
+                </span>
               </p>
             </div>
 
