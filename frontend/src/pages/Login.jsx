@@ -197,7 +197,9 @@ export default function Login() {
                 Bem vindo de volta!
               </h1>
               <p className="mt-2 text-sm text-zinc-500">
-                Acesse seu gerenciador de finanças.
+                Acesse seu gerenciador de finanças.(as credencias de login são
+                as mesmas que estão nos campos abaixo, caso queira testar o
+                sistema)
               </p>
             </div>
 
@@ -211,7 +213,7 @@ export default function Login() {
                   id="email"
                   name="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="demo@spendsmart.com"
                   value={form.email}
                   onChange={handleChange}
                   className={classeInput("email")}
@@ -237,6 +239,7 @@ export default function Login() {
                 <Input
                   id="senha"
                   name="senha"
+                  placeholder="SpendSmart123"
                   type={senhaVisivel ? "text" : "password"}
                   value={form.senha}
                   onChange={handleChange}
